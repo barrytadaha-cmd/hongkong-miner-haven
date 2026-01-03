@@ -1,9 +1,10 @@
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { ShoppingCart, Menu, X, Cpu, ChevronDown } from 'lucide-react';
+import { ShoppingCart, Menu, X, ChevronDown, Search, User, MapPin, Award, Phone } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useCart } from '@/contexts/CartContext';
 import { Badge } from '@/components/ui/badge';
+import { Input } from '@/components/ui/input';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -13,137 +14,271 @@ import {
 
 const Header = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
   const { totalItems, setIsOpen } = useCart();
   const location = useLocation();
 
-  const navLinks = [
-    { name: 'Home', path: '/' },
-    { name: 'Shop', path: '/shop' },
-    { name: 'About', path: '/about' },
-    { name: 'Blog', path: '/blog' },
-    { name: 'Contact', path: '/contact' },
+  const bitcoinMiners = [
+    { name: 'All Bitcoin Miners', path: '/shop?category=bitcoin' },
+    { name: 'Air-Cooled Miners', path: '/shop?category=bitcoin&type=air' },
+    { name: 'Hydro Miners', path: '/shop?category=bitcoin&type=hydro' },
+    { name: 'Immersion Miners', path: '/shop?category=bitcoin&type=immersion' },
   ];
 
-  const productCategories = [
-    { name: 'All Miners', path: '/shop' },
-    { name: 'Bitcoin Miners', path: '/shop?category=bitcoin' },
+  const altcoinMiners = [
     { name: 'Litecoin Miners', path: '/shop?category=litecoin' },
     { name: 'Kaspa Miners', path: '/shop?category=kaspa' },
-    { name: 'Home Miners', path: '/shop?category=home' },
+    { name: 'Zcash Miners', path: '/shop?category=zcash' },
+    { name: 'Ethereum Miners', path: '/shop?category=ethereum' },
+  ];
+
+  const knowledge = [
+    { name: 'Blog', path: '/blog' },
+    { name: 'FAQ', path: '/faq' },
+    { name: 'Mining Guide', path: '/blog' },
   ];
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-xl border-b border-border">
-      <div className="container mx-auto px-4">
-        <div className="flex items-center justify-between h-16 md:h-20">
-          {/* Logo */}
-          <Link to="/" className="flex items-center gap-2 group">
-            <div className="relative">
-              <Cpu className="h-8 w-8 text-primary transition-transform group-hover:rotate-12" />
-              <div className="absolute inset-0 bg-primary/20 blur-xl rounded-full" />
-            </div>
-            <div className="flex flex-col">
-              <span className="font-display font-bold text-xl tracking-tight">
-                Miner<span className="text-primary">Hoalan</span>
-              </span>
-              <span className="text-[10px] text-muted-foreground -mt-1">Hong Kong</span>
-            </div>
-          </Link>
-
-          {/* Desktop Navigation */}
-          <nav className="hidden lg:flex items-center gap-1">
-            {navLinks.map((link) => (
-              link.name === 'Shop' ? (
-                <DropdownMenu key={link.name}>
-                  <DropdownMenuTrigger asChild>
-                    <Button
-                      variant="ghost"
-                      className={`text-sm font-medium gap-1 ${
-                        location.pathname === link.path ? 'text-primary' : 'text-foreground/80'
-                      }`}
-                    >
-                      {link.name}
-                      <ChevronDown className="h-3 w-3" />
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="start" className="w-48">
-                    {productCategories.map((cat) => (
-                      <DropdownMenuItem key={cat.name} asChild>
-                        <Link to={cat.path} className="cursor-pointer">
-                          {cat.name}
-                        </Link>
-                      </DropdownMenuItem>
-                    ))}
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              ) : (
-                <Link key={link.name} to={link.path}>
-                  <Button
-                    variant="ghost"
-                    className={`text-sm font-medium ${
-                      location.pathname === link.path ? 'text-primary' : 'text-foreground/80'
-                    }`}
-                  >
-                    {link.name}
-                  </Button>
-                </Link>
-              )
-            ))}
-          </nav>
-
-          {/* Right Actions */}
-          <div className="flex items-center gap-2">
-            <Button
-              variant="ghost"
-              size="icon"
-              className="relative"
-              onClick={() => setIsOpen(true)}
-            >
-              <ShoppingCart className="h-5 w-5" />
-              {totalItems > 0 && (
-                <Badge className="absolute -top-1 -right-1 h-5 w-5 p-0 flex items-center justify-center text-xs">
-                  {totalItems}
-                </Badge>
-              )}
-            </Button>
-
-            <Button className="hidden sm:flex" asChild>
-              <Link to="/shop">Browse Miners</Link>
-            </Button>
-
-            {/* Mobile Menu Toggle */}
-            <Button
-              variant="ghost"
-              size="icon"
-              className="lg:hidden"
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            >
-              {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-            </Button>
+    <header className="fixed top-0 left-0 right-0 z-50">
+      {/* Top Bar */}
+      <div className="bg-navy text-navy-foreground text-sm py-2">
+        <div className="container mx-auto px-4 flex justify-between items-center">
+          <div className="flex items-center gap-6">
+            <span className="flex items-center gap-1.5">
+              <MapPin className="h-3.5 w-3.5" />
+              Hong Kong HQ
+            </span>
+            <span className="hidden sm:flex items-center gap-1.5">
+              <Award className="h-3.5 w-3.5 text-accent" />
+              Best Price Guarantee
+            </span>
+            <span className="hidden md:flex items-center gap-1.5">
+              <Phone className="h-3.5 w-3.5" />
+              Service & Support
+            </span>
+          </div>
+          <div className="flex items-center gap-4">
+            <Link to="/contact" className="hover:text-accent transition-colors">Contact</Link>
           </div>
         </div>
+      </div>
 
-        {/* Mobile Menu */}
-        {mobileMenuOpen && (
-          <div className="lg:hidden py-4 border-t border-border animate-fade-in">
-            <nav className="flex flex-col gap-2">
-              {navLinks.map((link) => (
-                <Link
-                  key={link.name}
-                  to={link.path}
-                  onClick={() => setMobileMenuOpen(false)}
-                  className={`py-2 px-4 rounded-lg font-medium transition-colors ${
-                    location.pathname === link.path
-                      ? 'bg-primary/10 text-primary'
-                      : 'hover:bg-muted'
-                  }`}
-                >
-                  {link.name}
-                </Link>
-              ))}
+      {/* Main Navigation */}
+      <div className="bg-background/95 backdrop-blur-xl border-b border-border">
+        <div className="container mx-auto px-4">
+          <div className="flex items-center justify-between h-16 md:h-20">
+            {/* Logo */}
+            <Link to="/" className="flex items-center gap-2 group">
+              <div className="flex flex-col">
+                <span className="font-display font-bold text-xl tracking-tight">
+                  Miner<span className="text-primary">Haolan</span>
+                </span>
+                <span className="text-[10px] text-muted-foreground -mt-1">Hong Kong</span>
+              </div>
+            </Link>
+
+            {/* Desktop Navigation */}
+            <nav className="hidden lg:flex items-center gap-1">
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    className="text-sm font-medium gap-1"
+                  >
+                    Buy ASIC Miner
+                    <ChevronDown className="h-3 w-3" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="start" className="w-56 bg-popover">
+                  <DropdownMenuItem asChild>
+                    <Link to="/shop" className="cursor-pointer font-medium">
+                      All Miners
+                    </Link>
+                  </DropdownMenuItem>
+                  {bitcoinMiners.map((item) => (
+                    <DropdownMenuItem key={item.name} asChild>
+                      <Link to={item.path} className="cursor-pointer">
+                        {item.name}
+                      </Link>
+                    </DropdownMenuItem>
+                  ))}
+                </DropdownMenuContent>
+              </DropdownMenu>
+
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    className="text-sm font-medium gap-1"
+                  >
+                    Bitcoin Miner
+                    <ChevronDown className="h-3 w-3" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="start" className="w-56 bg-popover">
+                  {bitcoinMiners.map((item) => (
+                    <DropdownMenuItem key={item.name} asChild>
+                      <Link to={item.path} className="cursor-pointer">
+                        {item.name}
+                      </Link>
+                    </DropdownMenuItem>
+                  ))}
+                </DropdownMenuContent>
+              </DropdownMenu>
+
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    className="text-sm font-medium gap-1"
+                  >
+                    Altcoin Miner
+                    <ChevronDown className="h-3 w-3" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="start" className="w-56 bg-popover">
+                  {altcoinMiners.map((item) => (
+                    <DropdownMenuItem key={item.name} asChild>
+                      <Link to={item.path} className="cursor-pointer">
+                        {item.name}
+                      </Link>
+                    </DropdownMenuItem>
+                  ))}
+                </DropdownMenuContent>
+              </DropdownMenu>
+
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    className="text-sm font-medium gap-1"
+                  >
+                    Knowledge
+                    <ChevronDown className="h-3 w-3" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="start" className="w-48 bg-popover">
+                  {knowledge.map((item) => (
+                    <DropdownMenuItem key={item.name} asChild>
+                      <Link to={item.path} className="cursor-pointer">
+                        {item.name}
+                      </Link>
+                    </DropdownMenuItem>
+                  ))}
+                </DropdownMenuContent>
+              </DropdownMenu>
+
+              <Link to="/contact">
+                <Button variant="ghost" className="text-sm font-medium">
+                  Contact
+                </Button>
+              </Link>
             </nav>
+
+            {/* Right Actions */}
+            <div className="flex items-center gap-2">
+              {/* Search */}
+              {searchOpen ? (
+                <div className="hidden md:flex items-center gap-2">
+                  <Input 
+                    type="search" 
+                    placeholder="Search miners..." 
+                    className="w-48"
+                    autoFocus
+                    onBlur={() => setSearchOpen(false)}
+                  />
+                </div>
+              ) : (
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="hidden md:flex"
+                  onClick={() => setSearchOpen(true)}
+                >
+                  <Search className="h-5 w-5" />
+                </Button>
+              )}
+
+              <Button
+                variant="ghost"
+                size="icon"
+              >
+                <User className="h-5 w-5" />
+              </Button>
+
+              <Button
+                variant="ghost"
+                size="icon"
+                className="relative"
+                onClick={() => setIsOpen(true)}
+              >
+                <ShoppingCart className="h-5 w-5" />
+                {totalItems > 0 && (
+                  <Badge className="absolute -top-1 -right-1 h-5 w-5 p-0 flex items-center justify-center text-xs bg-accent text-accent-foreground">
+                    {totalItems}
+                  </Badge>
+                )}
+              </Button>
+
+              <Button className="hidden sm:flex bg-primary hover:bg-primary/90" asChild>
+                <Link to="/shop">Buy ASIC Miner</Link>
+              </Button>
+
+              {/* Mobile Menu Toggle */}
+              <Button
+                variant="ghost"
+                size="icon"
+                className="lg:hidden"
+                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              >
+                {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+              </Button>
+            </div>
           </div>
-        )}
+
+          {/* Mobile Menu */}
+          {mobileMenuOpen && (
+            <div className="lg:hidden py-4 border-t border-border animate-fade-in">
+              <nav className="flex flex-col gap-2">
+                <Link
+                  to="/shop"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="py-2 px-4 rounded-lg font-medium hover:bg-muted"
+                >
+                  Buy ASIC Miner
+                </Link>
+                <Link
+                  to="/shop?category=bitcoin"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="py-2 px-4 rounded-lg font-medium hover:bg-muted"
+                >
+                  Bitcoin Miner
+                </Link>
+                <Link
+                  to="/shop?category=litecoin"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="py-2 px-4 rounded-lg font-medium hover:bg-muted"
+                >
+                  Altcoin Miner
+                </Link>
+                <Link
+                  to="/blog"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="py-2 px-4 rounded-lg font-medium hover:bg-muted"
+                >
+                  Knowledge
+                </Link>
+                <Link
+                  to="/contact"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="py-2 px-4 rounded-lg font-medium hover:bg-muted"
+                >
+                  Contact
+                </Link>
+              </nav>
+            </div>
+          )}
+        </div>
       </div>
     </header>
   );

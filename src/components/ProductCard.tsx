@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
 import { useCart } from '@/contexts/CartContext';
-import { ShoppingCart, Zap, Cpu, TrendingUp } from 'lucide-react';
+import { ShoppingCart, Plus } from 'lucide-react';
 import { toast } from 'sonner';
 
 interface ProductCardProps {
@@ -21,13 +21,13 @@ const ProductCard = ({ product }: ProductCardProps) => {
   };
 
   return (
-    <Card className="group relative overflow-hidden hover-lift bg-card border-border/50 hover:border-primary/30 transition-all duration-300">
+    <Card className="group relative overflow-hidden bg-card border-border hover:border-primary/30 transition-all duration-300 hover:shadow-lg">
       <Link to={`/product/${product.id}`} className="block">
-        <div className="relative aspect-square overflow-hidden bg-muted">
+        <div className="relative aspect-square overflow-hidden bg-secondary p-4">
           <img
             src={product.image}
             alt={product.name}
-            className="object-cover w-full h-full transition-transform duration-500 group-hover:scale-110"
+            className="object-contain w-full h-full transition-transform duration-500 group-hover:scale-105"
           />
         
           {/* Badges */}
@@ -36,67 +36,39 @@ const ProductCard = ({ product }: ProductCardProps) => {
               <Badge className="bg-primary text-primary-foreground">New</Badge>
             )}
             {product.isSale && (
-              <Badge variant="destructive">Sale</Badge>
+              <Badge className="bg-accent text-accent-foreground">On Sale</Badge>
             )}
             {!product.inStock && (
-              <Badge variant="secondary" className="bg-muted-foreground/80">Sold Out</Badge>
+              <Badge variant="secondary" className="bg-muted-foreground text-background">Sold Out</Badge>
             )}
-          </div>
-
-          {/* Location Badge */}
-          <div className="absolute top-3 right-3">
-            <Badge variant="outline" className="bg-background/80 backdrop-blur-sm text-xs">
-              {product.location === 'hongkong' ? '🇭🇰 HK Stock' : '🌏 Intl'}
-            </Badge>
           </div>
 
           {/* Quick Add Button */}
-          <div className="absolute bottom-3 left-3 right-3 opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 z-10">
-            <Button
-              className="w-full"
-              onClick={(e) => {
-                e.preventDefault();
-                handleAddToCart();
-              }}
-              disabled={!product.inStock}
-            >
-              <ShoppingCart className="h-4 w-4 mr-2" />
-              {product.inStock ? 'Add to Cart' : 'Out of Stock'}
-            </Button>
-          </div>
+          <Button
+            size="icon"
+            className="absolute top-3 right-3 h-8 w-8 opacity-0 group-hover:opacity-100 transition-opacity"
+            onClick={(e) => {
+              e.preventDefault();
+              handleAddToCart();
+            }}
+            disabled={!product.inStock}
+          >
+            <Plus className="h-4 w-4" />
+          </Button>
         </div>
       </Link>
 
       <CardContent className="p-4">
-        {/* Brand */}
-        <p className="text-xs text-muted-foreground mb-1">{product.brand}</p>
-        
         {/* Name */}
         <Link to={`/product/${product.id}`}>
-          <h3 className="font-display font-semibold text-lg mb-3 line-clamp-1 group-hover:text-primary transition-colors">
+          <h3 className="font-semibold text-base mb-3 line-clamp-2 group-hover:text-primary transition-colors min-h-[48px]">
             {product.name}
           </h3>
         </Link>
 
-        {/* Specs Grid */}
-        <div className="grid grid-cols-3 gap-2 mb-4">
-          <div className="flex flex-col items-center p-2 bg-muted/50 rounded-lg">
-            <Cpu className="h-3 w-3 text-primary mb-1" />
-            <span className="text-[10px] text-muted-foreground">{product.algorithm}</span>
-          </div>
-          <div className="flex flex-col items-center p-2 bg-muted/50 rounded-lg">
-            <TrendingUp className="h-3 w-3 text-primary mb-1" />
-            <span className="text-[10px] text-muted-foreground">{product.hashrate}</span>
-          </div>
-          <div className="flex flex-col items-center p-2 bg-muted/50 rounded-lg">
-            <Zap className="h-3 w-3 text-primary mb-1" />
-            <span className="text-[10px] text-muted-foreground">{product.power}</span>
-          </div>
-        </div>
-
         {/* Price */}
-        <div className="flex items-baseline gap-2">
-          <span className="text-2xl font-display font-bold text-primary">
+        <div className="flex items-baseline gap-2 mb-4">
+          <span className="text-lg font-bold">
             ${product.price.toLocaleString()}
           </span>
           {product.originalPrice && (
@@ -105,6 +77,36 @@ const ProductCard = ({ product }: ProductCardProps) => {
             </span>
           )}
         </div>
+
+        {/* Specs */}
+        <div className="space-y-2 text-sm border-t border-border pt-3">
+          <div className="flex justify-between">
+            <span className="text-muted-foreground">Algorithm</span>
+            <span className="font-medium">{product.algorithm}</span>
+          </div>
+          <div className="flex justify-between">
+            <span className="text-muted-foreground">Hashrate</span>
+            <span className="font-medium">{product.hashrate}</span>
+          </div>
+          <div className="flex justify-between">
+            <span className="text-muted-foreground">Power</span>
+            <span className="font-medium">{product.power}</span>
+          </div>
+        </div>
+
+        {/* Add to Cart Button */}
+        <Button
+          className="w-full mt-4"
+          variant="outline"
+          onClick={(e) => {
+            e.preventDefault();
+            handleAddToCart();
+          }}
+          disabled={!product.inStock}
+        >
+          <ShoppingCart className="h-4 w-4 mr-2" />
+          {product.inStock ? 'Add to Cart' : 'Out of Stock'}
+        </Button>
       </CardContent>
     </Card>
   );

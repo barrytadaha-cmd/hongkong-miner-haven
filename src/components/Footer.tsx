@@ -1,125 +1,179 @@
 import { Link } from 'react-router-dom';
-import { Cpu, Mail, Phone, MapPin, MessageCircle } from 'lucide-react';
+import { Mail, Phone, MapPin, Facebook, Twitter, Instagram, Youtube } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="bg-card border-t border-border">
+    <footer className="bg-navy text-navy-foreground">
       <div className="container mx-auto px-4 py-12 md:py-16">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
-          {/* Brand */}
-          <div className="lg:col-span-1">
-            <Link to="/" className="flex items-center gap-2 mb-4">
-              <Cpu className="h-8 w-8 text-primary" />
-              <div className="flex flex-col">
-                <span className="font-display font-bold text-xl">
-                  Miner<span className="text-primary">Hoalan</span>
-                </span>
-                <span className="text-[10px] text-muted-foreground -mt-1">Hong Kong</span>
-              </div>
-            </Link>
-            <p className="text-muted-foreground text-sm mb-4">
-              Your trusted partner for ASIC cryptocurrency mining hardware in Asia and worldwide.
+        {/* Newsletter */}
+        <div className="border-b border-white/10 pb-12 mb-12">
+          <div className="max-w-xl mx-auto text-center">
+            <h3 className="font-display text-2xl font-bold mb-3">Stay Updated</h3>
+            <p className="text-navy-foreground/70 mb-6">
+              Subscribe to our newsletter for the latest products, deals, and mining insights.
             </p>
-            <div className="flex gap-4">
-              <a href="#" className="text-muted-foreground hover:text-primary transition-colors">
-                <MessageCircle className="h-5 w-5" />
-              </a>
-            </div>
+            <form className="flex gap-3">
+              <Input 
+                type="email" 
+                placeholder="Enter your email" 
+                className="bg-white/10 border-white/20 text-navy-foreground placeholder:text-navy-foreground/50"
+              />
+              <Button className="bg-primary hover:bg-primary/90">
+                Subscribe
+              </Button>
+            </form>
           </div>
+        </div>
 
-          {/* Products */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
+          {/* Shop */}
           <div>
-            <h4 className="font-display font-semibold text-lg mb-4">Products</h4>
+            <h4 className="font-display font-semibold text-lg mb-4">Shop</h4>
             <ul className="space-y-2">
               <li>
-                <Link to="/shop?category=bitcoin" className="text-muted-foreground hover:text-primary transition-colors text-sm">
+                <Link to="/shop" className="text-navy-foreground/70 hover:text-accent transition-colors text-sm">
+                  All Miners
+                </Link>
+              </li>
+              <li>
+                <Link to="/shop?category=bitcoin" className="text-navy-foreground/70 hover:text-accent transition-colors text-sm">
                   Bitcoin Miners
                 </Link>
               </li>
               <li>
-                <Link to="/shop?category=litecoin" className="text-muted-foreground hover:text-primary transition-colors text-sm">
+                <Link to="/shop?category=litecoin" className="text-navy-foreground/70 hover:text-accent transition-colors text-sm">
                   Litecoin Miners
                 </Link>
               </li>
               <li>
-                <Link to="/shop?category=kaspa" className="text-muted-foreground hover:text-primary transition-colors text-sm">
+                <Link to="/shop?category=kaspa" className="text-navy-foreground/70 hover:text-accent transition-colors text-sm">
                   Kaspa Miners
                 </Link>
               </li>
               <li>
-                <Link to="/shop?category=home" className="text-muted-foreground hover:text-primary transition-colors text-sm">
+                <Link to="/shop?category=home" className="text-navy-foreground/70 hover:text-accent transition-colors text-sm">
                   Home Miners
                 </Link>
               </li>
             </ul>
           </div>
 
-          {/* Company */}
+          {/* Categories */}
           <div>
-            <h4 className="font-display font-semibold text-lg mb-4">Company</h4>
+            <h4 className="font-display font-semibold text-lg mb-4">Categories</h4>
             <ul className="space-y-2">
               <li>
-                <Link to="/about" className="text-muted-foreground hover:text-primary transition-colors text-sm">
-                  About Us
+                <Link to="/shop?type=air" className="text-navy-foreground/70 hover:text-accent transition-colors text-sm">
+                  Air-Cooled Miners
                 </Link>
               </li>
               <li>
-                <Link to="/blog" className="text-muted-foreground hover:text-primary transition-colors text-sm">
-                  Blog
+                <Link to="/shop?type=hydro" className="text-navy-foreground/70 hover:text-accent transition-colors text-sm">
+                  Hydro Miners
                 </Link>
               </li>
               <li>
-                <Link to="/contact" className="text-muted-foreground hover:text-primary transition-colors text-sm">
-                  Contact
+                <Link to="/shop?category=heater" className="text-navy-foreground/70 hover:text-accent transition-colors text-sm">
+                  Bitcoin Heaters
                 </Link>
               </li>
               <li>
-                <Link to="/faq" className="text-muted-foreground hover:text-primary transition-colors text-sm">
-                  FAQ
+                <Link to="/shop?category=lottery" className="text-navy-foreground/70 hover:text-accent transition-colors text-sm">
+                  Lottery Miners
                 </Link>
               </li>
             </ul>
           </div>
 
-          {/* Contact */}
+          {/* Knowledge */}
+          <div>
+            <h4 className="font-display font-semibold text-lg mb-4">Knowledge</h4>
+            <ul className="space-y-2">
+              <li>
+                <Link to="/blog" className="text-navy-foreground/70 hover:text-accent transition-colors text-sm">
+                  Blog
+                </Link>
+              </li>
+              <li>
+                <Link to="/faq" className="text-navy-foreground/70 hover:text-accent transition-colors text-sm">
+                  FAQ
+                </Link>
+              </li>
+              <li>
+                <Link to="/blog" className="text-navy-foreground/70 hover:text-accent transition-colors text-sm">
+                  Mining Guides
+                </Link>
+              </li>
+              <li>
+                <Link to="/about" className="text-navy-foreground/70 hover:text-accent transition-colors text-sm">
+                  About Us
+                </Link>
+              </li>
+            </ul>
+          </div>
+
+          {/* Company Info */}
           <div>
             <h4 className="font-display font-semibold text-lg mb-4">Contact Us</h4>
             <ul className="space-y-3">
               <li className="flex items-start gap-3">
-                <MapPin className="h-4 w-4 text-primary mt-0.5 shrink-0" />
-                <span className="text-muted-foreground text-sm">
+                <MapPin className="h-4 w-4 text-accent mt-0.5 shrink-0" />
+                <span className="text-navy-foreground/70 text-sm">
                   Unit 1205, 12/F, Tower 1<br />
                   Lippo Centre, 89 Queensway<br />
                   Admiralty, Hong Kong
                 </span>
               </li>
               <li className="flex items-center gap-3">
-                <Phone className="h-4 w-4 text-primary shrink-0" />
-                <a href="tel:+85212345678" className="text-muted-foreground hover:text-primary transition-colors text-sm">
-                  +852 1234 5678
+                <Phone className="h-4 w-4 text-accent shrink-0" />
+                <a href="tel:+14076764098" className="text-navy-foreground/70 hover:text-accent transition-colors text-sm">
+                  +1 407 676 4098
                 </a>
               </li>
               <li className="flex items-center gap-3">
-                <Mail className="h-4 w-4 text-primary shrink-0" />
-                <a href="mailto:info@minerhoalan.hk" className="text-muted-foreground hover:text-primary transition-colors text-sm">
-                  info@minerhoalan.hk
+                <Mail className="h-4 w-4 text-accent shrink-0" />
+                <a href="mailto:support@minerhaolan.com" className="text-navy-foreground/70 hover:text-accent transition-colors text-sm">
+                  support@minerhaolan.com
                 </a>
               </li>
             </ul>
+            
+            {/* Social Links */}
+            <div className="flex gap-4 mt-6">
+              <a href="#" className="text-navy-foreground/50 hover:text-accent transition-colors">
+                <Facebook className="h-5 w-5" />
+              </a>
+              <a href="#" className="text-navy-foreground/50 hover:text-accent transition-colors">
+                <Twitter className="h-5 w-5" />
+              </a>
+              <a href="#" className="text-navy-foreground/50 hover:text-accent transition-colors">
+                <Instagram className="h-5 w-5" />
+              </a>
+              <a href="#" className="text-navy-foreground/50 hover:text-accent transition-colors">
+                <Youtube className="h-5 w-5" />
+              </a>
+            </div>
           </div>
         </div>
 
-        <div className="border-t border-border mt-12 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="text-muted-foreground text-sm">
-            © {currentYear} MinerHoalan. All rights reserved.
+        <div className="border-t border-white/10 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+          <div className="flex items-center gap-2">
+            <span className="font-display font-bold text-xl">
+              Miner<span className="text-accent">Haolan</span>
+            </span>
+          </div>
+          <p className="text-navy-foreground/50 text-sm">
+            © {currentYear} Miner Haolan. All rights reserved.
           </p>
           <div className="flex gap-6">
-            <Link to="/privacy" className="text-muted-foreground hover:text-primary transition-colors text-sm">
+            <Link to="/privacy" className="text-navy-foreground/50 hover:text-accent transition-colors text-sm">
               Privacy Policy
             </Link>
-            <Link to="/terms" className="text-muted-foreground hover:text-primary transition-colors text-sm">
+            <Link to="/terms" className="text-navy-foreground/50 hover:text-accent transition-colors text-sm">
               Terms of Service
             </Link>
           </div>

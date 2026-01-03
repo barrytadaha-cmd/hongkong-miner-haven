@@ -34,23 +34,25 @@ const Contact = () => {
   return (
     <>
       <Helmet>
-        <title>Contact Us | MinerHoalan Hong Kong</title>
-        <meta name="description" content="Get in touch with MinerHoalan for ASIC miner purchases, B2B inquiries, or technical support. We're here to help." />
+        <title>Contact Us | Miner Haolan - Hong Kong ASIC Miners</title>
+        <meta name="description" content="Questions? We have the answers! Contact Miner Haolan for ASIC miner purchases, B2B inquiries, or technical support. Hong Kong based." />
       </Helmet>
 
-      <main className="pt-24 pb-16">
-        <div className="container mx-auto px-4">
-          {/* Header */}
-          <div className="max-w-3xl mx-auto text-center mb-16">
-            <h1 className="font-display text-4xl md:text-5xl font-bold mb-6">
-              Contact Us
+      <main className="pb-16">
+        {/* Hero */}
+        <div className="bg-navy text-navy-foreground py-16">
+          <div className="container mx-auto px-4 text-center">
+            <h1 className="font-display text-4xl md:text-5xl font-bold mb-4">
+              Questions? We have the answers!
             </h1>
-            <p className="text-xl text-muted-foreground">
-              Have questions? Need a quote? Our team is ready to help you with 
-              all your mining hardware needs.
+            <p className="text-xl text-navy-foreground/80 max-w-2xl mx-auto">
+              Our team is ready to help you with all your mining hardware needs.
             </p>
           </div>
+        </div>
 
+
+        <div className="container mx-auto px-4 py-16">
           <div className="grid lg:grid-cols-3 gap-8">
             {/* Contact Info */}
             <div className="lg:col-span-1 space-y-6">
@@ -81,7 +83,7 @@ const Contact = () => {
                     <div>
                       <h3 className="font-semibold mb-1">Call Us</h3>
                       <p className="text-sm text-muted-foreground">
-                        <a href="tel:+85212345678" className="hover:text-primary">+852 1234 5678</a>
+                        <a href="tel:+14076764098" className="hover:text-primary">+1 407 676 4098</a>
                       </p>
                     </div>
                   </div>
@@ -97,8 +99,8 @@ const Contact = () => {
                     <div>
                       <h3 className="font-semibold mb-1">Email Us</h3>
                       <p className="text-sm text-muted-foreground">
-                        <a href="mailto:info@minerhoalan.hk" className="hover:text-primary">info@minerhoalan.hk</a><br />
-                        <a href="mailto:sales@minerhoalan.hk" className="hover:text-primary">sales@minerhoalan.hk</a>
+                        <a href="mailto:support@minerhaolan.com" className="hover:text-primary">support@minerhaolan.com</a><br />
+                        <a href="mailto:sales@minerhaolan.com" className="hover:text-primary">sales@minerhaolan.com</a>
                       </p>
                     </div>
                   </div>
@@ -132,8 +134,8 @@ const Contact = () => {
                     <div>
                       <h3 className="font-semibold mb-1">Live Chat</h3>
                       <p className="text-sm text-muted-foreground">
-                        WhatsApp: +852 1234 5678<br />
-                        Telegram: @minerhoalan
+                        WhatsApp: +1 407 676 4098<br />
+                        Telegram: @minerhaolan
                       </p>
                     </div>
                   </div>
@@ -186,12 +188,12 @@ const Contact = () => {
                         <SelectTrigger>
                           <SelectValue placeholder="Select a subject" />
                         </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="sales">Sales Inquiry</SelectItem>
+                        <SelectContent className="bg-popover">
+                          <SelectItem value="general">General Inquiry</SelectItem>
                           <SelectItem value="b2b">B2B / Bulk Order</SelectItem>
+                          <SelectItem value="repair">Repair Service</SelectItem>
                           <SelectItem value="support">Technical Support</SelectItem>
                           <SelectItem value="warranty">Warranty Claim</SelectItem>
-                          <SelectItem value="hosting">Hosting Services</SelectItem>
                           <SelectItem value="other">Other</SelectItem>
                         </SelectContent>
                       </Select>

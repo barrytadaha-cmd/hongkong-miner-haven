@@ -8,20 +8,20 @@ const FeaturedProducts = () => {
   const featuredProducts = products.filter(p => p.inStock).slice(0, 4);
 
   return (
-    <section className="py-20 bg-muted/30">
+    <section className="py-20 bg-background">
       <div className="container mx-auto px-4">
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-12">
           <div>
             <h2 className="font-display text-3xl md:text-4xl font-bold mb-2">
-              Featured Miners
+              Our Bestsellers
             </h2>
             <p className="text-muted-foreground">
-              Our most popular ASIC miners, ready to ship from Hong Kong
+              Discover our most popular mining products
             </p>
           </div>
           <Button variant="outline" asChild>
             <Link to="/shop">
-              View All
+              Show All Products
               <ArrowRight className="ml-2 h-4 w-4" />
             </Link>
           </Button>
