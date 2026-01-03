@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
 import { useCart } from '@/contexts/CartContext';
-import { ShoppingCart, Plus } from 'lucide-react';
+import { ShoppingCart, Plus, Zap, Cpu } from 'lucide-react';
 import { toast } from 'sonner';
 
 interface ProductCardProps {
@@ -20,45 +20,57 @@ const ProductCard = ({ product }: ProductCardProps) => {
     toast.success(`${product.name} added to cart`);
   };
 
+  const discount = product.originalPrice 
+    ? Math.round((1 - product.price / product.originalPrice) * 100) 
+    : 0;
+
   return (
-    <Card className="group relative overflow-hidden bg-card border-border hover:border-primary/30 transition-all duration-300 hover:shadow-lg">
+    <Card className="group relative overflow-hidden bg-card border-border hover:border-primary/50 transition-all duration-500 hover:shadow-2xl hover:shadow-primary/10 card-hover">
       <Link to={`/product/${product.id}`} className="block">
-        <div className="relative aspect-square overflow-hidden bg-secondary p-4">
+        <div className="relative aspect-square overflow-hidden bg-gradient-to-br from-secondary to-secondary/50 p-6">
+          {/* Background Glow on Hover */}
+          <div className="absolute inset-0 bg-gradient-to-br from-primary/0 to-accent/0 group-hover:from-primary/5 group-hover:to-accent/5 transition-all duration-500" />
+          
           <img
             src={product.image}
             alt={product.name}
-            className="object-contain w-full h-full transition-transform duration-500 group-hover:scale-105"
+            className="object-contain w-full h-full transition-all duration-700 group-hover:scale-110"
           />
         
           {/* Badges */}
           <div className="absolute top-3 left-3 flex flex-col gap-2">
             {product.isNew && (
-              <Badge className="bg-primary text-primary-foreground">New</Badge>
+              <Badge className="bg-primary text-primary-foreground shadow-lg">New</Badge>
             )}
-            {product.isSale && (
-              <Badge className="bg-accent text-accent-foreground">On Sale</Badge>
+            {product.isSale && discount > 0 && (
+              <Badge className="bg-gradient-to-r from-accent to-yellow-500 text-white shadow-lg">
+                -{discount}%
+              </Badge>
             )}
             {!product.inStock && (
-              <Badge variant="secondary" className="bg-muted-foreground text-background">Sold Out</Badge>
+              <Badge variant="secondary" className="bg-muted-foreground/90 text-background">Sold Out</Badge>
             )}
           </div>
 
           {/* Quick Add Button */}
           <Button
             size="icon"
-            className="absolute top-3 right-3 h-8 w-8 opacity-0 group-hover:opacity-100 transition-opacity"
+            className="absolute top-3 right-3 h-10 w-10 rounded-xl opacity-0 group-hover:opacity-100 transition-all duration-300 bg-primary/90 hover:bg-primary shadow-lg"
             onClick={(e) => {
               e.preventDefault();
               handleAddToCart();
             }}
             disabled={!product.inStock}
           >
-            <Plus className="h-4 w-4" />
+            <Plus className="h-5 w-5" />
           </Button>
         </div>
       </Link>
 
-      <CardContent className="p-4">
+      <CardContent className="p-5">
+        {/* Brand */}
+        <p className="text-xs font-medium text-primary mb-1">{product.brand}</p>
+        
         {/* Name */}
         <Link to={`/product/${product.id}`}>
           <h3 className="font-semibold text-base mb-3 line-clamp-2 group-hover:text-primary transition-colors min-h-[48px]">
@@ -68,7 +80,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
 
         {/* Price */}
         <div className="flex items-baseline gap-2 mb-4">
-          <span className="text-lg font-bold">
+          <span className="text-xl font-bold text-foreground">
             ${product.price.toLocaleString()}
           </span>
           {product.originalPrice && (
@@ -79,16 +91,22 @@ const ProductCard = ({ product }: ProductCardProps) => {
         </div>
 
         {/* Specs */}
-        <div className="space-y-2 text-sm border-t border-border pt-3">
-          <div className="flex justify-between">
-            <span className="text-muted-foreground">Algorithm</span>
-            <span className="font-medium">{product.algorithm}</span>
+        <div className="space-y-2 text-sm border-t border-border pt-4">
+          <div className="flex items-center justify-between">
+            <span className="text-muted-foreground flex items-center gap-1.5">
+              <Cpu className="h-3.5 w-3.5" />
+              Algorithm
+            </span>
+            <span className="font-medium text-xs bg-secondary px-2 py-0.5 rounded">{product.algorithm}</span>
           </div>
-          <div className="flex justify-between">
-            <span className="text-muted-foreground">Hashrate</span>
-            <span className="font-medium">{product.hashrate}</span>
+          <div className="flex items-center justify-between">
+            <span className="text-muted-foreground flex items-center gap-1.5">
+              <Zap className="h-3.5 w-3.5" />
+              Hashrate
+            </span>
+            <span className="font-semibold text-primary">{product.hashrate}</span>
           </div>
-          <div className="flex justify-between">
+          <div className="flex items-center justify-between">
             <span className="text-muted-foreground">Power</span>
             <span className="font-medium">{product.power}</span>
           </div>
@@ -96,8 +114,8 @@ const ProductCard = ({ product }: ProductCardProps) => {
 
         {/* Add to Cart Button */}
         <Button
-          className="w-full mt-4"
-          variant="outline"
+          className="w-full mt-4 h-11 btn-shine"
+          variant={product.inStock ? "default" : "secondary"}
           onClick={(e) => {
             e.preventDefault();
             handleAddToCart();
