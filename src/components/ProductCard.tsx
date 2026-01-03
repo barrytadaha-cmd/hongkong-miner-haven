@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { Product } from '@/lib/data';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -20,55 +21,62 @@ const ProductCard = ({ product }: ProductCardProps) => {
   };
 
   return (
-    <Card className="group overflow-hidden hover-lift bg-card border-border/50 hover:border-primary/30 transition-all duration-300">
-      <div className="relative aspect-square overflow-hidden bg-muted">
-        <img
-          src={product.image}
-          alt={product.name}
-          className="object-cover w-full h-full transition-transform duration-500 group-hover:scale-110"
-        />
+    <Card className="group relative overflow-hidden hover-lift bg-card border-border/50 hover:border-primary/30 transition-all duration-300">
+      <Link to={`/product/${product.id}`} className="block">
+        <div className="relative aspect-square overflow-hidden bg-muted">
+          <img
+            src={product.image}
+            alt={product.name}
+            className="object-cover w-full h-full transition-transform duration-500 group-hover:scale-110"
+          />
         
-        {/* Badges */}
-        <div className="absolute top-3 left-3 flex flex-col gap-2">
-          {product.isNew && (
-            <Badge className="bg-primary text-primary-foreground">New</Badge>
-          )}
-          {product.isSale && (
-            <Badge variant="destructive">Sale</Badge>
-          )}
-          {!product.inStock && (
-            <Badge variant="secondary" className="bg-muted-foreground/80">Sold Out</Badge>
-          )}
-        </div>
+          {/* Badges */}
+          <div className="absolute top-3 left-3 flex flex-col gap-2">
+            {product.isNew && (
+              <Badge className="bg-primary text-primary-foreground">New</Badge>
+            )}
+            {product.isSale && (
+              <Badge variant="destructive">Sale</Badge>
+            )}
+            {!product.inStock && (
+              <Badge variant="secondary" className="bg-muted-foreground/80">Sold Out</Badge>
+            )}
+          </div>
 
-        {/* Location Badge */}
-        <div className="absolute top-3 right-3">
-          <Badge variant="outline" className="bg-background/80 backdrop-blur-sm text-xs">
-            {product.location === 'hongkong' ? '🇭🇰 HK Stock' : '🌏 Intl'}
-          </Badge>
-        </div>
+          {/* Location Badge */}
+          <div className="absolute top-3 right-3">
+            <Badge variant="outline" className="bg-background/80 backdrop-blur-sm text-xs">
+              {product.location === 'hongkong' ? '🇭🇰 HK Stock' : '🌏 Intl'}
+            </Badge>
+          </div>
 
-        {/* Quick Add Button */}
-        <div className="absolute bottom-3 left-3 right-3 opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">
-          <Button
-            className="w-full"
-            onClick={handleAddToCart}
-            disabled={!product.inStock}
-          >
-            <ShoppingCart className="h-4 w-4 mr-2" />
-            {product.inStock ? 'Add to Cart' : 'Out of Stock'}
-          </Button>
+          {/* Quick Add Button */}
+          <div className="absolute bottom-3 left-3 right-3 opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 z-10">
+            <Button
+              className="w-full"
+              onClick={(e) => {
+                e.preventDefault();
+                handleAddToCart();
+              }}
+              disabled={!product.inStock}
+            >
+              <ShoppingCart className="h-4 w-4 mr-2" />
+              {product.inStock ? 'Add to Cart' : 'Out of Stock'}
+            </Button>
+          </div>
         </div>
-      </div>
+      </Link>
 
       <CardContent className="p-4">
         {/* Brand */}
         <p className="text-xs text-muted-foreground mb-1">{product.brand}</p>
         
         {/* Name */}
-        <h3 className="font-display font-semibold text-lg mb-3 line-clamp-1 group-hover:text-primary transition-colors">
-          {product.name}
-        </h3>
+        <Link to={`/product/${product.id}`}>
+          <h3 className="font-display font-semibold text-lg mb-3 line-clamp-1 group-hover:text-primary transition-colors">
+            {product.name}
+          </h3>
+        </Link>
 
         {/* Specs Grid */}
         <div className="grid grid-cols-3 gap-2 mb-4">
