@@ -1,13 +1,26 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+import { Helmet } from 'react-helmet-async';
+import HeroSection from '@/components/HeroSection';
+import FeaturedProducts from '@/components/FeaturedProducts';
+import WhyChooseUs from '@/components/WhyChooseUs';
+import TestimonialsSection from '@/components/TestimonialsSection';
+import CTASection from '@/components/CTASection';
 
 const Index = () => {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background">
-      <div className="text-center">
-        <h1 className="mb-4 text-4xl font-bold">Welcome to Your Blank App</h1>
-        <p className="text-xl text-muted-foreground">Start building your amazing project here!</p>
-      </div>
-    </div>
+    <>
+      <Helmet>
+        <title>MinerHoalan - Premium ASIC Miners in Hong Kong</title>
+        <meta name="description" content="Hong Kong's premier destination for ASIC cryptocurrency miners. Bitcoin, Litecoin, Kaspa miners with fast global shipping and B2B support." />
+      </Helmet>
+      
+      <main>
+        <HeroSection />
+        <FeaturedProducts />
+        <WhyChooseUs />
+        <TestimonialsSection />
+        <CTASection />
+      </main>
+    </>
   );
 };
 
