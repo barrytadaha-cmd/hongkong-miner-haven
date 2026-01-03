@@ -1,67 +1,121 @@
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, Shield, Truck, Headphones } from 'lucide-react';
 
 const HeroSection = () => {
   return (
-    <section className="relative min-h-[70vh] flex items-center overflow-hidden bg-navy">
-      {/* Background Pattern */}
-      <div className="absolute inset-0 opacity-10" style={{
-        backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.4'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
-      }} />
+    <section className="relative min-h-[85vh] flex items-center overflow-hidden bg-gradient-hero">
+      {/* Animated Background Elements */}
+      <div className="absolute inset-0 overflow-hidden">
+        <div className="absolute top-20 left-10 w-72 h-72 bg-primary/10 rounded-full blur-3xl animate-pulse" />
+        <div className="absolute bottom-20 right-10 w-96 h-96 bg-accent/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-primary/5 rounded-full blur-3xl" />
+      </div>
       
-      {/* Gradient Overlay */}
-      <div className="absolute inset-0 bg-gradient-to-r from-navy via-navy/95 to-navy/80" />
+      {/* Grid Pattern */}
+      <div className="absolute inset-0 opacity-[0.03]" style={{
+        backgroundImage: `linear-gradient(rgba(255,255,255,.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.1) 1px, transparent 1px)`,
+        backgroundSize: '50px 50px',
+      }} />
 
       <div className="container mx-auto px-4 py-20 relative z-10">
-        <div className="grid lg:grid-cols-2 gap-12 items-center">
+        <div className="grid lg:grid-cols-2 gap-16 items-center">
           {/* Content */}
-          <div className="space-y-8 text-navy-foreground">
-            <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight">
-              Your Provider for{' '}
-              <span className="text-accent">ASIC Miners</span>
+          <div className="space-y-8 text-white">
+            {/* Badge */}
+            <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full px-4 py-2 text-sm">
+              <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
+              <span>Best Prices Guaranteed</span>
+            </div>
+
+            <h1 className="font-display text-5xl sm:text-6xl lg:text-7xl font-bold leading-[1.1]">
+              Your Premier
+              <span className="block text-gradient-gold">ASIC Miner</span>
+              Provider
             </h1>
 
-            <p className="text-lg text-navy-foreground/80 max-w-lg">
-              Order your ASIC miner for home or professional projects. 
-              Best price guarantee for your crypto mining hardware.
+            <p className="text-lg text-white/70 max-w-lg leading-relaxed">
+              Order your ASIC miner for home or professional mining operations. 
+              Hong Kong warehouse with worldwide shipping and unbeatable prices.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4">
-              <Button size="lg" className="group bg-primary hover:bg-primary/90 text-primary-foreground" asChild>
+              <Button size="lg" className="btn-shine bg-primary hover:bg-primary/90 text-white h-14 px-8 text-lg" asChild>
                 <Link to="/shop">
-                  Buy ASIC Miner
-                  <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                  Shop All Miners
+                  <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
                 </Link>
               </Button>
-              <Button size="lg" variant="outline" className="border-navy-foreground/30 text-navy-foreground hover:bg-navy-foreground/10" asChild>
+              <Button size="lg" variant="outline" className="border-white/30 text-white hover:bg-white/10 h-14 px-8 text-lg backdrop-blur-sm" asChild>
                 <Link to="/contact">Get B2B Quote</Link>
               </Button>
             </div>
+
+            {/* Trust Badges */}
+            <div className="grid grid-cols-3 gap-6 pt-8 border-t border-white/10">
+              <div className="flex items-center gap-3">
+                <div className="w-12 h-12 rounded-xl bg-white/10 flex items-center justify-center">
+                  <Shield className="h-6 w-6 text-accent" />
+                </div>
+                <div>
+                  <p className="font-semibold text-sm">Secure</p>
+                  <p className="text-white/50 text-xs">Payment</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-3">
+                <div className="w-12 h-12 rounded-xl bg-white/10 flex items-center justify-center">
+                  <Truck className="h-6 w-6 text-accent" />
+                </div>
+                <div>
+                  <p className="font-semibold text-sm">Fast</p>
+                  <p className="text-white/50 text-xs">Shipping</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-3">
+                <div className="w-12 h-12 rounded-xl bg-white/10 flex items-center justify-center">
+                  <Headphones className="h-6 w-6 text-accent" />
+                </div>
+                <div>
+                  <p className="font-semibold text-sm">24/7</p>
+                  <p className="text-white/50 text-xs">Support</p>
+                </div>
+              </div>
+            </div>
           </div>
 
-          {/* Visual - Miner Image */}
+          {/* Visual - Featured Product Card */}
           <div className="relative hidden lg:block">
-            <div className="relative">
+            <div className="relative animate-float">
               {/* Glow effect */}
-              <div className="absolute inset-0 bg-primary/20 blur-3xl rounded-full" />
+              <div className="absolute inset-0 bg-gradient-to-r from-primary/30 to-accent/30 blur-3xl rounded-full scale-75" />
               
-              {/* Main Image */}
-              <div className="relative bg-gradient-to-br from-white/10 to-white/5 rounded-2xl p-8 backdrop-blur-sm border border-white/10">
-                <img 
-                  src="https://asicminermarket.com/wp-content/uploads/2024/03/Antminer-S21-Pro.png" 
-                  alt="Antminer S21 Pro - ASIC Bitcoin Miner" 
-                  className="w-full max-w-md mx-auto drop-shadow-2xl"
-                />
-                
-                {/* Floating stats */}
-                <div className="absolute top-4 right-4 bg-accent text-accent-foreground px-3 py-1 rounded-full text-sm font-semibold">
-                  234 TH/s
+              {/* Main Card */}
+              <div className="relative glass-card rounded-3xl p-8 border border-white/10">
+                <div className="absolute -top-4 -right-4 best-price-badge shadow-lg">
+                  Best Seller
                 </div>
                 
-                <div className="absolute bottom-4 left-4 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-lg">
-                  <p className="text-sm text-navy-foreground/70">Starting from</p>
-                  <p className="text-2xl font-bold text-navy-foreground">$8,999</p>
+                <img 
+                  src="https://images.unsplash.com/photo-1639762681485-074b7f938ba0?w=500&h=500&fit=crop" 
+                  alt="Antminer S21 Pro - ASIC Bitcoin Miner" 
+                  className="w-full max-w-sm mx-auto drop-shadow-2xl rounded-2xl"
+                />
+                
+                {/* Floating Specs */}
+                <div className="absolute top-8 left-8 bg-primary/90 backdrop-blur-sm px-4 py-2 rounded-xl">
+                  <p className="text-xl font-bold text-white">234 TH/s</p>
+                  <p className="text-xs text-white/70">Hashrate</p>
+                </div>
+                
+                <div className="mt-6 p-4 bg-white/5 rounded-2xl">
+                  <p className="text-white/70 text-sm">Antminer S21 Pro</p>
+                  <div className="flex items-baseline gap-2 mt-1">
+                    <p className="text-3xl font-bold text-white">$2,980</p>
+                    <p className="text-lg text-white/50 line-through">$3,499</p>
+                  </div>
+                  <Button className="w-full mt-4 bg-accent hover:bg-accent/90 text-white" asChild>
+                    <Link to="/product/1">View Details</Link>
+                  </Button>
                 </div>
               </div>
             </div>
