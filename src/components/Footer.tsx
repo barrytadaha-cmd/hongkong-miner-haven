@@ -104,13 +104,18 @@ const Footer = () => {
                 </Link>
               </li>
               <li>
-                <Link to="/blog" className="text-navy-foreground/70 hover:text-accent transition-colors text-sm">
-                  Mining Guides
+                <Link to="/repair-warranty" className="text-navy-foreground/70 hover:text-accent transition-colors text-sm">
+                  Repair & Warranty
                 </Link>
               </li>
               <li>
                 <Link to="/about" className="text-navy-foreground/70 hover:text-accent transition-colors text-sm">
                   About Us
+                </Link>
+              </li>
+              <li>
+                <Link to="/contact" className="text-navy-foreground/70 hover:text-accent transition-colors text-sm">
+                  Contact
                 </Link>
               </li>
             </ul>
@@ -170,11 +175,11 @@ const Footer = () => {
             © {currentYear} Miner Haolan. All rights reserved.
           </p>
           <div className="flex gap-6">
-            <Link to="/privacy" className="text-navy-foreground/50 hover:text-accent transition-colors text-sm">
-              Privacy Policy
+            <Link to="/faq" className="text-navy-foreground/50 hover:text-accent transition-colors text-sm">
+              FAQ
             </Link>
-            <Link to="/terms" className="text-navy-foreground/50 hover:text-accent transition-colors text-sm">
-              Terms of Service
+            <Link to="/contact" className="text-navy-foreground/50 hover:text-accent transition-colors text-sm">
+              Contact
             </Link>
           </div>
         </div>
