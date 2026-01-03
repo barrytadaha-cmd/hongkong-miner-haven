@@ -1,41 +1,52 @@
-import { useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useCart } from '@/contexts/CartContext';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Separator } from '@/components/ui/separator';
-import { Link, useNavigate } from 'react-router-dom';
-import { ArrowLeft, CreditCard, Building2, Bitcoin, ShoppingBag } from 'lucide-react';
-import { toast } from 'sonner';
+import { Link } from 'react-router-dom';
+import { ArrowLeft, MessageCircle, ShoppingBag, CheckCircle2 } from 'lucide-react';
 
 const Checkout = () => {
   const { items, totalPrice, clearCart } = useCart();
-  const navigate = useNavigate();
-  const [paymentMethod, setPaymentMethod] = useState('crypto');
-  const [isProcessing, setIsProcessing] = useState(false);
 
   const shippingCost = totalPrice > 5000 ? 0 : 150;
   const finalTotal = totalPrice + shippingCost;
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsProcessing(true);
+  // Generate WhatsApp message with cart details
+  const generateWhatsAppMessage = (): string => {
+    const orderItems = items.map(item => 
+      `• ${item.name} (Qty: ${item.quantity}) - $${(item.price * item.quantity).toLocaleString()}`
+    ).join('\n');
 
-    // Simulate order processing
-    await new Promise(resolve => setTimeout(resolve, 2000));
+    const message = `Hello! I would like to place an order:
 
-    toast.success('Order placed successfully! You will receive a confirmation email shortly.');
-    clearCart();
-    navigate('/');
-    setIsProcessing(false);
+📦 *ORDER DETAILS*
+${orderItems}
+
+💰 *SUMMARY*
+Subtotal: $${totalPrice.toLocaleString()}
+Shipping: ${shippingCost === 0 ? 'Free' : `$${shippingCost}`}
+*Total: $${finalTotal.toLocaleString()}*
+
+Please confirm availability and provide payment details. Thank you!`;
+
+    return message;
+  };
+
+  const handleWhatsAppCheckout = () => {
+    const phoneNumber = '14076764098';
+    const message = generateWhatsAppMessage();
+    // Properly encode the message for URL
+    const encodedMessage = encodeURIComponent(message);
+    const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
+    
+    // Open WhatsApp in new tab
+    window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
   };
 
   if (items.length === 0) {
     return (
-      <main className="pt-24 pb-16">
+      <main className="pb-16">
         <div className="container mx-auto px-4">
           <div className="max-w-lg mx-auto text-center py-16">
             <ShoppingBag className="h-16 w-16 text-muted-foreground/30 mx-auto mb-4" />
@@ -53,188 +64,140 @@ const Checkout = () => {
   return (
     <>
       <Helmet>
-        <title>Checkout | MinerHoalan</title>
+        <title>Checkout | Miner Haolan</title>
         <meta name="robots" content="noindex" />
       </Helmet>
 
-      <main className="pt-24 pb-16">
-        <div className="container mx-auto px-4">
-          <Button variant="ghost" asChild className="mb-6">
-            <Link to="/shop">
-              <ArrowLeft className="h-4 w-4 mr-2" />
-              Continue Shopping
-            </Link>
-          </Button>
+      <main className="pb-16">
+        {/* Hero */}
+        <div className="bg-navy text-navy-foreground py-12">
+          <div className="container mx-auto px-4">
+            <Button variant="ghost" asChild className="mb-4 text-navy-foreground/70 hover:text-navy-foreground">
+              <Link to="/shop">
+                <ArrowLeft className="h-4 w-4 mr-2" />
+                Continue Shopping
+              </Link>
+            </Button>
+            <h1 className="font-display text-3xl md:text-4xl font-bold">Checkout</h1>
+          </div>
+        </div>
 
-          <h1 className="font-display text-3xl font-bold mb-8">Checkout</h1>
-
-          <form onSubmit={handleSubmit}>
-            <div className="grid lg:grid-cols-3 gap-8">
-              {/* Form Section */}
-              <div className="lg:col-span-2 space-y-6">
-                {/* Contact Info */}
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Contact Information</CardTitle>
-                  </CardHeader>
-                  <CardContent className="space-y-4">
-                    <div className="grid sm:grid-cols-2 gap-4">
-                      <div className="space-y-2">
-                        <Label htmlFor="firstName">First Name *</Label>
-                        <Input id="firstName" required />
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="lastName">Last Name *</Label>
-                        <Input id="lastName" required />
-                      </div>
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="email">Email Address *</Label>
-                      <Input id="email" type="email" required />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="phone">Phone Number *</Label>
-                      <Input id="phone" type="tel" required />
-                    </div>
-                  </CardContent>
-                </Card>
-
-                {/* Shipping Address */}
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Shipping Address</CardTitle>
-                  </CardHeader>
-                  <CardContent className="space-y-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="company">Company Name (Optional)</Label>
-                      <Input id="company" />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="address">Street Address *</Label>
-                      <Input id="address" required />
-                    </div>
-                    <div className="grid sm:grid-cols-3 gap-4">
-                      <div className="space-y-2">
-                        <Label htmlFor="city">City *</Label>
-                        <Input id="city" required />
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="state">State/Province</Label>
-                        <Input id="state" />
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="zip">Postal Code *</Label>
-                        <Input id="zip" required />
-                      </div>
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="country">Country *</Label>
-                      <Input id="country" required />
-                    </div>
-                  </CardContent>
-                </Card>
-
-                {/* Payment Method */}
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Payment Method</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <RadioGroup value={paymentMethod} onValueChange={setPaymentMethod} className="space-y-3">
-                      <div className="flex items-center space-x-3 p-4 border border-border rounded-lg hover:border-primary/50 transition-colors">
-                        <RadioGroupItem value="crypto" id="crypto" />
-                        <Label htmlFor="crypto" className="flex items-center gap-2 cursor-pointer flex-1">
-                          <Bitcoin className="h-5 w-5 text-primary" />
-                          <div>
-                            <p className="font-medium">Cryptocurrency</p>
-                            <p className="text-xs text-muted-foreground">BTC, ETH, USDT accepted</p>
-                          </div>
-                        </Label>
-                      </div>
-                      <div className="flex items-center space-x-3 p-4 border border-border rounded-lg hover:border-primary/50 transition-colors">
-                        <RadioGroupItem value="wire" id="wire" />
-                        <Label htmlFor="wire" className="flex items-center gap-2 cursor-pointer flex-1">
-                          <Building2 className="h-5 w-5 text-primary" />
-                          <div>
-                            <p className="font-medium">Bank Transfer (SWIFT)</p>
-                            <p className="text-xs text-muted-foreground">1-3 business days to confirm</p>
-                          </div>
-                        </Label>
-                      </div>
-                      <div className="flex items-center space-x-3 p-4 border border-border rounded-lg hover:border-primary/50 transition-colors">
-                        <RadioGroupItem value="card" id="card" />
-                        <Label htmlFor="card" className="flex items-center gap-2 cursor-pointer flex-1">
-                          <CreditCard className="h-5 w-5 text-primary" />
-                          <div>
-                            <p className="font-medium">Credit Card</p>
-                            <p className="text-xs text-muted-foreground">For orders under $5,000</p>
-                          </div>
-                        </Label>
-                      </div>
-                    </RadioGroup>
-                  </CardContent>
-                </Card>
-              </div>
-
-              {/* Order Summary */}
-              <div className="lg:col-span-1">
-                <Card className="sticky top-24">
-                  <CardHeader>
-                    <CardTitle>Order Summary</CardTitle>
-                  </CardHeader>
-                  <CardContent className="space-y-4">
-                    {items.map((item) => (
-                      <div key={item.id} className="flex gap-3">
-                        <img
-                          src={item.image}
-                          alt={item.name}
-                          className="w-16 h-16 object-cover rounded-md"
-                        />
-                        <div className="flex-1 min-w-0">
-                          <p className="font-medium text-sm truncate">{item.name}</p>
-                          <p className="text-xs text-muted-foreground">Qty: {item.quantity}</p>
-                          <p className="text-sm text-primary font-semibold">
+        <div className="container mx-auto px-4 py-8">
+          <div className="grid lg:grid-cols-3 gap-8">
+            {/* Order Summary */}
+            <div className="lg:col-span-2">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Order Summary</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  {items.map((item) => (
+                    <div key={item.id} className="flex gap-4 p-4 bg-secondary rounded-lg">
+                      <img
+                        src={item.image}
+                        alt={item.name}
+                        className="w-20 h-20 object-contain bg-background rounded-md"
+                      />
+                      <div className="flex-1 min-w-0">
+                        <p className="font-semibold truncate">{item.name}</p>
+                        <p className="text-sm text-muted-foreground">{item.brand} • {item.algorithm}</p>
+                        <p className="text-sm text-muted-foreground">Hashrate: {item.hashrate}</p>
+                        <div className="flex justify-between items-center mt-2">
+                          <span className="text-sm">Qty: {item.quantity}</span>
+                          <span className="font-bold text-primary">
                             ${(item.price * item.quantity).toLocaleString()}
-                          </p>
+                          </span>
                         </div>
                       </div>
-                    ))}
-
-                    <Separator />
-
-                    <div className="space-y-2">
-                      <div className="flex justify-between text-sm">
-                        <span className="text-muted-foreground">Subtotal</span>
-                        <span>${totalPrice.toLocaleString()}</span>
-                      </div>
-                      <div className="flex justify-between text-sm">
-                        <span className="text-muted-foreground">Shipping</span>
-                        <span>{shippingCost === 0 ? 'Free' : `$${shippingCost}`}</span>
-                      </div>
-                      {shippingCost === 0 && (
-                        <p className="text-xs text-primary">Free shipping on orders over $5,000!</p>
-                      )}
                     </div>
+                  ))}
 
-                    <Separator />
+                  <Separator />
 
-                    <div className="flex justify-between font-display font-bold text-lg">
-                      <span>Total</span>
-                      <span className="text-primary">${finalTotal.toLocaleString()}</span>
+                  <div className="space-y-2">
+                    <div className="flex justify-between text-sm">
+                      <span className="text-muted-foreground">Subtotal</span>
+                      <span>${totalPrice.toLocaleString()}</span>
                     </div>
+                    <div className="flex justify-between text-sm">
+                      <span className="text-muted-foreground">Shipping</span>
+                      <span>{shippingCost === 0 ? 'Free' : `$${shippingCost}`}</span>
+                    </div>
+                    {shippingCost === 0 && (
+                      <p className="text-xs text-primary flex items-center gap-1">
+                        <CheckCircle2 className="h-3 w-3" />
+                        Free shipping on orders over $5,000!
+                      </p>
+                    )}
+                  </div>
 
-                    <Button type="submit" size="lg" className="w-full" disabled={isProcessing}>
-                      {isProcessing ? 'Processing...' : 'Place Order'}
-                    </Button>
+                  <Separator />
 
-                    <p className="text-xs text-muted-foreground text-center">
-                      By placing this order, you agree to our Terms of Service and Privacy Policy.
-                    </p>
-                  </CardContent>
-                </Card>
-              </div>
+                  <div className="flex justify-between font-display font-bold text-xl">
+                    <span>Total</span>
+                    <span className="text-primary">${finalTotal.toLocaleString()}</span>
+                  </div>
+                </CardContent>
+              </Card>
             </div>
-          </form>
+
+            {/* WhatsApp Checkout */}
+            <div className="lg:col-span-1">
+              <Card className="sticky top-32">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <MessageCircle className="h-5 w-5 text-[#25D366]" />
+                    Complete via WhatsApp
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <p className="text-sm text-muted-foreground">
+                    Click the button below to send your order to our sales team via WhatsApp. 
+                    We'll confirm availability and provide payment options.
+                  </p>
+
+                  <div className="space-y-3 text-sm">
+                    <div className="flex items-start gap-2">
+                      <CheckCircle2 className="h-4 w-4 text-primary mt-0.5" />
+                      <span>Instant response during business hours</span>
+                    </div>
+                    <div className="flex items-start gap-2">
+                      <CheckCircle2 className="h-4 w-4 text-primary mt-0.5" />
+                      <span>Secure payment options available</span>
+                    </div>
+                    <div className="flex items-start gap-2">
+                      <CheckCircle2 className="h-4 w-4 text-primary mt-0.5" />
+                      <span>Get answers to any questions</span>
+                    </div>
+                  </div>
+
+                  <Button 
+                    size="lg" 
+                    className="w-full bg-[#25D366] hover:bg-[#128C7E] text-white"
+                    onClick={handleWhatsAppCheckout}
+                  >
+                    <MessageCircle className="h-5 w-5 mr-2" />
+                    Order via WhatsApp
+                  </Button>
+
+                  <p className="text-xs text-muted-foreground text-center">
+                    Your order details will be sent to our sales team at +1 407 676 4098
+                  </p>
+
+                  <Separator />
+
+                  <div className="text-center">
+                    <p className="text-sm text-muted-foreground mb-2">Prefer email?</p>
+                    <Button variant="outline" size="sm" asChild>
+                      <a href={`mailto:sales@minerhaolan.com?subject=Order Inquiry&body=${encodeURIComponent(generateWhatsAppMessage())}`}>
+                        Contact via Email
+                      </a>
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
         </div>
       </main>
     </>
