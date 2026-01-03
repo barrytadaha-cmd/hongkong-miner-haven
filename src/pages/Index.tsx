@@ -3,8 +3,11 @@ import HeroSection from '@/components/HeroSection';
 import CategoryCards from '@/components/CategoryCards';
 import FeaturedProducts from '@/components/FeaturedProducts';
 import FeaturedProduct from '@/components/FeaturedProduct';
+import HostingCTA from '@/components/HostingCTA';
+import BlogPreview from '@/components/BlogPreview';
 import PartnersSection from '@/components/PartnersSection';
 import TestimonialsSection from '@/components/TestimonialsSection';
+import HelpSection from '@/components/HelpSection';
 import FAQSection from '@/components/FAQSection';
 
 const Index = () => {
@@ -23,10 +26,13 @@ const Index = () => {
       <main>
         <HeroSection />
         <CategoryCards />
-        <FeaturedProducts />
         <FeaturedProduct />
+        <FeaturedProducts />
+        <HostingCTA />
+        <BlogPreview />
         <PartnersSection />
         <TestimonialsSection />
+        <HelpSection />
         <FAQSection />
       </main>
     </>

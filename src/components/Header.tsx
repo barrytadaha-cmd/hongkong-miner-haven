@@ -36,6 +36,7 @@ const Header = () => {
     { name: 'Blog', path: '/blog' },
     { name: 'FAQ', path: '/faq' },
     { name: 'Mining Guide', path: '/blog' },
+    { name: 'Repair & Warranty', path: '/repair-warranty' },
   ];
 
   return (
