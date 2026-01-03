@@ -45,18 +45,17 @@ export const products: Product[] = [
     efficiency: '15.1 J/TH',
     price: 8999,
     originalPrice: 10499,
-    image: 'https://images.unsplash.com/photo-1639762681485-074b7f938ba0?w=400&h=400&fit=crop',
+    image: 'https://asicminermarket.com/wp-content/uploads/2024/03/Antminer-S21-Pro.png',
     images: [
-      'https://images.unsplash.com/photo-1639762681485-074b7f938ba0?w=800&h=800&fit=crop',
-      'https://images.unsplash.com/photo-1518770660439-4636190af475?w=800&h=800&fit=crop',
-      'https://images.unsplash.com/photo-1516245834210-c4c142787335?w=800&h=800&fit=crop',
-      'https://images.unsplash.com/photo-1622630998477-20aa696ecb05?w=800&h=800&fit=crop'
+      'https://asicminermarket.com/wp-content/uploads/2024/03/Antminer-S21-Pro.png',
+      'https://asicminermarket.com/wp-content/uploads/2024/03/Antminer-S21-Pro-side.png',
+      'https://asicminermarket.com/wp-content/uploads/2024/03/Antminer-S21-Pro-back.png',
     ],
     category: 'bitcoin',
     inStock: true,
     isSale: true,
     location: 'hongkong',
-    description: 'The Antminer S21 Pro represents the latest advancement in Bitcoin mining technology from Bitmain. With an impressive hashrate of 234 TH/s and industry-leading efficiency of 15.1 J/TH, this miner is designed for serious mining operations seeking maximum profitability. The S21 Pro features enhanced thermal design, improved power delivery, and robust build quality for 24/7 operation.',
+    description: 'The Antminer S21 Pro represents the latest advancement in Bitcoin mining technology from Bitmain. With an impressive hashrate of 234 TH/s and industry-leading efficiency of 15.1 J/TH, this miner is designed for serious mining operations seeking maximum profitability.',
     specs: {
       dimensions: '400 x 195 x 290 mm',
       weight: '14.6 kg',
@@ -77,18 +76,15 @@ export const products: Product[] = [
     power: '5676W',
     efficiency: '12.0 J/TH',
     price: 18500,
-    image: 'https://images.unsplash.com/photo-1518544801976-3e159e50e5bb?w=400&h=400&fit=crop',
+    image: 'https://asicminermarket.com/wp-content/uploads/2024/01/Antminer-S21-Hyd.png',
     images: [
-      'https://images.unsplash.com/photo-1518544801976-3e159e50e5bb?w=800&h=800&fit=crop',
-      'https://images.unsplash.com/photo-1639762681485-074b7f938ba0?w=800&h=800&fit=crop',
-      'https://images.unsplash.com/photo-1605792657660-596af9009e82?w=800&h=800&fit=crop',
-      'https://images.unsplash.com/photo-1621761191319-c6fb62004040?w=800&h=800&fit=crop'
+      'https://asicminermarket.com/wp-content/uploads/2024/01/Antminer-S21-Hyd.png',
     ],
     category: 'bitcoin',
     inStock: true,
     isNew: true,
     location: 'hongkong',
-    description: 'The Antminer S21 XP Hyd is the most powerful hydro-cooled Bitcoin miner available. With an extraordinary 473 TH/s hashrate and exceptional 12.0 J/TH efficiency, this machine sets new standards in mining performance. Hydro cooling technology ensures silent operation and maximum thermal efficiency, making it ideal for professional mining facilities.',
+    description: 'The Antminer S21 XP Hyd is the most powerful hydro-cooled Bitcoin miner available. With an extraordinary 473 TH/s hashrate and exceptional 12.0 J/TH efficiency, this machine sets new standards in mining performance.',
     specs: {
       dimensions: '410 x 170 x 209 mm',
       weight: '12.5 kg',
@@ -109,17 +105,14 @@ export const products: Product[] = [
     power: '3422W',
     efficiency: '18.4 J/TH',
     price: 5299,
-    image: 'https://images.unsplash.com/photo-1622630998477-20aa696ecb05?w=400&h=400&fit=crop',
+    image: 'https://asicminermarket.com/wp-content/uploads/2024/03/Whatsminer-M60S.png',
     images: [
-      'https://images.unsplash.com/photo-1622630998477-20aa696ecb05?w=800&h=800&fit=crop',
-      'https://images.unsplash.com/photo-1518770660439-4636190af475?w=800&h=800&fit=crop',
-      'https://images.unsplash.com/photo-1639762681485-074b7f938ba0?w=800&h=800&fit=crop',
-      'https://images.unsplash.com/photo-1516245834210-c4c142787335?w=800&h=800&fit=crop'
+      'https://asicminermarket.com/wp-content/uploads/2024/03/Whatsminer-M60S.png',
     ],
     category: 'bitcoin',
     inStock: true,
     location: 'hongkong',
-    description: 'The Whatsminer M60S from MicroBT offers exceptional value for Bitcoin mining operations. Delivering 186 TH/s with 18.4 J/TH efficiency, this miner provides an excellent balance of performance and power consumption. Known for reliability and durability, the M60S is perfect for both new and experienced miners.',
+    description: 'The Whatsminer M60S from MicroBT offers exceptional value for Bitcoin mining operations. Delivering 186 TH/s with 18.4 J/TH efficiency, this miner provides an excellent balance of performance and power consumption.',
     specs: {
       dimensions: '390 x 155 x 240 mm',
       weight: '12.8 kg',
@@ -139,19 +132,17 @@ export const products: Product[] = [
     hashrate: '17 GH/s',
     power: '3260W',
     efficiency: '191.8 J/GH',
-    price: 12999,
-    image: 'https://images.unsplash.com/photo-1621761191319-c6fb62004040?w=400&h=400&fit=crop',
+    price: 5799,
+    originalPrice: 9999,
+    image: 'https://asicminermarket.com/wp-content/uploads/2024/01/Antminer-L9.png',
     images: [
-      'https://images.unsplash.com/photo-1621761191319-c6fb62004040?w=800&h=800&fit=crop',
-      'https://images.unsplash.com/photo-1605792657660-596af9009e82?w=800&h=800&fit=crop',
-      'https://images.unsplash.com/photo-1639762681485-074b7f938ba0?w=800&h=800&fit=crop',
-      'https://images.unsplash.com/photo-1518544801976-3e159e50e5bb?w=800&h=800&fit=crop'
+      'https://asicminermarket.com/wp-content/uploads/2024/01/Antminer-L9.png',
     ],
     category: 'litecoin',
     inStock: true,
-    isNew: true,
+    isSale: true,
     location: 'hongkong',
-    description: 'The Antminer L9 is the most powerful Scrypt miner from Bitmain, designed for Litecoin and Dogecoin mining. With 17 GH/s hashrate, it delivers unmatched performance for Scrypt algorithm cryptocurrencies. The L9 features improved efficiency and enhanced cooling for stable long-term operation.',
+    description: 'The Antminer L9 is the most powerful Scrypt miner from Bitmain, designed for Litecoin and Dogecoin mining. With 17 GH/s hashrate, it delivers unmatched performance for Scrypt algorithm cryptocurrencies.',
     specs: {
       dimensions: '400 x 195 x 290 mm',
       weight: '14.2 kg',
@@ -172,17 +163,14 @@ export const products: Product[] = [
     power: '3150W',
     efficiency: '150 J/TH',
     price: 32000,
-    image: 'https://images.unsplash.com/photo-1605792657660-596af9009e82?w=400&h=400&fit=crop',
+    image: 'https://asicminermarket.com/wp-content/uploads/2024/01/Antminer-KS5-Pro.png',
     images: [
-      'https://images.unsplash.com/photo-1605792657660-596af9009e82?w=800&h=800&fit=crop',
-      'https://images.unsplash.com/photo-1621761191319-c6fb62004040?w=800&h=800&fit=crop',
-      'https://images.unsplash.com/photo-1639762681485-074b7f938ba0?w=800&h=800&fit=crop',
-      'https://images.unsplash.com/photo-1518770660439-4636190af475?w=800&h=800&fit=crop'
+      'https://asicminermarket.com/wp-content/uploads/2024/01/Antminer-KS5-Pro.png',
     ],
     category: 'kaspa',
     inStock: false,
     location: 'international',
-    description: 'The Antminer KS5 Pro is the flagship Kaspa miner from Bitmain, optimized for the KHeavyHash algorithm. With 21 TH/s hashrate, it offers the highest performance available for Kaspa mining. This professional-grade machine is designed for maximum profitability in Kaspa mining operations.',
+    description: 'The Antminer KS5 Pro is the flagship Kaspa miner from Bitmain, optimized for the KHeavyHash algorithm. With 21 TH/s hashrate, it offers the highest performance available for Kaspa mining.',
     specs: {
       dimensions: '400 x 195 x 290 mm',
       weight: '14.5 kg',
@@ -203,17 +191,14 @@ export const products: Product[] = [
     power: '15W',
     efficiency: '30 J/TH',
     price: 199,
-    image: 'https://images.unsplash.com/photo-1516245834210-c4c142787335?w=400&h=400&fit=crop',
+    image: 'https://asicminermarket.com/wp-content/uploads/2024/01/Bitaxe-Ultra.png',
     images: [
-      'https://images.unsplash.com/photo-1516245834210-c4c142787335?w=800&h=800&fit=crop',
-      'https://images.unsplash.com/photo-1518770660439-4636190af475?w=800&h=800&fit=crop',
-      'https://images.unsplash.com/photo-1622630998477-20aa696ecb05?w=800&h=800&fit=crop',
-      'https://images.unsplash.com/photo-1639762681485-074b7f938ba0?w=800&h=800&fit=crop'
+      'https://asicminermarket.com/wp-content/uploads/2024/01/Bitaxe-Ultra.png',
     ],
     category: 'home',
     inStock: true,
     location: 'hongkong',
-    description: 'The Bitaxe Ultra is the perfect entry point for home Bitcoin mining enthusiasts. This open-source, low-power miner runs on just 15W, making it ideal for educational purposes, lottery mining, and supporting the Bitcoin network from home. Silent operation and compact design make it suitable for any environment.',
+    description: 'The Bitaxe Ultra is the perfect entry point for home Bitcoin mining enthusiasts. This open-source, low-power miner runs on just 15W, making it ideal for educational purposes, lottery mining, and supporting the Bitcoin network from home.',
     specs: {
       dimensions: '80 x 60 x 35 mm',
       weight: '0.2 kg',
@@ -235,18 +220,15 @@ export const products: Product[] = [
     efficiency: '23 J/TH',
     price: 1899,
     originalPrice: 2499,
-    image: 'https://images.unsplash.com/photo-1518770660439-4636190af475?w=400&h=400&fit=crop',
+    image: 'https://asicminermarket.com/wp-content/uploads/2024/01/Antminer-S19k-Pro.png',
     images: [
-      'https://images.unsplash.com/photo-1518770660439-4636190af475?w=800&h=800&fit=crop',
-      'https://images.unsplash.com/photo-1639762681485-074b7f938ba0?w=800&h=800&fit=crop',
-      'https://images.unsplash.com/photo-1622630998477-20aa696ecb05?w=800&h=800&fit=crop',
-      'https://images.unsplash.com/photo-1516245834210-c4c142787335?w=800&h=800&fit=crop'
+      'https://asicminermarket.com/wp-content/uploads/2024/01/Antminer-S19k-Pro.png',
     ],
     category: 'bitcoin',
     inStock: true,
     isSale: true,
     location: 'hongkong',
-    description: 'The Antminer S19k Pro offers excellent value with 120 TH/s hashrate at an affordable price point. With 23 J/TH efficiency and proven reliability, this miner is perfect for those looking to enter Bitcoin mining without breaking the bank. Currently on sale with limited stock available.',
+    description: 'The Antminer S19k Pro offers excellent value with 120 TH/s hashrate at an affordable price point. With 23 J/TH efficiency and proven reliability, this miner is perfect for those looking to enter Bitcoin mining without breaking the bank.',
     specs: {
       dimensions: '400 x 195 x 290 mm',
       weight: '13.8 kg',
@@ -260,34 +242,147 @@ export const products: Product[] = [
   },
   {
     id: '8',
-    name: 'Antminer E9 Pro',
-    brand: 'Bitmain',
-    algorithm: 'EtHash',
-    hashrate: '3.68 GH/s',
-    power: '2200W',
-    efficiency: '0.6 J/MH',
-    price: 4599,
-    image: 'https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=400&h=400&fit=crop',
+    name: 'VolcMiner D1 Mini',
+    brand: 'VolcMiner',
+    algorithm: 'SCRYPT',
+    hashrate: '2.2 GH/s',
+    power: '500W',
+    efficiency: '0.227 J/GH',
+    price: 1049,
+    image: 'https://asicminermarket.com/wp-content/uploads/2024/01/VolcMiner-D1.png',
     images: [
-      'https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=800&h=800&fit=crop',
-      'https://images.unsplash.com/photo-1639762681485-074b7f938ba0?w=800&h=800&fit=crop',
-      'https://images.unsplash.com/photo-1605792657660-596af9009e82?w=800&h=800&fit=crop',
-      'https://images.unsplash.com/photo-1621761191319-c6fb62004040?w=800&h=800&fit=crop'
+      'https://asicminermarket.com/wp-content/uploads/2024/01/VolcMiner-D1.png',
     ],
-    category: 'ethereum',
+    category: 'litecoin',
     inStock: true,
-    location: 'international',
-    description: 'The Antminer E9 Pro is the ultimate EtHash algorithm miner, equivalent to 32 RTX 3080 graphics cards in mining performance. With 3.68 GH/s hashrate, it delivers exceptional performance for Ethereum Classic and other EtHash coins. Professional-grade reliability for continuous operation.',
+    location: 'hongkong',
+    description: 'The VolcMiner D1 Mini is a compact and efficient Scrypt miner perfect for home use. With 2.2 GH/s hashrate and only 500W power consumption, it offers quiet operation and low electricity costs.',
     specs: {
-      dimensions: '195 x 290 x 400 mm',
-      weight: '14.2 kg',
+      dimensions: '200 x 180 x 120 mm',
+      weight: '3.5 kg',
+      noise: '45 dB',
+      temperature: '5-40°C',
+      voltage: '110-240V',
+      interface: 'Ethernet',
+      cooling: '2 x Silent Fans'
+    },
+    coins: ['Litecoin', 'Dogecoin']
+  },
+  {
+    id: '9',
+    name: 'Avalon Q',
+    brand: 'Canaan',
+    algorithm: 'SHA256',
+    hashrate: '90 TH/s',
+    power: '1674W',
+    efficiency: '18.6 J/TH',
+    price: 1699,
+    originalPrice: 1999,
+    image: 'https://asicminermarket.com/wp-content/uploads/2024/05/Avalon-Nano-3.png',
+    images: [
+      'https://asicminermarket.com/wp-content/uploads/2024/05/Avalon-Nano-3.png',
+    ],
+    category: 'home',
+    inStock: true,
+    isSale: true,
+    location: 'hongkong',
+    description: 'The Avalon Q from Canaan is designed for home miners who want solid performance with lower power consumption. At 90 TH/s and 1674W, it offers an excellent entry point into Bitcoin mining.',
+    specs: {
+      dimensions: '331 x 195 x 292 mm',
+      weight: '10.5 kg',
+      noise: '65 dB',
+      temperature: '5-35°C',
+      voltage: '200-240V',
+      interface: 'Ethernet',
+      cooling: '4 x Fans'
+    },
+    coins: ['Bitcoin', 'Bitcoin Cash']
+  },
+  {
+    id: '10',
+    name: 'IceRiver KS3',
+    brand: 'IceRiver',
+    algorithm: 'KHeavyHash',
+    hashrate: '8 TH/s',
+    power: '3200W',
+    efficiency: '400 J/TH',
+    price: 8999,
+    image: 'https://asicminermarket.com/wp-content/uploads/2024/01/IceRiver-KS3.png',
+    images: [
+      'https://asicminermarket.com/wp-content/uploads/2024/01/IceRiver-KS3.png',
+    ],
+    category: 'kaspa',
+    inStock: true,
+    isNew: true,
+    location: 'hongkong',
+    description: 'The IceRiver KS3 is a powerful Kaspa miner delivering 8 TH/s hashrate. Built for serious Kaspa mining operations with reliable performance and solid build quality.',
+    specs: {
+      dimensions: '430 x 195 x 290 mm',
+      weight: '15 kg',
+      noise: '75 dB',
+      temperature: '5-40°C',
+      voltage: '200-240V',
+      interface: 'Ethernet',
+      cooling: '4 x Fans'
+    },
+    coins: ['Kaspa']
+  },
+  {
+    id: '11',
+    name: 'Antminer Z15 Pro',
+    brand: 'Bitmain',
+    algorithm: 'Equihash',
+    hashrate: '840 KSol/s',
+    power: '2650W',
+    efficiency: '3.15 J/Sol',
+    price: 4599,
+    image: 'https://asicminermarket.com/wp-content/uploads/2024/01/Antminer-Z15-Pro.png',
+    images: [
+      'https://asicminermarket.com/wp-content/uploads/2024/01/Antminer-Z15-Pro.png',
+    ],
+    category: 'zcash',
+    inStock: true,
+    location: 'hongkong',
+    description: 'The Antminer Z15 Pro is the most powerful Equihash miner on the market. Perfect for mining Zcash and other Equihash coins with 840 KSol/s hashrate.',
+    specs: {
+      dimensions: '400 x 195 x 290 mm',
+      weight: '14 kg',
       noise: '75 dB',
       temperature: '5-40°C',
       voltage: '200-240V',
       interface: 'Ethernet',
       cooling: '4 x 12038 Fans'
     },
-    coins: ['Ethereum Classic', 'Ravencoin', 'Ergo']
+    coins: ['Zcash', 'Horizen', 'Komodo']
+  },
+  {
+    id: '12',
+    name: 'Avalon MINI 3',
+    brand: 'Canaan',
+    algorithm: 'SHA256',
+    hashrate: '37.5 TH/s',
+    power: '1000W',
+    efficiency: '26.7 J/TH',
+    price: 799,
+    image: 'https://asicminermarket.com/wp-content/uploads/2024/05/Avalon-Nano-3.png',
+    images: [
+      'https://asicminermarket.com/wp-content/uploads/2024/05/Avalon-Nano-3.png',
+    ],
+    category: 'heater',
+    inStock: true,
+    isNew: true,
+    location: 'hongkong',
+    description: 'The Avalon MINI 3 doubles as a Bitcoin miner and space heater. Heat your home while earning Bitcoin with this innovative device from Canaan. Silent operation and stylish design.',
+    specs: {
+      dimensions: '200 x 200 x 300 mm',
+      weight: '5.5 kg',
+      noise: '35 dB',
+      temperature: '5-35°C',
+      voltage: '110-240V',
+      interface: 'WiFi + Ethernet',
+      cooling: 'Internal Heat Dissipation'
+    },
+    coins: ['Bitcoin']
   },
 ];
 
@@ -296,57 +391,58 @@ export const categories = [
   { id: 'bitcoin', name: 'Bitcoin Miners', count: products.filter(p => p.category === 'bitcoin').length },
   { id: 'litecoin', name: 'Litecoin Miners', count: products.filter(p => p.category === 'litecoin').length },
   { id: 'kaspa', name: 'Kaspa Miners', count: products.filter(p => p.category === 'kaspa').length },
+  { id: 'zcash', name: 'Zcash Miners', count: products.filter(p => p.category === 'zcash').length },
   { id: 'home', name: 'Home Miners', count: products.filter(p => p.category === 'home').length },
-  { id: 'ethereum', name: 'Ethereum Miners', count: products.filter(p => p.category === 'ethereum').length },
+  { id: 'heater', name: 'Bitcoin Heaters', count: products.filter(p => p.category === 'heater').length },
 ];
 
 export const faqItems = [
   {
+    question: 'Where is your company located?',
+    answer: 'Miner Haolan is headquartered in Hong Kong, with warehousing facilities for fast shipping across Asia and worldwide.'
+  },
+  {
+    question: 'Do I have to pay VAT?',
+    answer: 'VAT and import duties vary by destination country. Orders shipped from Hong Kong may be subject to local customs duties and taxes.'
+  },
+  {
+    question: 'Is there a warranty?',
+    answer: 'Yes! All new miners come with manufacturer warranty, typically 6-12 months depending on the brand.'
+  },
+  {
     question: 'What payment methods do you accept?',
-    answer: 'We accept bank transfers (SWIFT), cryptocurrency payments (BTC, ETH, USDT), and credit cards for orders under $5,000. For large B2B orders, we offer flexible payment terms.'
+    answer: 'We accept bank transfers (SWIFT), cryptocurrency payments (BTC, ETH, USDT), and credit cards for orders under $5,000.'
   },
   {
     question: 'How long does shipping take?',
-    answer: 'Orders from our Hong Kong warehouse typically ship within 1-3 business days. Delivery to Asia takes 3-5 days, to Europe and North America 7-14 days. Express shipping is available for urgent orders.'
-  },
-  {
-    question: 'Do you offer warranty on miners?',
-    answer: 'Yes, all new miners come with manufacturer warranty (typically 6-12 months). We also offer extended warranty packages and post-warranty repair services at our Hong Kong facility.'
-  },
-  {
-    question: 'Can I visit your showroom in Hong Kong?',
-    answer: 'Absolutely! Our showroom is open Monday-Friday, 9AM-6PM. We recommend scheduling an appointment for personalized consultation. We can also arrange facility tours for B2B clients.'
+    answer: 'Orders from our Hong Kong warehouse typically ship within 1-3 business days. Delivery to Asia takes 3-5 days, to Europe 7-10 days.'
   },
   {
     question: 'Do you offer hosting services?',
-    answer: 'Yes, we partner with mining farms across Asia offering competitive electricity rates starting at $0.04/kWh. Contact us for customized hosting solutions for your mining operation.'
-  },
-  {
-    question: 'What about customs and import duties?',
-    answer: 'We handle all export documentation from Hong Kong. Import duties vary by country - we provide commercial invoices and can advise on customs requirements for your location.'
+    answer: 'Yes! We partner with mining facilities across Asia offering competitive electricity rates starting at $0.04/kWh.'
   },
 ];
 
 export const testimonials = [
   {
-    name: 'David Chen',
-    company: 'Chen Mining Co.',
-    location: 'Singapore',
-    text: 'MinerHoalan has been our trusted supplier for 3 years. Their Hong Kong location means fast delivery to Singapore and excellent after-sales support.',
-    rating: 5
-  },
-  {
-    name: 'Michael Wong',
-    company: 'Pacific Hash Ltd.',
-    location: 'Australia',
-    text: 'Outstanding service! They helped us set up a 500-unit operation with competitive bulk pricing and ongoing technical support.',
-    rating: 5
-  },
-  {
-    name: 'Sarah Kim',
+    name: 'Dennis',
     company: 'Home Miner',
-    location: 'South Korea',
-    text: 'Perfect for small-scale miners like me. The Bitaxe they recommended is quiet, efficient, and actually profitable!',
+    location: 'Germany',
+    text: "Top-notch service, good personal contact, and immediate help. The S19k Pro arrived way ahead of schedule and works flawlessly!",
+    rating: 5
+  },
+  {
+    name: 'Rene',
+    company: 'Mining Farm',
+    location: 'Netherlands',
+    text: "Completely satisfied! Service was competent and friendly, delivery was lightning fast. A completely reliable provider.",
+    rating: 5
+  },
+  {
+    name: 'Tom',
+    company: 'Crypto Investor',
+    location: 'UK',
+    text: "Very friendly and professional support. The miner was shipped on Tuesday, by Friday it was running. What more could you want?",
     rating: 5
   },
 ];
