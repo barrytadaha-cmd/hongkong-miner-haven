@@ -17,6 +17,8 @@ import Checkout from "./pages/Checkout";
 import RepairWarranty from "./pages/RepairWarranty";
 import Auth from "./pages/Auth";
 import Admin from "./pages/Admin";
+import AlgorithmLanding from "./pages/AlgorithmLanding";
+import ProductDetailApple from "./pages/ProductDetailApple";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
