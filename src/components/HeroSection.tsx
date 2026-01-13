@@ -7,14 +7,42 @@ import heroMobileBg from '@/assets/hero-mobile-bg.webp';
 const HeroSection = () => {
   return (
     <section className="relative min-h-[85vh] flex items-center overflow-hidden bg-gradient-hero">
-      {/* Mobile Background Image */}
-      <div className="absolute inset-0 lg:hidden">
-        <img 
-          src={heroMobileBg} 
-          alt="" 
-          className="w-full h-full object-cover"
+      {/* Mobile Background Video/Animation with 3D Effect */}
+      <div className="absolute inset-0 lg:hidden" style={{ perspective: '1000px' }}>
+        <motion.div
+          className="absolute inset-0"
+          initial={{ scale: 1.1, rotateX: 5 }}
+          animate={{ 
+            scale: [1.1, 1.15, 1.1],
+            rotateX: [5, 3, 5],
+            z: [0, 20, 0],
+          }}
+          transition={{ 
+            duration: 8, 
+            repeat: Infinity, 
+            ease: "easeInOut" 
+          }}
+          style={{ 
+            transformStyle: 'preserve-3d',
+            transformOrigin: 'center center',
+          }}
+        >
+          <img 
+            src={heroMobileBg} 
+            alt="" 
+            className="w-full h-full object-cover"
+          />
+        </motion.div>
+        {/* Animated glow overlay */}
+        <motion.div 
+          className="absolute inset-0 bg-gradient-radial from-primary/20 via-transparent to-transparent"
+          animate={{ 
+            opacity: [0.3, 0.6, 0.3],
+          }}
+          transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-navy via-navy/80 to-navy/40" />
+        {/* Gradient overlay for readability */}
+        <div className="absolute inset-0 bg-gradient-to-t from-navy via-navy/70 to-navy/30" />
       </div>
 
       {/* Animated Background Elements - Desktop Only */}
