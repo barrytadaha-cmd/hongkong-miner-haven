@@ -11,9 +11,10 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/hooks/use-toast';
-import { Loader2, Plus, Trash2, Upload, Database, LogOut, Edit, Image, Package } from 'lucide-react';
+import { Loader2, Plus, Trash2, Upload, Database, LogOut, Edit, Image, Package, Sparkles } from 'lucide-react';
 import OrderManagement from '@/components/admin/OrderManagement';
 import OrderStatistics from '@/components/admin/OrderStatistics';
+import AIProductDescription from '@/components/AIProductDescription';
 import Layout from '@/components/Layout';
 import {
   Dialog,
@@ -514,6 +515,25 @@ export default function Admin() {
                     rows={3}
                   />
                 </div>
+                
+                {/* AI Description Generator */}
+                {formData.name && formData.price && (
+                  <AIProductDescription
+                    product={{
+                      name: formData.name,
+                      brand: formData.brand,
+                      algorithm: formData.algorithm,
+                      hashrate: formData.hashrate,
+                      power: formData.power,
+                      efficiency: formData.efficiency,
+                      price: parseFloat(formData.price) || 0,
+                      category: formData.category,
+                      coins: formData.coins ? formData.coins.split(',').map(c => c.trim()) : [],
+                      description: formData.description,
+                    }}
+                    onDescriptionGenerated={(desc) => setFormData({ ...formData, description: desc })}
+                  />
+                )}
                 <div className="flex items-center gap-2">
                   <input
                     type="checkbox"

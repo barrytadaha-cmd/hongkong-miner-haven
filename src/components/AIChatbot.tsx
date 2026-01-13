@@ -176,18 +176,76 @@ const AIChatbot = () => {
 
   return (
     <>
-      {/* Chat Toggle Button */}
+      {/* Chat Toggle Button with Enhanced Animation */}
       <AnimatePresence>
         {!isOpen && (
           <motion.button
             initial={{ scale: 0, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0, opacity: 0 }}
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.95 }}
             onClick={() => setIsOpen(true)}
-            className="fixed bottom-24 right-6 z-50 bg-primary hover:bg-primary/90 text-primary-foreground p-4 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 group"
+            className="fixed bottom-24 right-6 z-50 bg-primary hover:bg-primary/90 text-primary-foreground p-4 rounded-full shadow-lg group"
             aria-label="Open AI Assistant"
           >
-            <Bot className="h-6 w-6" />
+            {/* Animated Glow Ring */}
+            <motion.span
+              className="absolute inset-0 rounded-full bg-primary"
+              animate={{
+                scale: [1, 1.4, 1.4],
+                opacity: [0.6, 0, 0],
+              }}
+              transition={{
+                duration: 2.5,
+                repeat: Infinity,
+                ease: "easeOut",
+              }}
+            />
+            <motion.span
+              className="absolute inset-0 rounded-full bg-primary"
+              animate={{
+                scale: [1, 1.2, 1.2],
+                opacity: [0.4, 0, 0],
+              }}
+              transition={{
+                duration: 2.5,
+                repeat: Infinity,
+                ease: "easeOut",
+                delay: 0.3,
+              }}
+            />
+            
+            {/* Animated Bot Icon */}
+            <motion.div
+              className="relative z-10"
+              animate={{
+                y: [0, -3, 0],
+                rotate: [0, 5, -5, 0],
+              }}
+              transition={{
+                y: { duration: 1.5, repeat: Infinity, ease: "easeInOut" },
+                rotate: { duration: 2, repeat: Infinity, ease: "easeInOut", repeatDelay: 1 },
+              }}
+            >
+              <Bot className="h-6 w-6" />
+              {/* Sparkle Effect */}
+              <motion.div
+                className="absolute -top-1 -right-1"
+                animate={{
+                  scale: [0, 1, 0],
+                  opacity: [0, 1, 0],
+                }}
+                transition={{
+                  duration: 1.5,
+                  repeat: Infinity,
+                  repeatDelay: 2,
+                }}
+              >
+                <Sparkles className="h-3 w-3 text-accent" />
+              </motion.div>
+            </motion.div>
+            
             <span className="absolute right-full mr-3 top-1/2 -translate-y-1/2 bg-card text-foreground px-3 py-2 rounded-lg shadow-lg text-sm font-medium opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap border border-border">
               AI Mining Consultant
             </span>
@@ -208,9 +266,13 @@ const AIChatbot = () => {
               <CardHeader className="pb-3 bg-gradient-to-r from-primary/10 to-accent/10">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <div className="p-2 rounded-full bg-primary/20">
+                    <motion.div 
+                      className="p-2 rounded-full bg-primary/20"
+                      animate={{ rotate: [0, 10, -10, 0] }}
+                      transition={{ duration: 2, repeat: Infinity, repeatDelay: 3 }}
+                    >
                       <Sparkles className="h-4 w-4 text-primary" />
-                    </div>
+                    </motion.div>
                     <CardTitle className="text-base">AI Mining Assistant</CardTitle>
                   </div>
                   <Button variant="ghost" size="icon" onClick={() => setIsOpen(false)}>
@@ -246,8 +308,10 @@ const AIChatbot = () => {
                 <ScrollArea className="h-[350px] p-4" ref={scrollRef}>
                   <div className="space-y-4">
                     {messages.map((msg, idx) => (
-                      <div
+                      <motion.div
                         key={idx}
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
                         className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
                       >
                         <div
@@ -259,12 +323,17 @@ const AIChatbot = () => {
                         >
                           <p className="text-sm whitespace-pre-wrap">{msg.content}</p>
                         </div>
-                      </div>
+                      </motion.div>
                     ))}
                     {isLoading && (
                       <div className="flex justify-start">
                         <div className="bg-muted rounded-2xl rounded-bl-md px-4 py-3">
-                          <Loader2 className="h-4 w-4 animate-spin" />
+                          <motion.div
+                            animate={{ opacity: [0.5, 1, 0.5] }}
+                            transition={{ duration: 1.5, repeat: Infinity }}
+                          >
+                            <Loader2 className="h-4 w-4 animate-spin" />
+                          </motion.div>
                         </div>
                       </div>
                     )}
@@ -276,18 +345,23 @@ const AIChatbot = () => {
                       <p className="text-xs text-muted-foreground">Quick questions:</p>
                       <div className="flex flex-wrap gap-2">
                         {quickActions.map((action, idx) => (
-                          <Button
+                          <motion.div
                             key={idx}
-                            variant="outline"
-                            size="sm"
-                            className="text-xs"
-                            onClick={() => {
-                              setInput(action.label);
-                            }}
+                            whileHover={{ scale: 1.02 }}
+                            whileTap={{ scale: 0.98 }}
                           >
-                            <span className="mr-1">{action.icon}</span>
-                            {action.label}
-                          </Button>
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              className="text-xs"
+                              onClick={() => {
+                                setInput(action.label);
+                              }}
+                            >
+                              <span className="mr-1">{action.icon}</span>
+                              {action.label}
+                            </Button>
+                          </motion.div>
                         ))}
                       </div>
                     </div>
@@ -305,9 +379,11 @@ const AIChatbot = () => {
                       disabled={isLoading}
                       className="flex-1"
                     />
-                    <Button onClick={handleSend} disabled={isLoading || !input.trim()} size="icon">
-                      <Send className="h-4 w-4" />
-                    </Button>
+                    <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                      <Button onClick={handleSend} disabled={isLoading || !input.trim()} size="icon">
+                        <Send className="h-4 w-4" />
+                      </Button>
+                    </motion.div>
                   </div>
                 </div>
               </CardContent>
