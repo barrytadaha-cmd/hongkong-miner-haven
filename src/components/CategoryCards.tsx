@@ -1,34 +1,40 @@
 import { Link } from 'react-router-dom';
 import { Card, CardContent } from '@/components/ui/card';
+import categoryCryptoMiner from '@/assets/category-crypto-miner.png';
+import categoryLotteryMiner from '@/assets/category-lottery-miner.png';
+import categoryBitcoinHeater from '@/assets/category-bitcoin-heater.png';
+import categoryHomeMiner from '@/assets/category-home-miner.png';
+import categorySolarMiner from '@/assets/category-solar-miner.png';
+
 const categories = [{
   id: 'crypto-miner',
   name: 'Crypto Miner',
   description: 'All ASIC miners for Bitcoin, Litecoin & more',
-  image: 'https://asicminermarket.com/wp-content/uploads/2024/03/Antminer-S21-Pro.png',
+  image: categoryCryptoMiner,
   path: '/shop'
 }, {
   id: 'lottery-miner',
   name: 'Lottery Bitcoin Miner',
   description: 'Solo mining with home-friendly devices',
-  image: 'https://asicminermarket.com/wp-content/uploads/2024/01/Bitaxe-Supra.png',
+  image: categoryLotteryMiner,
   path: '/shop?category=home'
 }, {
   id: 'bitcoin-heater',
   name: 'Bitcoin Heater',
   description: 'Heat your home while earning Bitcoin',
-  image: 'https://asicminermarket.com/wp-content/uploads/2024/05/Avalon-Nano-3.png',
+  image: categoryBitcoinHeater,
   path: '/shop?category=heater'
 }, {
   id: 'home-miner',
   name: 'Home Miner',
   description: 'Quiet, efficient miners for residential use',
-  image: 'https://asicminermarket.com/wp-content/uploads/2024/01/Bitaxe-Ultra.png',
+  image: categoryHomeMiner,
   path: '/shop?category=home'
 }, {
   id: 'solar-miner',
   name: 'Solar System Miners',
   description: 'Off-grid mining solutions',
-  image: 'https://asicminermarket.com/wp-content/uploads/2024/03/Whatsminer-M60S.png',
+  image: categorySolarMiner,
   path: '/shop?category=solar'
 }];
 import { motion } from 'framer-motion';
