@@ -1,19 +1,28 @@
 import { useState, useMemo } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
-import { products, categories } from '@/lib/data';
+import { products as staticProducts, categories } from '@/lib/data';
+import { useDBProducts, useHasDBProducts } from '@/hooks/useProducts';
 import ProductCard from '@/components/ProductCard';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Search, SlidersHorizontal, X } from 'lucide-react';
+import { Search, SlidersHorizontal, X, Loader2 } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
+import Layout from '@/components/Layout';
 
 const Shop = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [search, setSearch] = useState('');
   const [sortBy, setSortBy] = useState('featured');
   const [showFilters, setShowFilters] = useState(false);
+
+  // Check if database has products
+  const { data: hasDBProducts, isLoading: checkingDB } = useHasDBProducts();
+  const { data: dbProducts, isLoading: loadingProducts } = useDBProducts();
+
+  // Use database products if available, otherwise fall back to static
+  const products = hasDBProducts && dbProducts?.length ? dbProducts : staticProducts;
 
   const activeCategory = searchParams.get('category') || 'all';
 
@@ -56,7 +65,16 @@ const Shop = () => {
     }
 
     return filtered;
-  }, [activeCategory, search, sortBy]);
+  }, [products, activeCategory, search, sortBy]);
+
+  // Calculate category counts from current products
+  const categoryCounts = useMemo(() => {
+    const counts: Record<string, number> = { all: products.length };
+    products.forEach(p => {
+      counts[p.category] = (counts[p.category] || 0) + 1;
+    });
+    return counts;
+  }, [products]);
 
   const handleCategoryChange = (category: string) => {
     if (category === 'all') {
@@ -67,8 +85,10 @@ const Shop = () => {
     setSearchParams(searchParams);
   };
 
+  const isLoading = checkingDB || loadingProducts;
+
   return (
-    <>
+    <Layout>
       <Helmet>
         <title>Shop ASIC Miners | MinerHoalan Hong Kong</title>
         <meta name="description" content="Browse our selection of Bitcoin, Litecoin, Kaspa and other ASIC miners. Fast shipping from Hong Kong with warranty." />
@@ -80,7 +100,14 @@ const Shop = () => {
           <div className="mb-8">
             <h1 className="font-display text-3xl md:text-4xl font-bold mb-2">ASIC Miner Shop</h1>
             <p className="text-muted-foreground">
-              {filteredProducts.length} miners available for purchase
+              {isLoading ? (
+                <span className="flex items-center gap-2">
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                  Loading products...
+                </span>
+              ) : (
+                `${filteredProducts.length} miners available for purchase`
+              )}
             </p>
           </div>
 
@@ -137,6 +164,16 @@ const Shop = () => {
               <div className="sticky top-24">
                 <h3 className="font-semibold mb-4">Categories</h3>
                 <div className="space-y-2">
+                  <Button
+                    variant={activeCategory === 'all' ? 'default' : 'ghost'}
+                    className="w-full justify-between"
+                    onClick={() => handleCategoryChange('all')}
+                  >
+                    All Products
+                    <Badge variant="secondary" className="ml-2">
+                      {categoryCounts.all || 0}
+                    </Badge>
+                  </Button>
                   {categories.map((cat) => (
                     <Button
                       key={cat.id}
@@ -146,7 +183,7 @@ const Shop = () => {
                     >
                       {cat.name}
                       <Badge variant="secondary" className="ml-2">
-                        {cat.count}
+                        {categoryCounts[cat.id] || 0}
                       </Badge>
                     </Button>
                   ))}
@@ -166,7 +203,11 @@ const Shop = () => {
 
             {/* Products Grid */}
             <div className="flex-1">
-              {filteredProducts.length === 0 ? (
+              {isLoading ? (
+                <div className="flex items-center justify-center py-16">
+                  <Loader2 className="h-8 w-8 animate-spin" />
+                </div>
+              ) : filteredProducts.length === 0 ? (
                 <div className="text-center py-16">
                   <p className="text-muted-foreground mb-4">No miners found matching your criteria</p>
                   <Button variant="outline" onClick={() => { setSearch(''); handleCategoryChange('all'); }}>
@@ -184,7 +225,7 @@ const Shop = () => {
           </div>
         </div>
       </main>
-    </>
+    </Layout>
   );
 };
 
