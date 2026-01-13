@@ -65,18 +65,7 @@ const WhatsAppButton = () => {
               }}
             />
             
-            <motion.div
-              animate={{
-                rotate: [0, 15, -15, 0],
-              }}
-              transition={{
-                duration: 1.5,
-                repeat: Infinity,
-                repeatDelay: 3,
-              }}
-            >
-              <MessageCircle className="h-6 w-6 relative z-10" />
-            </motion.div>
+            <MessageCircle className="h-6 w-6 relative z-10" />
             
             <span className="absolute right-full mr-3 top-1/2 -translate-y-1/2 bg-card text-foreground px-3 py-2 rounded-lg shadow-lg text-sm font-medium opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap border border-border">
               Chat with us on WhatsApp
