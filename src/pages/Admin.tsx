@@ -15,6 +15,7 @@ import { Loader2, Plus, Trash2, Upload, Database, LogOut, Edit, Image, Package, 
 import OrderManagement from '@/components/admin/OrderManagement';
 import OrderStatistics from '@/components/admin/OrderStatistics';
 import AIProductDescription from '@/components/AIProductDescription';
+import ProductEditModal from '@/components/admin/ProductEditModal';
 import Layout from '@/components/Layout';
 import {
   Dialog,
@@ -54,7 +55,8 @@ export default function Admin() {
   const [migrating, setMigrating] = useState(false);
   const [addingProduct, setAddingProduct] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
-  const [editingProduct, setEditingProduct] = useState<string | null>(null);
+  const [editDialogOpen, setEditDialogOpen] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState<typeof dbProducts extends (infer T)[] | undefined ? T | null : never>(null);
   const [uploadingImage, setUploadingImage] = useState<string | null>(null);
   
   // Form state
@@ -619,7 +621,18 @@ export default function Admin() {
                           {product.inStock ? 'In Stock' : 'Out of Stock'}
                         </Badge>
                       </TableCell>
-                      <TableCell>
+                      <TableCell className="flex gap-2">
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          onClick={() => {
+                            setSelectedProduct(product);
+                            setEditDialogOpen(true);
+                          }}
+                          disabled={!isAdmin}
+                        >
+                          <Edit className="h-4 w-4 text-primary" />
+                        </Button>
                         <Button
                           variant="ghost"
                           size="icon"
@@ -636,6 +649,15 @@ export default function Admin() {
             )}
           </CardContent>
         </Card>
+
+        {/* Product Edit Modal */}
+        <ProductEditModal
+          product={selectedProduct}
+          open={editDialogOpen}
+          onOpenChange={setEditDialogOpen}
+          onSave={() => refetch()}
+          isAdmin={isAdmin}
+        />
       </div>
     </Layout>
   );
