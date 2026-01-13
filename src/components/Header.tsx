@@ -260,21 +260,92 @@ const Header = () => {
           {/* Mobile Menu */}
           {mobileMenuOpen && <div className="lg:hidden py-4 border-t border-border animate-fade-in">
               <nav className="flex flex-col gap-2">
-                <Link to="/shop" onClick={() => setMobileMenuOpen(false)} className="py-2 px-4 rounded-lg font-medium hover:bg-muted">
-                  Buy ASIC Miner
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="ghost" className="w-full justify-between text-sm font-medium px-4">
+                      Buy ASIC Miner
+                      <ChevronDown className="h-3 w-3" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="start" className="w-56 bg-popover">
+                    <DropdownMenuItem asChild>
+                      <Link to="/shop" onClick={() => setMobileMenuOpen(false)} className="cursor-pointer font-medium">
+                        All Miners
+                      </Link>
+                    </DropdownMenuItem>
+                    {bitcoinMiners.map(item => <DropdownMenuItem key={item.name} asChild>
+                        <Link to={item.path} onClick={() => setMobileMenuOpen(false)} className="cursor-pointer">
+                          {item.name}
+                        </Link>
+                      </DropdownMenuItem>)}
+                  </DropdownMenuContent>
+                </DropdownMenu>
+
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="ghost" className="w-full justify-between text-sm font-medium px-4">
+                      Bitcoin Miner
+                      <ChevronDown className="h-3 w-3" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="start" className="w-56 bg-popover">
+                    {bitcoinMiners.map(item => <DropdownMenuItem key={item.name} asChild>
+                        <Link to={item.path} onClick={() => setMobileMenuOpen(false)} className="cursor-pointer">
+                          {item.name}
+                        </Link>
+                      </DropdownMenuItem>)}
+                  </DropdownMenuContent>
+                </DropdownMenu>
+
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="ghost" className="w-full justify-between text-sm font-medium px-4">
+                      Altcoin Miner
+                      <ChevronDown className="h-3 w-3" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="start" className="w-56 bg-popover">
+                    {altcoinMiners.map(item => <DropdownMenuItem key={item.name} asChild>
+                        <Link to={item.path} onClick={() => setMobileMenuOpen(false)} className="cursor-pointer">
+                          {item.name}
+                        </Link>
+                      </DropdownMenuItem>)}
+                  </DropdownMenuContent>
+                </DropdownMenu>
+
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="ghost" className="w-full justify-between text-sm font-medium px-4">
+                      Knowledge
+                      <ChevronDown className="h-3 w-3" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="start" className="w-48 bg-popover">
+                    {knowledge.map(item => <DropdownMenuItem key={item.name} asChild>
+                        <Link to={item.path} onClick={() => setMobileMenuOpen(false)} className="cursor-pointer">
+                          {item.name}
+                        </Link>
+                      </DropdownMenuItem>)}
+                  </DropdownMenuContent>
+                </DropdownMenu>
+
+                <Link to="/compare" onClick={() => setMobileMenuOpen(false)}>
+                  <Button variant="ghost" className="w-full justify-start text-sm font-medium px-4 gap-1">
+                    <GitCompare className="h-4 w-4" />
+                    Compare
+                  </Button>
                 </Link>
-                <Link to="/shop?category=bitcoin" onClick={() => setMobileMenuOpen(false)} className="py-2 px-4 rounded-lg font-medium hover:bg-muted">
-                  Bitcoin Miner
+
+                <Link to="/contact" onClick={() => setMobileMenuOpen(false)}>
+                  <Button variant="ghost" className="w-full justify-start text-sm font-medium px-4">
+                    Contact
+                  </Button>
                 </Link>
-                <Link to="/shop?category=litecoin" onClick={() => setMobileMenuOpen(false)} className="py-2 px-4 rounded-lg font-medium hover:bg-muted">
-                  Altcoin Miner
-                </Link>
-                <Link to="/blog" onClick={() => setMobileMenuOpen(false)} className="py-2 px-4 rounded-lg font-medium hover:bg-muted">
-                  Knowledge
-                </Link>
-                <Link to="/contact" onClick={() => setMobileMenuOpen(false)} className="py-2 px-4 rounded-lg font-medium hover:bg-muted">
-                  Contact
-                </Link>
+
+                {/* Mobile Search */}
+                <div className="px-4 pt-2">
+                  <Input type="search" placeholder="Search miners..." className="w-full" />
+                </div>
               </nav>
             </div>}
         </div>
