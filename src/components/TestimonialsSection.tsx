@@ -3,7 +3,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Star, Quote, ChevronLeft, ChevronRight } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '@/components/ui/button';
-import trustpilotLogo from '@/assets/trustpilot-logo.png';
+import trustpilotLogo from '@/assets/trustpilot-stars-logo.png';
 
 const testimonials = [
   { name: 'Dennis', text: "Top-notch service, good personal contact, and immediate help should any minor issues arise. At Miner Haolan, everything just works, I'm happy to use them again! The S19k Pro arrived way ahead of schedule, works flawlessly, and is a joy to use.", rating: 5, location: 'Germany' },
