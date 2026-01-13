@@ -2,12 +2,23 @@ import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { ArrowRight, Shield, Truck, Headphones } from 'lucide-react';
 import { motion } from 'framer-motion';
+import heroMobileBg from '@/assets/hero-mobile-bg.webp';
 
 const HeroSection = () => {
   return (
     <section className="relative min-h-[85vh] flex items-center overflow-hidden bg-gradient-hero">
-      {/* Animated Background Elements */}
-      <div className="absolute inset-0 overflow-hidden">
+      {/* Mobile Background Image */}
+      <div className="absolute inset-0 lg:hidden">
+        <img 
+          src={heroMobileBg} 
+          alt="" 
+          className="w-full h-full object-cover"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-navy via-navy/80 to-navy/40" />
+      </div>
+
+      {/* Animated Background Elements - Desktop Only */}
+      <div className="absolute inset-0 overflow-hidden hidden lg:block">
         <motion.div 
           className="absolute top-20 left-10 w-72 h-72 bg-primary/10 rounded-full blur-3xl"
           animate={{ 
@@ -27,8 +38,8 @@ const HeroSection = () => {
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-primary/5 rounded-full blur-3xl" />
       </div>
       
-      {/* Grid Pattern */}
-      <div className="absolute inset-0 opacity-[0.03]" style={{
+      {/* Grid Pattern - Desktop Only */}
+      <div className="absolute inset-0 opacity-[0.03] hidden lg:block" style={{
         backgroundImage: `linear-gradient(rgba(255,255,255,.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.1) 1px, transparent 1px)`,
         backgroundSize: '50px 50px',
       }} />
