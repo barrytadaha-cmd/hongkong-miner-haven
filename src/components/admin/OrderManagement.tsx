@@ -6,7 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/hooks/use-toast';
-import { Loader2, Package, Truck, RefreshCw, ChevronDown, ChevronUp, Search, Filter, Calendar, X } from 'lucide-react';
+import { Loader2, Package, Truck, RefreshCw, ChevronDown, ChevronUp, Search, Filter, Calendar, X, Download } from 'lucide-react';
 import {
   Select,
   SelectContent,
@@ -113,6 +113,81 @@ export default function OrderManagement() {
   };
 
   const hasActiveFilters = searchQuery || statusFilter !== 'all' || dateFrom || dateTo;
+
+  const exportToCSV = () => {
+    if (filteredOrders.length === 0) {
+      toast({
+        title: 'No orders to export',
+        description: 'Apply different filters or wait for orders to appear.',
+        variant: 'destructive',
+      });
+      return;
+    }
+
+    // Build CSV content
+    const headers = [
+      'Order ID',
+      'Date',
+      'Status',
+      'Total Amount',
+      'Tracking Number',
+      'Shipping Address',
+      'City',
+      'Country',
+      'Postal Code',
+      'Items',
+      'Notes'
+    ];
+
+    const rows = filteredOrders.map((order) => {
+      const items = order.order_items
+        .map((item) => `${item.product_name} (x${item.quantity})`)
+        .join('; ');
+
+      return [
+        order.id,
+        new Date(order.created_at).toISOString(),
+        order.status,
+        order.total_amount.toString(),
+        order.tracking_number || '',
+        order.shipping_address || '',
+        order.shipping_city || '',
+        order.shipping_country || '',
+        order.shipping_postal_code || '',
+        items,
+        order.notes || ''
+      ];
+    });
+
+    // Escape CSV fields
+    const escapeField = (field: string) => {
+      if (field.includes(',') || field.includes('"') || field.includes('\n')) {
+        return `"${field.replace(/"/g, '""')}"`;
+      }
+      return field;
+    };
+
+    const csvContent = [
+      headers.join(','),
+      ...rows.map((row) => row.map(escapeField).join(','))
+    ].join('\n');
+
+    // Download file
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    const url = URL.createObjectURL(blob);
+    link.setAttribute('href', url);
+    link.setAttribute('download', `orders-export-${new Date().toISOString().split('T')[0]}.csv`);
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+
+    toast({
+      title: 'Export complete',
+      description: `${filteredOrders.length} orders exported to CSV.`,
+    });
+  };
 
   useEffect(() => {
     fetchOrders();
@@ -264,10 +339,16 @@ export default function OrderManagement() {
                 View and manage all customer orders ({filteredOrders.length} of {orders.length} orders)
               </CardDescription>
             </div>
-            <Button variant="outline" size="sm" onClick={fetchOrders}>
-              <RefreshCw className="h-4 w-4 mr-2" />
-              Refresh
-            </Button>
+            <div className="flex gap-2">
+              <Button variant="outline" size="sm" onClick={exportToCSV}>
+                <Download className="h-4 w-4 mr-2" />
+                Export CSV
+              </Button>
+              <Button variant="outline" size="sm" onClick={fetchOrders}>
+                <RefreshCw className="h-4 w-4 mr-2" />
+                Refresh
+              </Button>
+            </div>
           </div>
 
           {/* Filters Section */}

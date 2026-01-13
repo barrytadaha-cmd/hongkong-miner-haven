@@ -13,6 +13,7 @@ import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/hooks/use-toast';
 import { Loader2, Plus, Trash2, Upload, Database, LogOut, Edit, Image, Package } from 'lucide-react';
 import OrderManagement from '@/components/admin/OrderManagement';
+import OrderStatistics from '@/components/admin/OrderStatistics';
 import Layout from '@/components/Layout';
 import {
   Dialog,
@@ -343,6 +344,11 @@ export default function Admin() {
             </CardContent>
           </Card>
         )}
+
+        {/* Order Statistics */}
+        <div className="mb-8">
+          <OrderStatistics />
+        </div>
 
         {/* Order Management */}
         <div className="mb-8">
