@@ -22,6 +22,8 @@ import ProductDetailApple from "./pages/ProductDetailApple";
 import Profile from "./pages/Profile";
 import Compare from "./pages/Compare";
 import NotFound from "./pages/NotFound";
+import WhatsAppButton from "./components/WhatsAppButton";
+import AIChatbot from "./components/AIChatbot";
 
 const queryClient = new QueryClient();
 
@@ -52,6 +54,8 @@ const App = () => (
               <Route path="/product-apple/:id" element={<ProductDetailApple />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
+            <WhatsAppButton />
+            <AIChatbot />
           </BrowserRouter>
         </CartProvider>
       </TooltipProvider>

@@ -21,23 +21,43 @@ const Checkout = () => {
   const shippingCost = totalPrice > 5000 ? 0 : 150;
   const finalTotal = totalPrice + shippingCost;
 
-  // Generate WhatsApp message with cart details
+  // Generate WhatsApp message with cart details - professionally formatted
   const generateWhatsAppMessage = (orderRef?: string): string => {
     const orderItems = items.map(item => 
-      `• ${item.name} (Qty: ${item.quantity}) - $${(item.price * item.quantity).toLocaleString()}`
-    ).join('\n');
+      `   🔹 *${item.name}*\n      Qty: ${item.quantity} × $${item.price.toLocaleString()} = *$${(item.price * item.quantity).toLocaleString()}*`
+    ).join('\n\n');
 
-    const message = `Hello! I would like to place an order:
-${orderRef ? `\n🔖 *ORDER REF: ${orderRef}*\n` : ''}
-📦 *ORDER DETAILS*
+    const divider = '━━━━━━━━━━━━━━━━━━━━━━';
+
+    const message = `🛒 *NEW ORDER REQUEST*
+${orderRef ? `\n🔖 *Order Reference:* \`${orderRef}\`\n` : ''}
+${divider}
+
+📦 *ORDER ITEMS*
+
 ${orderItems}
 
-💰 *SUMMARY*
-Subtotal: $${totalPrice.toLocaleString()}
-Shipping: ${shippingCost === 0 ? 'Free' : `$${shippingCost}`}
-*Total: $${finalTotal.toLocaleString()}*
+${divider}
 
-Please confirm availability and provide payment details. Thank you!`;
+💰 *ORDER SUMMARY*
+
+   📋 Subtotal: $${totalPrice.toLocaleString()}
+   🚚 Shipping: ${shippingCost === 0 ? '_FREE_ ✨' : `$${shippingCost}`}
+   
+   💵 *TOTAL: $${finalTotal.toLocaleString()}*
+
+${divider}
+
+📍 *NEXT STEPS*
+
+   1️⃣ Confirm product availability
+   2️⃣ Receive payment details
+   3️⃣ Complete payment
+   4️⃣ Get tracking number
+
+_Thank you for choosing *Miner Haolan*!_ 🙏
+
+⏰ We typically respond within 1-2 hours during business hours.`;
 
     return message;
   };
