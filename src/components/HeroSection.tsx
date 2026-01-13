@@ -331,60 +331,75 @@ const HeroSection = () => {
                 transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
               />
               
-              {/* Main Card */}
+              {/* Main Card - Matching ProductCard style */}
               <motion.div 
-                className="relative glass-card rounded-3xl p-8 border border-white/10"
+                className="relative bg-card rounded-2xl border border-border overflow-hidden shadow-2xl shadow-primary/10"
                 initial={{ opacity: 0, scale: 0.9, rotateY: -10 }}
                 animate={{ opacity: 1, scale: 1, rotateY: 0 }}
                 transition={{ duration: 1, delay: 0.5 }}
                 whileHover={{ 
                   scale: 1.02,
-                  rotateY: 5,
                   transition: { duration: 0.3 }
                 }}
-                style={{ transformStyle: 'preserve-3d' }}
               >
-                <motion.div 
-                  className="absolute -top-4 -right-4 best-price-badge shadow-lg"
-                  animate={{ 
-                    scale: [1, 1.05, 1],
-                    boxShadow: [
-                      '0 4px 14px rgba(245, 158, 11, 0.3)',
-                      '0 6px 20px rgba(245, 158, 11, 0.5)',
-                      '0 4px 14px rgba(245, 158, 11, 0.3)',
-                    ],
-                  }}
-                  transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-                >
-                  Best Seller
-                </motion.div>
-                
-                <img 
-                  src="https://images.unsplash.com/photo-1639762681485-074b7f938ba0?w=500&h=500&fit=crop" 
-                  alt="Antminer S21 Pro - ASIC Bitcoin Miner available at Miner Haolan" 
-                  className="w-full max-w-sm mx-auto drop-shadow-2xl rounded-2xl"
-                />
-                
-                {/* Floating Specs */}
-                <motion.div 
-                  className="absolute top-8 left-8 bg-primary/90 backdrop-blur-sm px-4 py-2 rounded-xl"
-                  animate={{ 
-                    y: [0, -5, 0],
-                  }}
-                  transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
-                >
-                  <p className="text-xl font-bold text-primary-foreground">234 TH/s</p>
-                  <p className="text-xs text-primary-foreground/70">Hashrate</p>
-                </motion.div>
-                
-                <div className="mt-6 p-4 bg-white/5 rounded-2xl">
-                  <p className="text-white/70 text-sm">Antminer S21 Pro</p>
-                  <div className="flex items-baseline gap-2 mt-1">
-                    <p className="text-3xl font-bold text-white">$2,980</p>
-                    <p className="text-lg text-white/50 line-through">$3,499</p>
+                {/* Image Container */}
+                <Link to="/product/1" className="block">
+                  <div className="relative aspect-square overflow-hidden bg-gradient-to-br from-secondary to-secondary/50 p-6">
+                    <div className="absolute inset-0 bg-gradient-to-br from-primary/0 to-accent/0 hover:from-primary/5 hover:to-accent/5 transition-all duration-500" />
+                    
+                    <img 
+                      src="/products/antminer-s21-pro-1.jpg" 
+                      alt="Antminer S21 Pro - ASIC Bitcoin Miner available at Miner Haolan" 
+                      className="object-contain w-full h-full transition-all duration-700 hover:scale-110"
+                    />
+                  
+                    {/* Badges */}
+                    <div className="absolute top-3 left-3 flex flex-col gap-2">
+                      <span className="bg-primary text-primary-foreground text-xs font-medium px-2.5 py-1 rounded-md shadow-lg">New</span>
+                      <span className="bg-gradient-to-r from-accent to-yellow-500 text-white text-xs font-medium px-2.5 py-1 rounded-md shadow-lg">-15%</span>
+                    </div>
                   </div>
-                  <Button className="w-full mt-4 bg-accent hover:bg-accent/90 text-accent-foreground font-semibold" asChild>
-                    <Link to="/product/1">View Details</Link>
+                </Link>
+
+                {/* Content */}
+                <div className="p-5">
+                  {/* Brand */}
+                  <p className="text-xs font-medium text-primary mb-1">Bitmain</p>
+                  
+                  {/* Name */}
+                  <Link to="/product/1">
+                    <h3 className="font-semibold text-base mb-3 text-foreground hover:text-primary transition-colors">
+                      Antminer S21 Pro
+                    </h3>
+                  </Link>
+
+                  {/* Price */}
+                  <div className="flex items-baseline gap-2 mb-4">
+                    <span className="text-xl font-bold text-foreground">$2,980</span>
+                    <span className="text-sm text-muted-foreground line-through">$3,499</span>
+                  </div>
+
+                  {/* Specs */}
+                  <div className="space-y-2 text-sm border-t border-border pt-4">
+                    <div className="flex items-center justify-between">
+                      <span className="text-muted-foreground">Algorithm</span>
+                      <span className="font-medium text-xs bg-secondary px-2 py-0.5 rounded">SHA-256</span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-muted-foreground">Hashrate</span>
+                      <span className="font-semibold text-primary">234 TH/s</span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-muted-foreground">Power</span>
+                      <span className="font-medium">3510W</span>
+                    </div>
+                  </div>
+
+                  {/* Add to Cart Button */}
+                  <Button className="w-full mt-4 h-11 btn-shine" asChild>
+                    <Link to="/product/1">
+                      View Details
+                    </Link>
                   </Button>
                 </div>
               </motion.div>
