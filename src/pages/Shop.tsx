@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { products as staticProducts, categories } from '@/lib/data';
@@ -17,9 +17,18 @@ import { motion, AnimatePresence } from 'framer-motion';
 
 const Shop = () => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const [search, setSearch] = useState('');
+  const initialSearch = searchParams.get('search') || '';
+  const [search, setSearch] = useState(initialSearch);
   const [sortBy, setSortBy] = useState('featured');
   const [showFilters, setShowFilters] = useState(false);
+
+  // Update search state when URL changes (e.g., from hero search)
+  useEffect(() => {
+    const urlSearch = searchParams.get('search') || '';
+    if (urlSearch !== search) {
+      setSearch(urlSearch);
+    }
+  }, [searchParams]);
 
   // Check if database has products
   const { data: hasDBProducts, isLoading: checkingDB } = useHasDBProducts();
