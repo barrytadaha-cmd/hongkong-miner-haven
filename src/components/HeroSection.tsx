@@ -4,6 +4,7 @@ import { ArrowRight, Shield, Truck, Headphones } from 'lucide-react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { useRef, useMemo } from 'react';
 import heroMobileBg from '@/assets/hero-mobile-bg.webp';
+import { products } from '@/lib/data';
 
 // Generate random particles
 const generateParticles = (count: number) => {
@@ -77,6 +78,16 @@ const FloatingParticles = () => {
 
 const HeroSection = () => {
   const sectionRef = useRef<HTMLElement>(null);
+  
+  // Get first featured product (with sale or new badge preferred)
+  const featuredProduct = useMemo(() => {
+    const featured = products.find(p => p.isSale || p.isNew) || products[0];
+    return featured;
+  }, []);
+  
+  const discount = featuredProduct.originalPrice 
+    ? Math.round((1 - featuredProduct.price / featuredProduct.originalPrice) * 100) 
+    : 0;
   
   const { scrollYProgress } = useScroll({
     target: sectionRef,
@@ -343,20 +354,24 @@ const HeroSection = () => {
                 }}
               >
                 {/* Image Container */}
-                <Link to="/product/1" className="block">
+                <Link to={`/product/${featuredProduct.id}`} className="block">
                   <div className="relative aspect-square overflow-hidden bg-gradient-to-br from-secondary to-secondary/50 p-6">
                     <div className="absolute inset-0 bg-gradient-to-br from-primary/0 to-accent/0 hover:from-primary/5 hover:to-accent/5 transition-all duration-500" />
                     
                     <img 
-                      src="/products/antminer-s21-pro-1.jpg" 
-                      alt="Antminer S21 Pro - ASIC Bitcoin Miner available at Miner Haolan" 
+                      src={featuredProduct.image} 
+                      alt={`${featuredProduct.name} - ASIC Miner available at Miner Haolan`} 
                       className="object-contain w-full h-full transition-all duration-700 hover:scale-110"
                     />
                   
                     {/* Badges */}
                     <div className="absolute top-3 left-3 flex flex-col gap-2">
-                      <span className="bg-primary text-primary-foreground text-xs font-medium px-2.5 py-1 rounded-md shadow-lg">New</span>
-                      <span className="bg-gradient-to-r from-accent to-yellow-500 text-white text-xs font-medium px-2.5 py-1 rounded-md shadow-lg">-15%</span>
+                      {featuredProduct.isNew && (
+                        <span className="bg-primary text-primary-foreground text-xs font-medium px-2.5 py-1 rounded-md shadow-lg">New</span>
+                      )}
+                      {featuredProduct.isSale && discount > 0 && (
+                        <span className="bg-gradient-to-r from-accent to-yellow-500 text-white text-xs font-medium px-2.5 py-1 rounded-md shadow-lg">-{discount}%</span>
+                      )}
                     </div>
                   </div>
                 </Link>
@@ -364,40 +379,42 @@ const HeroSection = () => {
                 {/* Content */}
                 <div className="p-5">
                   {/* Brand */}
-                  <p className="text-xs font-medium text-primary mb-1">Bitmain</p>
+                  <p className="text-xs font-medium text-primary mb-1">{featuredProduct.brand}</p>
                   
                   {/* Name */}
-                  <Link to="/product/1">
+                  <Link to={`/product/${featuredProduct.id}`}>
                     <h3 className="font-semibold text-base mb-3 text-foreground hover:text-primary transition-colors">
-                      Antminer S21 Pro
+                      {featuredProduct.name}
                     </h3>
                   </Link>
 
                   {/* Price */}
                   <div className="flex items-baseline gap-2 mb-4">
-                    <span className="text-xl font-bold text-foreground">$2,980</span>
-                    <span className="text-sm text-muted-foreground line-through">$3,499</span>
+                    <span className="text-xl font-bold text-foreground">${featuredProduct.price.toLocaleString()}</span>
+                    {featuredProduct.originalPrice && (
+                      <span className="text-sm text-muted-foreground line-through">${featuredProduct.originalPrice.toLocaleString()}</span>
+                    )}
                   </div>
 
                   {/* Specs */}
                   <div className="space-y-2 text-sm border-t border-border pt-4">
                     <div className="flex items-center justify-between">
                       <span className="text-muted-foreground">Algorithm</span>
-                      <span className="font-medium text-xs bg-secondary px-2 py-0.5 rounded">SHA-256</span>
+                      <span className="font-medium text-xs bg-secondary px-2 py-0.5 rounded">{featuredProduct.algorithm}</span>
                     </div>
                     <div className="flex items-center justify-between">
                       <span className="text-muted-foreground">Hashrate</span>
-                      <span className="font-semibold text-primary">234 TH/s</span>
+                      <span className="font-semibold text-primary">{featuredProduct.hashrate}</span>
                     </div>
                     <div className="flex items-center justify-between">
                       <span className="text-muted-foreground">Power</span>
-                      <span className="font-medium">3510W</span>
+                      <span className="font-medium">{featuredProduct.power}</span>
                     </div>
                   </div>
 
-                  {/* Add to Cart Button */}
+                  {/* View Details Button */}
                   <Button className="w-full mt-4 h-11 btn-shine" asChild>
-                    <Link to="/product/1">
+                    <Link to={`/product/${featuredProduct.id}`}>
                       View Details
                     </Link>
                   </Button>
