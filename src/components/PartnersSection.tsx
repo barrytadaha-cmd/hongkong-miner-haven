@@ -1,25 +1,25 @@
 import { motion } from 'framer-motion';
+import antminerLogo from '@/assets/antminer-logo.png';
+import microbtLogo from '@/assets/microbt-logo.png';
+import goldshellLogo from '@/assets/goldshell-logo.webp';
+import iceriverLogo from '@/assets/iceriver-logo.avif';
 
 const partners = [
   {
-    name: 'Bitmain',
-    logo: 'https://upload.wikimedia.org/wikipedia/en/thumb/7/7a/Bitmain_logo.svg/1200px-Bitmain_logo.svg.png',
+    name: 'Antminer',
+    logo: antminerLogo,
   },
   {
     name: 'MicroBT',
-    logo: 'https://www.microbt.com/static/img/logo.png',
-  },
-  {
-    name: 'Canaan',
-    logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/35/Canaan_Creative_logo.svg/2560px-Canaan_Creative_logo.svg.png',
+    logo: microbtLogo,
   },
   {
     name: 'Goldshell',
-    logo: 'https://www.goldshell.com/wp-content/uploads/2021/09/goldshell-logo.svg',
+    logo: goldshellLogo,
   },
   {
     name: 'IceRiver',
-    logo: 'https://iceriver.io/wp-content/uploads/2023/12/logo.svg',
+    logo: iceriverLogo,
   },
 ];
 
