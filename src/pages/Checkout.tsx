@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { Link } from 'react-router-dom';
 import { ArrowLeft, MessageCircle, ShoppingBag, CheckCircle2 } from 'lucide-react';
+import Layout from '@/components/Layout';
 
 const Checkout = () => {
   const { items, totalPrice, clearCart } = useCart();
@@ -46,23 +47,25 @@ Please confirm availability and provide payment details. Thank you!`;
 
   if (items.length === 0) {
     return (
-      <main className="pb-16">
-        <div className="container mx-auto px-4">
-          <div className="max-w-lg mx-auto text-center py-16">
-            <ShoppingBag className="h-16 w-16 text-muted-foreground/30 mx-auto mb-4" />
-            <h1 className="font-display text-2xl font-bold mb-4">Your cart is empty</h1>
-            <p className="text-muted-foreground mb-6">Add some miners to get started</p>
-            <Button asChild>
-              <Link to="/shop">Browse Miners</Link>
-            </Button>
+      <Layout>
+        <main className="pb-16">
+          <div className="container mx-auto px-4">
+            <div className="max-w-lg mx-auto text-center py-16">
+              <ShoppingBag className="h-16 w-16 text-muted-foreground/30 mx-auto mb-4" />
+              <h1 className="font-display text-2xl font-bold mb-4">Your cart is empty</h1>
+              <p className="text-muted-foreground mb-6">Add some miners to get started</p>
+              <Button asChild>
+                <Link to="/shop">Browse Miners</Link>
+              </Button>
+            </div>
           </div>
-        </div>
-      </main>
+        </main>
+      </Layout>
     );
   }
 
   return (
-    <>
+    <Layout>
       <Helmet>
         <title>Checkout | Miner Haolan</title>
         <meta name="robots" content="noindex" />
@@ -200,7 +203,7 @@ Please confirm availability and provide payment details. Thank you!`;
           </div>
         </div>
       </main>
-    </>
+    </Layout>
   );
 };
 

@@ -5,6 +5,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Calendar, Clock, ArrowLeft, ArrowRight, User, Tag } from 'lucide-react';
 import { getPostBySlug, getRelatedPosts } from '@/lib/blogData';
+import Layout from '@/components/Layout';
 
 const BlogPost = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -13,23 +14,25 @@ const BlogPost = () => {
 
   if (!post) {
     return (
-      <main className="pt-24 pb-16">
-        <div className="container mx-auto px-4 text-center">
-          <h1 className="text-4xl font-bold mb-4">Post Not Found</h1>
-          <p className="text-muted-foreground mb-8">The article you're looking for doesn't exist.</p>
-          <Button onClick={() => navigate('/blog')}>
-            <ArrowLeft className="mr-2 h-4 w-4" />
-            Back to Blog
-          </Button>
-        </div>
-      </main>
+      <Layout>
+        <main className="pt-24 pb-16">
+          <div className="container mx-auto px-4 text-center">
+            <h1 className="text-4xl font-bold mb-4">Post Not Found</h1>
+            <p className="text-muted-foreground mb-8">The article you're looking for doesn't exist.</p>
+            <Button onClick={() => navigate('/blog')}>
+              <ArrowLeft className="mr-2 h-4 w-4" />
+              Back to Blog
+            </Button>
+          </div>
+        </main>
+      </Layout>
     );
   }
 
   const relatedPosts = getRelatedPosts(post, 3);
 
   return (
-    <>
+    <Layout>
       <Helmet>
         <title>{post.title} | MinerHaolan Blog</title>
         <meta name="description" content={post.excerpt} />
@@ -181,7 +184,7 @@ const BlogPost = () => {
           </section>
         )}
       </main>
-    </>
+    </Layout>
   );
 };
 
