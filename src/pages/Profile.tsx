@@ -12,6 +12,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { useToast } from '@/hooks/use-toast';
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { 
   Loader2, 
   User, 
@@ -23,7 +24,9 @@ import {
   Truck,
   Clock,
   CheckCircle2,
-  XCircle
+  XCircle,
+  ChevronDown,
+  FileText
 } from 'lucide-react';
 
 interface Profile {
@@ -45,7 +48,9 @@ interface Order {
   shipping_address: string | null;
   shipping_city: string | null;
   shipping_country: string | null;
+  shipping_postal_code: string | null;
   tracking_number: string | null;
+  notes: string | null;
   created_at: string;
   order_items: {
     id: string;
@@ -393,57 +398,104 @@ export default function Profile() {
                       </Button>
                     </div>
                   ) : (
-                    <div className="space-y-6">
+                    <div className="space-y-4">
                       {orders.map((order) => (
-                        <div key={order.id} className="border border-border rounded-lg p-6">
-                          <div className="flex flex-wrap justify-between items-start gap-4 mb-4">
-                            <div>
-                              <p className="text-sm text-muted-foreground">
-                                Order #{order.id.slice(0, 8).toUpperCase()}
-                              </p>
-                              <p className="text-sm text-muted-foreground">
-                                {new Date(order.created_at).toLocaleDateString('en-US', {
-                                  year: 'numeric',
-                                  month: 'long',
-                                  day: 'numeric',
-                                })}
-                              </p>
-                            </div>
-                            <Badge className={statusColors[order.status] || ''}>
-                              {statusIcons[order.status]}
-                              <span className="ml-1 capitalize">{order.status}</span>
-                            </Badge>
-                          </div>
-
-                          <div className="space-y-3 mb-4">
-                            {order.order_items.map((item) => (
-                              <div key={item.id} className="flex justify-between text-sm">
-                                <span>
-                                  {item.product_name} × {item.quantity}
-                                </span>
-                                <span className="font-medium">
-                                  ${(item.unit_price * item.quantity).toLocaleString()}
-                                </span>
+                        <Collapsible key={order.id}>
+                          <div className="border border-border rounded-lg overflow-hidden">
+                            <CollapsibleTrigger className="w-full p-6 text-left hover:bg-muted/50 transition-colors">
+                              <div className="flex flex-wrap justify-between items-start gap-4">
+                                <div className="flex items-start gap-4">
+                                  <ChevronDown className="h-5 w-5 text-muted-foreground mt-0.5 transition-transform [[data-state=open]_&]:rotate-180" />
+                                  <div>
+                                    <p className="font-medium">
+                                      Order #{order.id.slice(0, 8).toUpperCase()}
+                                    </p>
+                                    <p className="text-sm text-muted-foreground">
+                                      {new Date(order.created_at).toLocaleDateString('en-US', {
+                                        year: 'numeric',
+                                        month: 'long',
+                                        day: 'numeric',
+                                      })}
+                                    </p>
+                                    <p className="text-sm font-medium mt-1">
+                                      ${order.total_amount.toLocaleString()}
+                                    </p>
+                                  </div>
+                                </div>
+                                <Badge className={statusColors[order.status] || ''}>
+                                  {statusIcons[order.status]}
+                                  <span className="ml-1 capitalize">{order.status}</span>
+                                </Badge>
                               </div>
-                            ))}
-                          </div>
+                            </CollapsibleTrigger>
 
-                          <Separator className="my-4" />
+                            <CollapsibleContent>
+                              <div className="px-6 pb-6 pt-2 border-t border-border bg-muted/30">
+                                {/* Order Items */}
+                                <div className="space-y-3 mb-6">
+                                  <h4 className="font-semibold text-sm flex items-center gap-2">
+                                    <Package className="h-4 w-4" />
+                                    Items
+                                  </h4>
+                                  {order.order_items.map((item) => (
+                                    <div key={item.id} className="flex justify-between text-sm pl-6">
+                                      <span>
+                                        {item.product_name} × {item.quantity}
+                                      </span>
+                                      <span className="font-medium">
+                                        ${(item.unit_price * item.quantity).toLocaleString()}
+                                      </span>
+                                    </div>
+                                  ))}
+                                </div>
 
-                          <div className="flex flex-wrap justify-between items-center gap-4">
-                            <div className="text-sm text-muted-foreground">
-                              {order.tracking_number && (
-                                <p>Tracking: {order.tracking_number}</p>
-                              )}
-                              {order.shipping_city && order.shipping_country && (
-                                <p>Ship to: {order.shipping_city}, {order.shipping_country}</p>
-                              )}
-                            </div>
-                            <p className="font-display font-bold text-lg">
-                              Total: ${order.total_amount.toLocaleString()}
-                            </p>
+                                {/* Shipping Address */}
+                                {(order.shipping_address || order.shipping_city) && (
+                                  <div className="mb-6">
+                                    <h4 className="font-semibold text-sm flex items-center gap-2 mb-2">
+                                      <MapPin className="h-4 w-4" />
+                                      Shipping Address
+                                    </h4>
+                                    <div className="text-sm text-muted-foreground pl-6 space-y-1">
+                                      {order.shipping_address && <p>{order.shipping_address}</p>}
+                                      <p>
+                                        {[order.shipping_city, order.shipping_postal_code, order.shipping_country]
+                                          .filter(Boolean)
+                                          .join(', ')}
+                                      </p>
+                                    </div>
+                                  </div>
+                                )}
+
+                                {/* Tracking Number */}
+                                {order.tracking_number && (
+                                  <div className="mb-6">
+                                    <h4 className="font-semibold text-sm flex items-center gap-2 mb-2">
+                                      <Truck className="h-4 w-4" />
+                                      Tracking
+                                    </h4>
+                                    <p className="text-sm text-muted-foreground pl-6 font-mono">
+                                      {order.tracking_number}
+                                    </p>
+                                  </div>
+                                )}
+
+                                {/* Order Notes */}
+                                {order.notes && (
+                                  <div>
+                                    <h4 className="font-semibold text-sm flex items-center gap-2 mb-2">
+                                      <FileText className="h-4 w-4" />
+                                      Notes
+                                    </h4>
+                                    <p className="text-sm text-muted-foreground pl-6">
+                                      {order.notes}
+                                    </p>
+                                  </div>
+                                )}
+                              </div>
+                            </CollapsibleContent>
                           </div>
-                        </div>
+                        </Collapsible>
                       ))}
                     </div>
                   )}
