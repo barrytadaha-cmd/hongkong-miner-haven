@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Check, X, Wrench, Shield, Clock, Phone, ChevronRight } from 'lucide-react';
 import Layout from '@/components/Layout';
+import PartnersSection from '@/components/PartnersSection';
 
 const warrantyPlans = [
   {
@@ -315,6 +316,8 @@ const RepairWarranty = () => {
             </Button>
           </div>
         </section>
+
+        <PartnersSection />
       </main>
     </Layout>
   );

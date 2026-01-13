@@ -9,6 +9,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Mail, Phone, MapPin, Clock, MessageCircle, Send } from 'lucide-react';
 import { toast } from 'sonner';
 import Layout from '@/components/Layout';
+import PartnersSection from '@/components/PartnersSection';
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -228,6 +229,7 @@ const Contact = () => {
             </Card>
           </div>
         </div>
+        <PartnersSection />
       </main>
     </Layout>
   );

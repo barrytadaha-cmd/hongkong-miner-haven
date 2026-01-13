@@ -4,6 +4,7 @@ import { Helmet } from 'react-helmet-async';
 import { products as staticProducts } from '@/lib/data';
 import { useDBProducts, useHasDBProducts } from '@/hooks/useProducts';
 import Layout from '@/components/Layout';
+import PartnersSection from '@/components/PartnersSection';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -602,6 +603,7 @@ export default function Compare() {
             </motion.div>
           )}
         </div>
+        <PartnersSection />
       </main>
     </Layout>
   );

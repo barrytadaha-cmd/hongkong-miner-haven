@@ -10,6 +10,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Search, SlidersHorizontal, X, Loader2 } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import Layout from '@/components/Layout';
+import PartnersSection from '@/components/PartnersSection';
 
 const Shop = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -224,6 +225,7 @@ const Shop = () => {
             </div>
           </div>
         </div>
+        <PartnersSection />
       </main>
     </Layout>
   );
