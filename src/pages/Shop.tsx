@@ -4,10 +4,11 @@ import { Helmet } from 'react-helmet-async';
 import { products as staticProducts, categories } from '@/lib/data';
 import { useDBProducts, useHasDBProducts } from '@/hooks/useProducts';
 import ProductCard from '@/components/ProductCard';
+import PageLoadingSkeleton from '@/components/PageLoadingSkeleton';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Search, SlidersHorizontal, X, Loader2 } from 'lucide-react';
+import { Search, SlidersHorizontal, X } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
@@ -127,7 +128,7 @@ const Shop = () => {
             <p className="text-muted-foreground">
               {isLoading ? (
                 <span className="flex items-center gap-2">
-                  <Loader2 className="h-4 w-4 animate-spin" />
+                  <span className="h-4 w-4 border-2 border-primary border-t-transparent rounded-full animate-spin" />
                   Loading products...
                 </span>
               ) : (
@@ -336,12 +337,9 @@ const Shop = () => {
               </div>
             </aside>
 
-            {/* Products Grid */}
             <div className="flex-1">
               {isLoading ? (
-                <div className="flex items-center justify-center py-16">
-                  <Loader2 className="h-8 w-8 animate-spin" />
-                </div>
+                <PageLoadingSkeleton type="shop" count={8} />
               ) : filteredProducts.length === 0 ? (
                 <div className="text-center py-16">
                   <p className="text-muted-foreground mb-4">No miners found matching your criteria</p>
@@ -351,8 +349,15 @@ const Shop = () => {
                 </div>
               ) : (
                 <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4 md:gap-6">
-                  {filteredProducts.map((product) => (
-                    <ProductCard key={product.id} product={product} />
+                  {filteredProducts.map((product, index) => (
+                    <motion.div
+                      key={product.id}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: index * 0.03, duration: 0.3 }}
+                    >
+                      <ProductCard product={product} />
+                    </motion.div>
                   ))}
                 </div>
               )}
