@@ -44,6 +44,8 @@ const App = () => (
               <Route path="/repair-warranty" element={<RepairWarranty />} />
               <Route path="/auth" element={<Auth />} />
               <Route path="/admin" element={<Admin />} />
+              <Route path="/miners/:algorithm" element={<AlgorithmLanding />} />
+              <Route path="/product-apple/:id" element={<ProductDetailApple />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </BrowserRouter>
