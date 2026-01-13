@@ -80,27 +80,43 @@ const CategoryCards = () => {
         }} style={{
           transformStyle: 'preserve-3d'
         }}>
-              <Link to={category.path}>
-                <Card className="group h-full transition-all duration-300 border-border hover:border-primary/50 bg-gradient-to-br from-card to-card/80 hover:shadow-[0_20px_40px_-12px_rgba(0,0,0,0.3)] dark:hover:shadow-[0_20px_40px_-12px_rgba(0,0,0,0.5)]">
-                  <CardContent className="p-3 md:p-4 flex flex-col items-center text-center">
-                    <motion.div 
-                      className="w-full aspect-square mb-3 md:mb-4 bg-gradient-to-br from-muted to-muted/50 rounded-xl flex items-center justify-center overflow-hidden relative"
-                      whileHover={{
-                        rotateZ: 2,
-                        scale: 1.02
-                      }}
-                      transition={{ duration: 0.3 }}
-                    >
-                      <motion.div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-accent/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                      <motion.div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-[radial-gradient(circle_at_50%_50%,rgba(255,255,255,0.1),transparent_70%)]" />
-                      <img 
-                        src={category.image} 
-                        alt={category.name} 
-                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 ease-out" 
-                      />
-                    </motion.div>
-                    <h3 className="font-semibold text-xs sm:text-sm md:text-base mb-1 group-hover:text-primary transition-colors duration-300">{category.name}</h3>
-                    <p className="text-xs text-muted-foreground hidden md:block group-hover:text-muted-foreground/80 transition-colors duration-300">{category.description}</p>
+              <Link to={category.path} className="block h-full">
+                <Card className="group relative h-full overflow-hidden transition-all duration-300 border-border hover:border-primary/50 hover:shadow-[0_20px_40px_-12px_rgba(0,0,0,0.3)] dark:hover:shadow-[0_20px_40px_-12px_rgba(0,0,0,0.5)]">
+                  {/* Pulsing glow effect */}
+                  <motion.div 
+                    className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
+                    animate={{
+                      boxShadow: [
+                        '0 0 20px 0px hsl(var(--primary) / 0.2)',
+                        '0 0 30px 5px hsl(var(--primary) / 0.3)',
+                        '0 0 20px 0px hsl(var(--primary) / 0.2)'
+                      ]
+                    }}
+                    transition={{
+                      duration: 2,
+                      repeat: Infinity,
+                      ease: "easeInOut"
+                    }}
+                  />
+                  
+                  {/* Full background image */}
+                  <div className="absolute inset-0">
+                    <img 
+                      src={category.image} 
+                      alt={category.name} 
+                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 ease-out" 
+                    />
+                    {/* Gradient overlay for text readability */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-background/95 via-background/60 to-transparent" />
+                    {/* Hover glow overlay */}
+                    <motion.div className="absolute inset-0 bg-gradient-to-br from-primary/10 to-accent/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                    <motion.div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-[radial-gradient(circle_at_50%_50%,rgba(255,255,255,0.08),transparent_70%)]" />
+                  </div>
+                  
+                  {/* Content positioned at bottom */}
+                  <CardContent className="relative z-10 h-full flex flex-col justify-end p-3 md:p-4 min-h-[180px] md:min-h-[220px]">
+                    <h3 className="font-semibold text-sm md:text-base mb-1 group-hover:text-primary transition-colors duration-300 drop-shadow-sm">{category.name}</h3>
+                    <p className="text-xs text-muted-foreground hidden md:block group-hover:text-foreground/70 transition-colors duration-300">{category.description}</p>
                   </CardContent>
                 </Card>
               </Link>
