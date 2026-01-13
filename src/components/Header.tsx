@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { ShoppingCart, Menu, X, ChevronDown, Search, User, MapPin, Award, Phone, Settings } from 'lucide-react';
+import { ShoppingCart, Menu, X, ChevronDown, Search, User, MapPin, Award, Phone, Settings, GitCompare, UserCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useCart } from '@/contexts/CartContext';
 import { useAuth } from '@/hooks/useAuth';
@@ -172,6 +172,13 @@ const Header = () => {
                 </DropdownMenuContent>
               </DropdownMenu>
 
+              <Link to="/compare">
+                <Button variant="ghost" className="text-sm font-medium gap-1">
+                  <GitCompare className="h-4 w-4" />
+                  Compare
+                </Button>
+              </Link>
+
               <Link to="/contact">
                 <Button variant="ghost" className="text-sm font-medium">
                   Contact
@@ -219,6 +226,12 @@ const Header = () => {
                         {user.email}
                       </DropdownMenuItem>
                       <DropdownMenuSeparator />
+                      <DropdownMenuItem asChild>
+                        <Link to="/profile" className="cursor-pointer flex items-center gap-2">
+                          <UserCircle className="h-4 w-4" />
+                          My Profile
+                        </Link>
+                      </DropdownMenuItem>
                       {isAdmin && (
                         <DropdownMenuItem asChild>
                           <Link to="/admin" className="cursor-pointer flex items-center gap-2">
@@ -227,6 +240,7 @@ const Header = () => {
                           </Link>
                         </DropdownMenuItem>
                       )}
+                      <DropdownMenuSeparator />
                       <DropdownMenuItem onClick={() => signOut()} className="cursor-pointer text-destructive">
                         Sign Out
                       </DropdownMenuItem>
