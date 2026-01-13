@@ -76,6 +76,16 @@ export function useAuth() {
     return { error };
   };
 
+  const signInWithGoogle = async () => {
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: {
+        redirectTo: `${window.location.origin}/admin`
+      }
+    });
+    return { error };
+  };
+
   const signOut = async () => {
     await supabase.auth.signOut();
   };
@@ -87,6 +97,7 @@ export function useAuth() {
     isAdmin,
     signIn,
     signUp,
+    signInWithGoogle,
     signOut
   };
 }
