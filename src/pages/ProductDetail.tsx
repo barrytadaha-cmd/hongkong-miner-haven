@@ -6,6 +6,7 @@ import { useCart } from '@/contexts/CartContext';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import Layout from '@/components/Layout';
 import { 
   ShoppingCart, 
   ChevronRight, 
@@ -43,13 +44,15 @@ const ProductDetail = () => {
 
   if (!product) {
     return (
-      <main className="pt-24 pb-16">
-        <div className="container mx-auto px-4 text-center py-16">
-          <h1 className="text-2xl font-bold mb-4">Product Not Found</h1>
-          <p className="text-muted-foreground mb-8">The product you're looking for doesn't exist.</p>
-          <Button onClick={() => navigate('/shop')}>Back to Shop</Button>
-        </div>
-      </main>
+      <Layout>
+        <main className="pt-24 pb-16">
+          <div className="container mx-auto px-4 text-center py-16">
+            <h1 className="text-2xl font-bold mb-4">Product Not Found</h1>
+            <p className="text-muted-foreground mb-8">The product you're looking for doesn't exist.</p>
+            <Button onClick={() => navigate('/shop')}>Back to Shop</Button>
+          </div>
+        </main>
+      </Layout>
     );
   }
 
@@ -63,7 +66,7 @@ const ProductDetail = () => {
   const categoryName = product.category.charAt(0).toUpperCase() + product.category.slice(1);
 
   return (
-    <>
+    <Layout>
       <Helmet>
         <title>{product.name} | MinerHoalan Hong Kong</title>
         <meta name="description" content={`Buy ${product.name} - ${product.hashrate} ${product.algorithm} miner with ${product.efficiency} efficiency. Fast shipping from Hong Kong.`} />
@@ -503,7 +506,7 @@ const ProductDetail = () => {
           )}
         </div>
       </main>
-    </>
+    </Layout>
   );
 };
 

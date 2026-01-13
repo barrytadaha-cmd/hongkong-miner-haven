@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Check, X, Wrench, Shield, Clock, Phone, ChevronRight } from 'lucide-react';
+import Layout from '@/components/Layout';
 
 const warrantyPlans = [
   {
@@ -79,7 +80,7 @@ const services = [
 
 const RepairWarranty = () => {
   return (
-    <>
+    <Layout>
       <Helmet>
         <title>Repair & Warranty Service | Miner Haolan</title>
         <meta name="description" content="Premium warranty and repair service for your ASIC miners. Fast turnaround, genuine parts, and comprehensive coverage." />
@@ -315,7 +316,7 @@ const RepairWarranty = () => {
           </div>
         </section>
       </main>
-    </>
+    </Layout>
   );
 };
 

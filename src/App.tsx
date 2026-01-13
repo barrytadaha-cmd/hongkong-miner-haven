@@ -19,6 +19,8 @@ import Auth from "./pages/Auth";
 import Admin from "./pages/Admin";
 import AlgorithmLanding from "./pages/AlgorithmLanding";
 import ProductDetailApple from "./pages/ProductDetailApple";
+import Profile from "./pages/Profile";
+import Compare from "./pages/Compare";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -44,6 +46,8 @@ const App = () => (
               <Route path="/repair-warranty" element={<RepairWarranty />} />
               <Route path="/auth" element={<Auth />} />
               <Route path="/admin" element={<Admin />} />
+              <Route path="/profile" element={<Profile />} />
+              <Route path="/compare" element={<Compare />} />
               <Route path="/miners/:algorithm" element={<AlgorithmLanding />} />
               <Route path="/product-apple/:id" element={<ProductDetailApple />} />
               <Route path="*" element={<NotFound />} />
