@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Product } from '@/lib/data';
 import { Button } from '@/components/ui/button';
@@ -11,6 +12,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
+import { cn } from '@/lib/utils';
 
 interface ProductCardProps {
   product: Product;
@@ -37,6 +39,12 @@ const ProductCard = ({ product }: ProductCardProps) => {
     ? Math.round((1 - product.price / product.originalPrice) * 100) 
     : 0;
 
+  const [imageLoaded, setImageLoaded] = useState(false);
+  const [imageError, setImageError] = useState(false);
+
+  // Fallback image for broken links
+  const fallbackImage = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjQwMCIgdmlld0JveD0iMCAwIDQwMCA0MDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSI0MDAiIGhlaWdodD0iNDAwIiBmaWxsPSIjMjAyMDIwIi8+CjxyZWN0IHg9IjEzMCIgeT0iMTMwIiB3aWR0aD0iMTQwIiBoZWlnaHQ9IjE0MCIgcng9IjIwIiBmaWxsPSIjMzAzMDMwIi8+Cjwvc3ZnPg==';
+
   return (
     <Card className="group relative overflow-hidden bg-card border-border hover:border-primary/50 transition-all duration-500 hover:shadow-2xl hover:shadow-primary/10 card-hover">
       <Link to={`/product/${product.id}`} className="block">
@@ -44,10 +52,27 @@ const ProductCard = ({ product }: ProductCardProps) => {
           {/* Background Glow on Hover */}
           <div className="absolute inset-0 bg-gradient-to-br from-primary/0 to-accent/0 group-hover:from-primary/5 group-hover:to-accent/5 transition-all duration-500" />
           
+          {/* Loading skeleton */}
+          {!imageLoaded && !imageError && (
+            <div className="absolute inset-0 bg-gradient-to-br from-secondary via-secondary/80 to-secondary animate-pulse">
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent animate-shimmer" />
+            </div>
+          )}
+          
           <img
-            src={product.image}
+            src={imageError ? fallbackImage : product.image}
             alt={product.name}
-            className="object-contain w-full h-full transition-all duration-700 group-hover:scale-110"
+            className={cn(
+              "object-contain w-full h-full transition-all duration-700 group-hover:scale-110",
+              imageLoaded ? "opacity-100" : "opacity-0"
+            )}
+            loading="lazy"
+            decoding="async"
+            onLoad={() => setImageLoaded(true)}
+            onError={() => {
+              setImageError(true);
+              setImageLoaded(true);
+            }}
           />
         
           {/* Badges */}
