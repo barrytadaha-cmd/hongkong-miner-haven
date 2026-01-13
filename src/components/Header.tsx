@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { ShoppingCart, Menu, X, ChevronDown, Search, User, MapPin, Award, Phone, Settings, GitCompare, UserCircle } from 'lucide-react';
+import { ShoppingCart, Menu, X, ChevronDown, Search, User, MapPin, Award, Phone, Settings, GitCompare, UserCircle, Shield, Truck } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useCart } from '@/contexts/CartContext';
 import { useAuth } from '@/hooks/useAuth';
@@ -61,24 +61,29 @@ const Header = () => {
   }];
   return <header className="fixed top-0 left-0 right-0 z-50">
       {/* Top Bar */}
-      <div className="bg-navy text-navy-foreground text-sm py-2">
-        <div className="container mx-auto px-4 items-center justify-between flex flex-col">
-          <div className="flex items-center gap-6">
-            <span className="flex items-center gap-1.5">
-              <MapPin className="h-3.5 w-3.5" />
+      <div className="bg-navy text-navy-foreground text-xs md:text-sm py-1.5 md:py-2">
+        <div className="container mx-auto px-4">
+          <div className="flex items-center justify-center gap-3 md:gap-6 flex-wrap">
+            <span className="flex items-center gap-1 md:gap-1.5">
+              <MapPin className="h-3 w-3 md:h-3.5 md:w-3.5" />
               Hong Kong HQ
             </span>
-            <span className="hidden sm:flex items-center gap-1.5">
-              <Award className="h-3.5 w-3.5 text-accent" />
-              Best Price Guarantee
+            <span className="flex items-center gap-1 md:gap-1.5">
+              <Award className="h-3 w-3 md:h-3.5 md:w-3.5 text-accent" />
+              Best Price
+            </span>
+            <span className="flex items-center gap-1 md:gap-1.5">
+              <Shield className="h-3 w-3 md:h-3.5 md:w-3.5 text-accent" />
+              2 Year Warranty
+            </span>
+            <span className="flex items-center gap-1 md:gap-1.5">
+              <Truck className="h-3 w-3 md:h-3.5 md:w-3.5 text-accent" />
+              Free Shipping
             </span>
             <span className="hidden md:flex items-center gap-1.5">
               <Phone className="h-3.5 w-3.5" />
               Service & Support
             </span>
-          </div>
-          <div className="gap-4 flex items-center justify-center">
-            
           </div>
         </div>
       </div>
