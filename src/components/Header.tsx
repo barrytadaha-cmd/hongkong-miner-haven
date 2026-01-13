@@ -6,69 +6,54 @@ import { useCart } from '@/contexts/CartContext';
 import { useAuth } from '@/hooks/useAuth';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+
 const Header = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
-  const {
-    totalItems,
-    setIsOpen
-  } = useCart();
-  const {
-    user,
-    isAdmin,
-    signOut
-  } = useAuth();
+  const { totalItems, setIsOpen } = useCart();
+  const { user, isAdmin, signOut } = useAuth();
   const location = useLocation();
-  const bitcoinMiners = [{
-    name: 'All Bitcoin Miners',
-    path: '/shop?category=bitcoin'
-  }, {
-    name: 'Air-Cooled Miners',
-    path: '/shop?category=bitcoin&type=air'
-  }, {
-    name: 'Hydro Miners',
-    path: '/shop?category=bitcoin&type=hydro'
-  }, {
-    name: 'Immersion Miners',
-    path: '/shop?category=bitcoin&type=immersion'
-  }];
-  const altcoinMiners = [{
-    name: 'Litecoin Miners',
-    path: '/shop?category=litecoin'
-  }, {
-    name: 'Kaspa Miners',
-    path: '/shop?category=kaspa'
-  }, {
-    name: 'Zcash Miners',
-    path: '/shop?category=zcash'
-  }, {
-    name: 'Ethereum Miners',
-    path: '/shop?category=ethereum'
-  }];
-  const knowledge = [{
-    name: 'Blog',
-    path: '/blog'
-  }, {
-    name: 'FAQ',
-    path: '/faq'
-  }, {
-    name: 'Mining Guide',
-    path: '/blog'
-  }, {
-    name: 'Repair & Warranty',
-    path: '/repair-warranty'
-  }];
-  return <header className="fixed top-0 left-0 right-0 z-50">
+
+  const bitcoinMiners = [
+    { name: 'All Bitcoin Miners', path: '/shop?category=bitcoin' },
+    { name: 'Air-Cooled Miners', path: '/shop?category=bitcoin&type=air' },
+    { name: 'Hydro Miners', path: '/shop?category=bitcoin&type=hydro' },
+    { name: 'Immersion Miners', path: '/shop?category=bitcoin&type=immersion' },
+  ];
+
+  const altcoinMiners = [
+    { name: 'Litecoin Miners', path: '/shop?category=litecoin' },
+    { name: 'Kaspa Miners', path: '/shop?category=kaspa' },
+    { name: 'Zcash Miners', path: '/shop?category=zcash' },
+    { name: 'Ethereum Miners', path: '/shop?category=ethereum' },
+  ];
+
+  const knowledge = [
+    { name: 'Blog', path: '/blog' },
+    { name: 'FAQ', path: '/faq' },
+    { name: 'Mining Guide', path: '/blog' },
+    { name: 'Repair & Warranty', path: '/repair-warranty' },
+  ];
+
+  return (
+    <header className="fixed top-0 left-0 right-0 z-50">
       {/* Top Bar */}
       <div className="bg-navy text-navy-foreground text-sm py-2">
-        <div className="container mx-auto px-4 opacity-95 shadow-sm items-center justify-between flex flex-col">
+        <div className="container mx-auto px-4 flex justify-between items-center">
           <div className="flex items-center gap-6">
-            <span className="flex items-center gap-1.5 text-center">
+            <span className="flex items-center gap-1.5">
               <MapPin className="h-3.5 w-3.5" />
               Hong Kong HQ
             </span>
-            <span className="hidden sm:flex items-center gap-1.5">Best Price/2 Years Guarantee<Award className="h-3.5 w-3.5 text-accent" />
+            <span className="hidden sm:flex items-center gap-1.5">
+              <Award className="h-3.5 w-3.5 text-accent" />
               Best Price Guarantee
             </span>
             <span className="hidden md:flex items-center gap-1.5">
@@ -77,7 +62,7 @@ const Header = () => {
             </span>
           </div>
           <div className="flex items-center gap-4">
-            
+            <Link to="/contact" className="hover:text-accent transition-colors">Contact</Link>
           </div>
         </div>
       </div>
@@ -100,7 +85,10 @@ const Header = () => {
             <nav className="hidden lg:flex items-center gap-1">
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" className="text-sm font-medium gap-1">
+                  <Button
+                    variant="ghost"
+                    className="text-sm font-medium gap-1"
+                  >
                     Buy ASIC Miner
                     <ChevronDown className="h-3 w-3" />
                   </Button>
@@ -111,59 +99,76 @@ const Header = () => {
                       All Miners
                     </Link>
                   </DropdownMenuItem>
-                  {bitcoinMiners.map(item => <DropdownMenuItem key={item.name} asChild>
+                  {bitcoinMiners.map((item) => (
+                    <DropdownMenuItem key={item.name} asChild>
                       <Link to={item.path} className="cursor-pointer">
                         {item.name}
                       </Link>
-                    </DropdownMenuItem>)}
+                    </DropdownMenuItem>
+                  ))}
                 </DropdownMenuContent>
               </DropdownMenu>
 
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" className="text-sm font-medium gap-1">
+                  <Button
+                    variant="ghost"
+                    className="text-sm font-medium gap-1"
+                  >
                     Bitcoin Miner
                     <ChevronDown className="h-3 w-3" />
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="start" className="w-56 bg-popover">
-                  {bitcoinMiners.map(item => <DropdownMenuItem key={item.name} asChild>
+                  {bitcoinMiners.map((item) => (
+                    <DropdownMenuItem key={item.name} asChild>
                       <Link to={item.path} className="cursor-pointer">
                         {item.name}
                       </Link>
-                    </DropdownMenuItem>)}
+                    </DropdownMenuItem>
+                  ))}
                 </DropdownMenuContent>
               </DropdownMenu>
 
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" className="text-sm font-medium gap-1">
+                  <Button
+                    variant="ghost"
+                    className="text-sm font-medium gap-1"
+                  >
                     Altcoin Miner
                     <ChevronDown className="h-3 w-3" />
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="start" className="w-56 bg-popover">
-                  {altcoinMiners.map(item => <DropdownMenuItem key={item.name} asChild>
+                  {altcoinMiners.map((item) => (
+                    <DropdownMenuItem key={item.name} asChild>
                       <Link to={item.path} className="cursor-pointer">
                         {item.name}
                       </Link>
-                    </DropdownMenuItem>)}
+                    </DropdownMenuItem>
+                  ))}
                 </DropdownMenuContent>
               </DropdownMenu>
 
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" className="text-sm font-medium gap-1">
+                  <Button
+                    variant="ghost"
+                    className="text-sm font-medium gap-1"
+                  >
                     Knowledge
                     <ChevronDown className="h-3 w-3" />
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="start" className="w-48 bg-popover">
-                  {knowledge.map(item => <DropdownMenuItem key={item.name} asChild>
+                  {knowledge.map((item) => (
+                    <DropdownMenuItem key={item.name} asChild>
                       <Link to={item.path} className="cursor-pointer">
                         {item.name}
                       </Link>
-                    </DropdownMenuItem>)}
+                    </DropdownMenuItem>
+                  ))}
                 </DropdownMenuContent>
               </DropdownMenu>
 
@@ -184,20 +189,39 @@ const Header = () => {
             {/* Right Actions */}
             <div className="flex items-center gap-2">
               {/* Search */}
-              {searchOpen ? <div className="hidden md:flex items-center gap-2">
-                  <Input type="search" placeholder="Search miners..." className="w-48" autoFocus onBlur={() => setSearchOpen(false)} />
-                </div> : <Button variant="ghost" size="icon" className="hidden md:flex" onClick={() => setSearchOpen(true)}>
+              {searchOpen ? (
+                <div className="hidden md:flex items-center gap-2">
+                  <Input 
+                    type="search" 
+                    placeholder="Search miners..." 
+                    className="w-48"
+                    autoFocus
+                    onBlur={() => setSearchOpen(false)}
+                  />
+                </div>
+              ) : (
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="hidden md:flex"
+                  onClick={() => setSearchOpen(true)}
+                >
                   <Search className="h-5 w-5" />
-                </Button>}
+                </Button>
+              )}
 
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" size="icon">
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                  >
                     <User className="h-5 w-5" />
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="w-48">
-                  {user ? <>
+                  {user ? (
+                    <>
                       <DropdownMenuItem disabled className="text-xs text-muted-foreground">
                         {user.email}
                       </DropdownMenuItem>
@@ -208,29 +232,41 @@ const Header = () => {
                           My Profile
                         </Link>
                       </DropdownMenuItem>
-                      {isAdmin && <DropdownMenuItem asChild>
+                      {isAdmin && (
+                        <DropdownMenuItem asChild>
                           <Link to="/admin" className="cursor-pointer flex items-center gap-2">
                             <Settings className="h-4 w-4" />
                             Admin Dashboard
                           </Link>
-                        </DropdownMenuItem>}
+                        </DropdownMenuItem>
+                      )}
                       <DropdownMenuSeparator />
                       <DropdownMenuItem onClick={() => signOut()} className="cursor-pointer text-destructive">
                         Sign Out
                       </DropdownMenuItem>
-                    </> : <DropdownMenuItem asChild>
+                    </>
+                  ) : (
+                    <DropdownMenuItem asChild>
                       <Link to="/auth" className="cursor-pointer">
                         Sign In / Register
                       </Link>
-                    </DropdownMenuItem>}
+                    </DropdownMenuItem>
+                  )}
                 </DropdownMenuContent>
               </DropdownMenu>
 
-              <Button variant="ghost" size="icon" className="relative" onClick={() => setIsOpen(true)}>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="relative"
+                onClick={() => setIsOpen(true)}
+              >
                 <ShoppingCart className="h-5 w-5" />
-                {totalItems > 0 && <Badge className="absolute -top-1 -right-1 h-5 w-5 p-0 flex items-center justify-center text-xs bg-accent text-accent-foreground">
+                {totalItems > 0 && (
+                  <Badge className="absolute -top-1 -right-1 h-5 w-5 p-0 flex items-center justify-center text-xs bg-accent text-accent-foreground">
                     {totalItems}
-                  </Badge>}
+                  </Badge>
+                )}
               </Button>
 
               <Button className="hidden sm:flex bg-primary hover:bg-primary/90" asChild>
@@ -238,34 +274,63 @@ const Header = () => {
               </Button>
 
               {/* Mobile Menu Toggle */}
-              <Button variant="ghost" size="icon" className="lg:hidden" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="lg:hidden"
+                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              >
                 {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
               </Button>
             </div>
           </div>
 
           {/* Mobile Menu */}
-          {mobileMenuOpen && <div className="lg:hidden py-4 border-t border-border animate-fade-in">
+          {mobileMenuOpen && (
+            <div className="lg:hidden py-4 border-t border-border animate-fade-in">
               <nav className="flex flex-col gap-2">
-                <Link to="/shop" onClick={() => setMobileMenuOpen(false)} className="py-2 px-4 rounded-lg font-medium hover:bg-muted">
+                <Link
+                  to="/shop"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="py-2 px-4 rounded-lg font-medium hover:bg-muted"
+                >
                   Buy ASIC Miner
                 </Link>
-                <Link to="/shop?category=bitcoin" onClick={() => setMobileMenuOpen(false)} className="py-2 px-4 rounded-lg font-medium hover:bg-muted">
+                <Link
+                  to="/shop?category=bitcoin"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="py-2 px-4 rounded-lg font-medium hover:bg-muted"
+                >
                   Bitcoin Miner
                 </Link>
-                <Link to="/shop?category=litecoin" onClick={() => setMobileMenuOpen(false)} className="py-2 px-4 rounded-lg font-medium hover:bg-muted">
+                <Link
+                  to="/shop?category=litecoin"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="py-2 px-4 rounded-lg font-medium hover:bg-muted"
+                >
                   Altcoin Miner
                 </Link>
-                <Link to="/blog" onClick={() => setMobileMenuOpen(false)} className="py-2 px-4 rounded-lg font-medium hover:bg-muted">
+                <Link
+                  to="/blog"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="py-2 px-4 rounded-lg font-medium hover:bg-muted"
+                >
                   Knowledge
                 </Link>
-                <Link to="/contact" onClick={() => setMobileMenuOpen(false)} className="py-2 px-4 rounded-lg font-medium hover:bg-muted">
+                <Link
+                  to="/contact"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="py-2 px-4 rounded-lg font-medium hover:bg-muted"
+                >
                   Contact
                 </Link>
               </nav>
-            </div>}
+            </div>
+          )}
         </div>
       </div>
-    </header>;
+    </header>
+  );
 };
+
 export default Header;
