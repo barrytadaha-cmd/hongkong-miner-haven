@@ -1,37 +1,122 @@
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { ArrowRight, Shield, Truck, Headphones } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { motion, useScroll, useTransform } from 'framer-motion';
+import { useRef, useMemo } from 'react';
 import heroMobileBg from '@/assets/hero-mobile-bg.webp';
 
-const HeroSection = () => {
+// Generate random particles
+const generateParticles = (count: number) => {
+  return Array.from({ length: count }, (_, i) => ({
+    id: i,
+    x: Math.random() * 100,
+    y: Math.random() * 100,
+    size: Math.random() * 4 + 2,
+    duration: Math.random() * 10 + 15,
+    delay: Math.random() * 5,
+    opacity: Math.random() * 0.5 + 0.2,
+  }));
+};
+
+const FloatingParticles = () => {
+  const particles = useMemo(() => generateParticles(30), []);
+  
   return (
-    <section className="relative min-h-[85vh] flex items-center overflow-hidden bg-gradient-hero">
-      {/* Mobile Background Video/Animation with 3D Effect */}
+    <div className="absolute inset-0 overflow-hidden pointer-events-none z-10">
+      {particles.map((particle) => (
+        <motion.div
+          key={particle.id}
+          className="absolute rounded-full bg-white"
+          style={{
+            left: `${particle.x}%`,
+            top: `${particle.y}%`,
+            width: particle.size,
+            height: particle.size,
+          }}
+          animate={{
+            y: [0, -100, 0],
+            x: [0, Math.random() * 50 - 25, 0],
+            opacity: [particle.opacity, particle.opacity * 1.5, particle.opacity],
+            scale: [1, 1.2, 1],
+          }}
+          transition={{
+            duration: particle.duration,
+            repeat: Infinity,
+            delay: particle.delay,
+            ease: "easeInOut",
+          }}
+        />
+      ))}
+      {/* Glowing accent particles */}
+      {particles.slice(0, 10).map((particle) => (
+        <motion.div
+          key={`glow-${particle.id}`}
+          className="absolute rounded-full bg-accent/60 blur-sm"
+          style={{
+            left: `${(particle.x + 30) % 100}%`,
+            top: `${(particle.y + 20) % 100}%`,
+            width: particle.size * 2,
+            height: particle.size * 2,
+          }}
+          animate={{
+            y: [0, -80, 0],
+            x: [0, Math.random() * 40 - 20, 0],
+            opacity: [0.3, 0.6, 0.3],
+          }}
+          transition={{
+            duration: particle.duration * 1.2,
+            repeat: Infinity,
+            delay: particle.delay + 2,
+            ease: "easeInOut",
+          }}
+        />
+      ))}
+    </div>
+  );
+};
+
+const HeroSection = () => {
+  const sectionRef = useRef<HTMLElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start start", "end start"]
+  });
+  
+  // Parallax transforms
+  const backgroundY = useTransform(scrollYProgress, [0, 1], ['0%', '30%']);
+  const backgroundScale = useTransform(scrollYProgress, [0, 1], [1.1, 1.3]);
+
+  return (
+    <section ref={sectionRef} className="relative min-h-[85vh] flex items-center overflow-hidden bg-gradient-hero">
+      {/* Mobile Background Video/Animation with 3D Parallax Effect */}
       <div className="absolute inset-0 lg:hidden" style={{ perspective: '1000px' }}>
         <motion.div
           className="absolute inset-0"
-          initial={{ scale: 1.1, rotateX: 5 }}
-          animate={{ 
-            scale: [1.1, 1.15, 1.1],
-            rotateX: [5, 3, 5],
-            z: [0, 20, 0],
-          }}
-          transition={{ 
-            duration: 8, 
-            repeat: Infinity, 
-            ease: "easeInOut" 
-          }}
           style={{ 
+            y: backgroundY,
+            scale: backgroundScale,
             transformStyle: 'preserve-3d',
             transformOrigin: 'center center',
           }}
         >
-          <img 
-            src={heroMobileBg} 
-            alt="" 
-            className="w-full h-full object-cover"
-          />
+          <motion.div
+            className="absolute inset-0"
+            animate={{ 
+              rotateX: [5, 3, 5],
+              z: [0, 20, 0],
+            }}
+            transition={{ 
+              duration: 8, 
+              repeat: Infinity, 
+              ease: "easeInOut" 
+            }}
+          >
+            <img 
+              src={heroMobileBg} 
+              alt="" 
+              className="w-full h-full object-cover"
+            />
+          </motion.div>
         </motion.div>
         {/* Animated glow overlay */}
         <motion.div 
@@ -45,10 +130,39 @@ const HeroSection = () => {
         <div className="absolute inset-0 bg-gradient-to-t from-navy via-navy/70 to-navy/30" />
       </div>
 
-      {/* Animated Background Elements - Desktop Only */}
-      <div className="absolute inset-0 overflow-hidden hidden lg:block">
+      {/* Desktop Background with Parallax and 3D Effect */}
+      <div className="absolute inset-0 overflow-hidden hidden lg:block" style={{ perspective: '1000px' }}>
+        <motion.div
+          className="absolute inset-0"
+          style={{ 
+            y: backgroundY,
+            scale: backgroundScale,
+            transformStyle: 'preserve-3d',
+          }}
+        >
+          {/* Animated background image for desktop */}
+          <motion.div
+            className="absolute inset-0"
+            animate={{ 
+              rotateX: [2, 0, 2],
+            }}
+            transition={{ 
+              duration: 10, 
+              repeat: Infinity, 
+              ease: "easeInOut" 
+            }}
+          >
+            <img 
+              src={heroMobileBg} 
+              alt="" 
+              className="w-full h-full object-cover opacity-40"
+            />
+          </motion.div>
+        </motion.div>
+        
+        {/* Animated gradient orbs */}
         <motion.div 
-          className="absolute top-20 left-10 w-72 h-72 bg-primary/10 rounded-full blur-3xl"
+          className="absolute top-20 left-10 w-72 h-72 bg-primary/20 rounded-full blur-3xl"
           animate={{ 
             scale: [1, 1.2, 1],
             opacity: [0.3, 0.5, 0.3],
@@ -56,18 +170,24 @@ const HeroSection = () => {
           transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
         />
         <motion.div 
-          className="absolute bottom-20 right-10 w-96 h-96 bg-accent/10 rounded-full blur-3xl"
+          className="absolute bottom-20 right-10 w-96 h-96 bg-accent/20 rounded-full blur-3xl"
           animate={{ 
             scale: [1.2, 1, 1.2],
             opacity: [0.3, 0.5, 0.3],
           }}
           transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
         />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-primary/5 rounded-full blur-3xl" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-primary/10 rounded-full blur-3xl" />
+        
+        {/* Gradient overlay */}
+        <div className="absolute inset-0 bg-gradient-to-t from-navy via-navy/60 to-navy/40" />
       </div>
       
-      {/* Grid Pattern - Desktop Only */}
-      <div className="absolute inset-0 opacity-[0.03] hidden lg:block" style={{
+      {/* Floating Particles - Both Mobile and Desktop */}
+      <FloatingParticles />
+      
+      {/* Grid Pattern */}
+      <div className="absolute inset-0 opacity-[0.03]" style={{
         backgroundImage: `linear-gradient(rgba(255,255,255,.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.1) 1px, transparent 1px)`,
         backgroundSize: '50px 50px',
       }} />
