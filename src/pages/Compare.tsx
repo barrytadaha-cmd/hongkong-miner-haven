@@ -7,13 +7,20 @@ import Layout from '@/components/Layout';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { Input } from '@/components/ui/input';
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from '@/components/ui/command';
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover';
 import { useCart } from '@/contexts/CartContext';
 import { toast } from 'sonner';
 import {
@@ -28,6 +35,8 @@ import {
   Package,
   Check,
   Minus,
+  ChevronsUpDown,
+  Search,
 } from 'lucide-react';
 
 export default function Compare() {
@@ -38,6 +47,8 @@ export default function Compare() {
   const { addItem } = useCart();
 
   const [selectedProducts, setSelectedProducts] = useState<string[]>([]);
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
 
   // Handle URL parameter for adding product from product card
   useEffect(() => {
@@ -132,20 +143,74 @@ export default function Compare() {
               </CardHeader>
               <CardContent>
                 <div className="flex flex-wrap gap-4 items-center">
-                  <Select onValueChange={handleAddProduct}>
-                    <SelectTrigger className="w-[300px]">
-                      <SelectValue placeholder="Add a miner to compare..." />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {products
-                        .filter(p => !selectedProducts.includes(p.id))
-                        .map(product => (
-                          <SelectItem key={product.id} value={product.id}>
-                            {product.name} - ${product.price.toLocaleString()}
-                          </SelectItem>
-                        ))}
-                    </SelectContent>
-                  </Select>
+                  <Popover open={searchOpen} onOpenChange={setSearchOpen}>
+                    <PopoverTrigger asChild>
+                      <Button
+                        variant="outline"
+                        role="combobox"
+                        aria-expanded={searchOpen}
+                        className="w-[300px] justify-between"
+                      >
+                        <span className="flex items-center gap-2">
+                          <Search className="h-4 w-4 text-muted-foreground" />
+                          Search and add miner...
+                        </span>
+                        <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-[300px] p-0" align="start">
+                      <Command>
+                        <CommandInput 
+                          placeholder="Search miners by name, brand..." 
+                          value={searchQuery}
+                          onValueChange={setSearchQuery}
+                        />
+                        <CommandList>
+                          <CommandEmpty>No miners found.</CommandEmpty>
+                          <CommandGroup heading="Available Miners">
+                            {products
+                              .filter(p => !selectedProducts.includes(p.id))
+                              .filter(p => {
+                                const query = searchQuery.toLowerCase();
+                                return (
+                                  p.name.toLowerCase().includes(query) ||
+                                  p.brand.toLowerCase().includes(query) ||
+                                  p.algorithm.toLowerCase().includes(query) ||
+                                  p.category.toLowerCase().includes(query)
+                                );
+                              })
+                              .slice(0, 10)
+                              .map(product => (
+                                <CommandItem
+                                  key={product.id}
+                                  value={`${product.name} ${product.brand}`}
+                                  onSelect={() => {
+                                    handleAddProduct(product.id);
+                                    setSearchOpen(false);
+                                    setSearchQuery('');
+                                  }}
+                                  className="flex flex-col items-start gap-1 cursor-pointer"
+                                >
+                                  <div className="flex items-center justify-between w-full">
+                                    <span className="font-medium">{product.name}</span>
+                                    <Badge variant="outline" className="ml-2 text-xs">
+                                      ${product.price.toLocaleString()}
+                                    </Badge>
+                                  </div>
+                                  <div className="flex gap-2 text-xs text-muted-foreground">
+                                    <span>{product.brand}</span>
+                                    <span>•</span>
+                                    <span>{product.algorithm}</span>
+                                    <span>•</span>
+                                    <span>{product.hashrate}</span>
+                                  </div>
+                                </CommandItem>
+                              ))}
+                          </CommandGroup>
+                        </CommandList>
+                      </Command>
+                    </PopoverContent>
+                  </Popover>
 
                   <div className="flex flex-wrap gap-2">
                     {selectedProductData.map(product => (
