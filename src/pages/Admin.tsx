@@ -11,7 +11,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/hooks/use-toast';
-import { Loader2, Plus, Trash2, Upload, Database, LogOut, Edit, Image } from 'lucide-react';
+import { Loader2, Plus, Trash2, Upload, Database, LogOut, Edit, Image, Package } from 'lucide-react';
+import OrderManagement from '@/components/admin/OrderManagement';
 import Layout from '@/components/Layout';
 import {
   Dialog,
@@ -342,6 +343,11 @@ export default function Admin() {
             </CardContent>
           </Card>
         )}
+
+        {/* Order Management */}
+        <div className="mb-8">
+          <OrderManagement />
+        </div>
 
         {/* Add Product */}
         <div className="flex justify-between items-center mb-4">
