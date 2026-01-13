@@ -102,6 +102,37 @@ export default function Profile() {
     if (user) {
       fetchProfile();
       fetchOrders();
+
+      // Subscribe to real-time order updates
+      const channel = supabase
+        .channel('order-updates')
+        .on(
+          'postgres_changes',
+          {
+            event: '*',
+            schema: 'public',
+            table: 'orders',
+            filter: `user_id=eq.${user.id}`,
+          },
+          (payload) => {
+            if (payload.eventType === 'UPDATE') {
+              setOrders((prev) =>
+                prev.map((order) =>
+                  order.id === payload.new.id
+                    ? { ...order, ...payload.new }
+                    : order
+                )
+              );
+            } else if (payload.eventType === 'INSERT') {
+              fetchOrders(); // Refresh to get order items
+            }
+          }
+        )
+        .subscribe();
+
+      return () => {
+        supabase.removeChannel(channel);
+      };
     }
   }, [user]);
 
