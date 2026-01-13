@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -6,7 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/hooks/use-toast';
-import { Loader2, Package, Truck, RefreshCw, Mail, ChevronDown, ChevronUp } from 'lucide-react';
+import { Loader2, Package, Truck, RefreshCw, ChevronDown, ChevronUp, Search, Filter, Calendar, X } from 'lucide-react';
 import {
   Select,
   SelectContent,
@@ -65,6 +65,54 @@ export default function OrderManagement() {
   const [updatingOrder, setUpdatingOrder] = useState<string | null>(null);
   const [expandedOrder, setExpandedOrder] = useState<string | null>(null);
   const [trackingInputs, setTrackingInputs] = useState<Record<string, string>>({});
+
+  // Filter states
+  const [searchQuery, setSearchQuery] = useState('');
+  const [statusFilter, setStatusFilter] = useState<string>('all');
+  const [dateFrom, setDateFrom] = useState('');
+  const [dateTo, setDateTo] = useState('');
+
+  // Filtered orders
+  const filteredOrders = useMemo(() => {
+    return orders.filter((order) => {
+      // Search filter (order ID)
+      if (searchQuery) {
+        const searchLower = searchQuery.toLowerCase();
+        const matchesId = order.id.toLowerCase().includes(searchLower);
+        const matchesTracking = order.tracking_number?.toLowerCase().includes(searchLower);
+        if (!matchesId && !matchesTracking) return false;
+      }
+
+      // Status filter
+      if (statusFilter !== 'all' && order.status !== statusFilter) {
+        return false;
+      }
+
+      // Date range filter
+      const orderDate = new Date(order.created_at);
+      if (dateFrom) {
+        const fromDate = new Date(dateFrom);
+        fromDate.setHours(0, 0, 0, 0);
+        if (orderDate < fromDate) return false;
+      }
+      if (dateTo) {
+        const toDate = new Date(dateTo);
+        toDate.setHours(23, 59, 59, 999);
+        if (orderDate > toDate) return false;
+      }
+
+      return true;
+    });
+  }, [orders, searchQuery, statusFilter, dateFrom, dateTo]);
+
+  const clearFilters = () => {
+    setSearchQuery('');
+    setStatusFilter('all');
+    setDateFrom('');
+    setDateTo('');
+  };
+
+  const hasActiveFilters = searchQuery || statusFilter !== 'all' || dateFrom || dateTo;
 
   useEffect(() => {
     fetchOrders();
@@ -205,31 +253,91 @@ export default function OrderManagement() {
   return (
     <Card>
       <CardHeader>
-        <div className="flex justify-between items-center">
-          <div>
-            <CardTitle className="flex items-center gap-2">
-              <Package className="h-5 w-5" />
-              Order Management
-            </CardTitle>
-            <CardDescription>
-              View and manage all customer orders
-            </CardDescription>
+        <div className="flex flex-col gap-4">
+          <div className="flex justify-between items-center">
+            <div>
+              <CardTitle className="flex items-center gap-2">
+                <Package className="h-5 w-5" />
+                Order Management
+              </CardTitle>
+              <CardDescription>
+                View and manage all customer orders ({filteredOrders.length} of {orders.length} orders)
+              </CardDescription>
+            </div>
+            <Button variant="outline" size="sm" onClick={fetchOrders}>
+              <RefreshCw className="h-4 w-4 mr-2" />
+              Refresh
+            </Button>
           </div>
-          <Button variant="outline" size="sm" onClick={fetchOrders}>
-            <RefreshCw className="h-4 w-4 mr-2" />
-            Refresh
-          </Button>
+
+          {/* Filters Section */}
+          <div className="flex flex-wrap gap-3 pt-2 border-t border-border">
+            {/* Search */}
+            <div className="relative flex-1 min-w-[200px]">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+              <Input
+                placeholder="Search by Order ID or Tracking..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="pl-9"
+              />
+            </div>
+
+            {/* Status Filter */}
+            <Select value={statusFilter} onValueChange={setStatusFilter}>
+              <SelectTrigger className="w-[160px]">
+                <Filter className="h-4 w-4 mr-2" />
+                <SelectValue placeholder="Status" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Statuses</SelectItem>
+                {orderStatuses.map((status) => (
+                  <SelectItem key={status} value={status}>
+                    <span className="capitalize">{status}</span>
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+
+            {/* Date From */}
+            <div className="flex items-center gap-2">
+              <Calendar className="h-4 w-4 text-muted-foreground" />
+              <Input
+                type="date"
+                value={dateFrom}
+                onChange={(e) => setDateFrom(e.target.value)}
+                className="w-[150px]"
+                placeholder="From"
+              />
+              <span className="text-muted-foreground">to</span>
+              <Input
+                type="date"
+                value={dateTo}
+                onChange={(e) => setDateTo(e.target.value)}
+                className="w-[150px]"
+                placeholder="To"
+              />
+            </div>
+
+            {/* Clear Filters */}
+            {hasActiveFilters && (
+              <Button variant="ghost" size="sm" onClick={clearFilters}>
+                <X className="h-4 w-4 mr-1" />
+                Clear
+              </Button>
+            )}
+          </div>
         </div>
       </CardHeader>
       <CardContent>
-        {orders.length === 0 ? (
+        {filteredOrders.length === 0 ? (
           <div className="text-center py-12">
             <Package className="h-12 w-12 text-muted-foreground/30 mx-auto mb-4" />
             <p className="text-muted-foreground">No orders yet</p>
           </div>
         ) : (
           <div className="space-y-4">
-            {orders.map((order) => (
+            {filteredOrders.map((order) => (
               <Collapsible
                 key={order.id}
                 open={expandedOrder === order.id}
