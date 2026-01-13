@@ -133,11 +133,13 @@ const TestimonialsSection = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.5, delay: 0.2 }}
           >
-            <img 
-              src={trustpilotLogo} 
-              alt="Trustpilot Rating" 
-              className="h-12 md:h-16 w-auto object-contain"
-            />
+            <div className="bg-white rounded-lg p-2">
+              <img 
+                src={trustpilotLogo} 
+                alt="Trustpilot Rating" 
+                className="h-12 md:h-16 w-auto object-contain"
+              />
+            </div>
             <div className="text-left">
               <p className="text-sm font-semibold text-foreground">Excellent</p>
               <p className="text-xs text-muted-foreground">Based on 500+ reviews</p>
