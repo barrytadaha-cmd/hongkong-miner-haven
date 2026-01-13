@@ -8,10 +8,11 @@ import {
 } from '@/components/ui/accordion';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
+import Layout from '@/components/Layout';
 
 const FAQ = () => {
   return (
-    <>
+    <Layout>
       <Helmet>
         <title>FAQ | MinerHoalan Hong Kong</title>
         <meta name="description" content="Frequently asked questions about buying ASIC miners from MinerHoalan. Learn about shipping, payments, warranty, and more." />
@@ -63,7 +64,7 @@ const FAQ = () => {
           </div>
         </div>
       </main>
-    </>
+    </Layout>
   );
 };
 

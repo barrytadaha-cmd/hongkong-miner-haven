@@ -1,6 +1,6 @@
 import { Helmet } from 'react-helmet-async';
 import { Building2, Users, Globe, Award } from 'lucide-react';
-
+import Layout from '@/components/Layout';
 const stats = [
   { label: 'Years in Business', value: '5+' },
   { label: 'Miners Sold', value: '10,000+' },
@@ -10,7 +10,7 @@ const stats = [
 
 const About = () => {
   return (
-    <>
+    <Layout>
       <Helmet>
         <title>About Us | MinerHoalan Hong Kong</title>
         <meta name="description" content="Learn about MinerHoalan - Hong Kong's trusted ASIC miner supplier with 5+ years of experience serving miners worldwide." />
@@ -141,7 +141,7 @@ const About = () => {
           </div>
         </div>
       </main>
-    </>
+    </Layout>
   );
 };
 

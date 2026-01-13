@@ -5,7 +5,8 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Calendar, Clock, ArrowRight, X, Filter } from 'lucide-react';
-import { blogPosts, blogCategories, blogTags, getPostsByCategory, getPostsByTag } from '@/lib/blogData';
+import { blogPosts, blogCategories, blogTags, getPostsByTag } from '@/lib/blogData';
+import Layout from '@/components/Layout';
 
 const Blog = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -31,7 +32,7 @@ const Blog = () => {
   };
 
   return (
-    <>
+    <Layout>
       <Helmet>
         <title>Mining Blog - Guides, Reviews & Industry News | MinerHaolan</title>
         <meta name="description" content="Expert guides, hardware reviews, and industry analysis for cryptocurrency miners. Stay updated with the latest mining hardware and strategies." />
@@ -203,7 +204,7 @@ const Blog = () => {
           )}
         </div>
       </main>
-    </>
+    </Layout>
   );
 };
 

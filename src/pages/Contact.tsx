@@ -8,6 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Card, CardContent } from '@/components/ui/card';
 import { Mail, Phone, MapPin, Clock, MessageCircle, Send } from 'lucide-react';
 import { toast } from 'sonner';
+import Layout from '@/components/Layout';
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -32,7 +33,7 @@ const Contact = () => {
   };
 
   return (
-    <>
+    <Layout>
       <Helmet>
         <title>Contact Us | Miner Haolan - Hong Kong ASIC Miners</title>
         <meta name="description" content="Questions? We have the answers! Contact Miner Haolan for ASIC miner purchases, B2B inquiries, or technical support. Hong Kong based." />
@@ -228,7 +229,7 @@ const Contact = () => {
           </div>
         </div>
       </main>
-    </>
+    </Layout>
   );
 };
 
