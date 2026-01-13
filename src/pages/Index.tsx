@@ -1,6 +1,5 @@
 import { Helmet } from 'react-helmet-async';
-import Header from '@/components/Header';
-import Footer from '@/components/Footer';
+import Layout from '@/components/Layout';
 import HeroSection from '@/components/HeroSection';
 import CategoryCards from '@/components/CategoryCards';
 import FeaturedProducts from '@/components/FeaturedProducts';
@@ -14,7 +13,7 @@ import FAQSection from '@/components/FAQSection';
 
 const Index = () => {
   return (
-    <>
+    <Layout>
       <Helmet>
         <title>Miner Haolan - Your Provider for ASIC Miners | Hong Kong</title>
         <meta name="description" content="Order your ASIC miner for home or professional projects. Best price guarantee for crypto mining hardware. Bitcoin, Litecoin, Kaspa miners with fast global shipping." />
@@ -24,8 +23,6 @@ const Index = () => {
         <meta property="og:type" content="website" />
         <link rel="canonical" href="https://minerhaolan.com" />
       </Helmet>
-      
-      <Header />
       
       <main>
         <HeroSection />
@@ -39,9 +36,7 @@ const Index = () => {
         <HelpSection />
         <FAQSection />
       </main>
-      
-      <Footer />
-    </>
+    </Layout>
   );
 };
 
