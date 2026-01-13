@@ -1,11 +1,16 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Product } from '@/lib/data';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
 import { useCart } from '@/contexts/CartContext';
-import { ShoppingCart, Plus, Zap, Cpu } from 'lucide-react';
+import { ShoppingCart, Plus, Zap, Cpu, GitCompare } from 'lucide-react';
 import { toast } from 'sonner';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
 
 interface ProductCardProps {
   product: Product;
@@ -13,11 +18,19 @@ interface ProductCardProps {
 
 const ProductCard = ({ product }: ProductCardProps) => {
   const { addItem } = useCart();
+  const navigate = useNavigate();
 
   const handleAddToCart = () => {
     if (!product.inStock) return;
     addItem(product);
     toast.success(`${product.name} added to cart`);
+  };
+
+  const handleCompare = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    navigate(`/compare?product=${product.id}`);
+    toast.success(`${product.name} added to comparison`);
   };
 
   const discount = product.originalPrice 
@@ -53,17 +66,38 @@ const ProductCard = ({ product }: ProductCardProps) => {
           </div>
 
           {/* Quick Add Button */}
-          <Button
-            size="icon"
-            className="absolute top-3 right-3 h-10 w-10 rounded-xl opacity-0 group-hover:opacity-100 transition-all duration-300 bg-primary/90 hover:bg-primary shadow-lg"
-            onClick={(e) => {
-              e.preventDefault();
-              handleAddToCart();
-            }}
-            disabled={!product.inStock}
-          >
-            <Plus className="h-5 w-5" />
-          </Button>
+          <div className="absolute top-3 right-3 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-all duration-300">
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  size="icon"
+                  className="h-10 w-10 rounded-xl bg-primary/90 hover:bg-primary shadow-lg"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleAddToCart();
+                  }}
+                  disabled={!product.inStock}
+                >
+                  <Plus className="h-5 w-5" />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>Add to cart</TooltipContent>
+            </Tooltip>
+            
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  size="icon"
+                  variant="secondary"
+                  className="h-10 w-10 rounded-xl shadow-lg"
+                  onClick={handleCompare}
+                >
+                  <GitCompare className="h-5 w-5" />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>Compare</TooltipContent>
+            </Tooltip>
+          </div>
         </div>
       </Link>
 

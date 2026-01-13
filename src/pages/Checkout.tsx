@@ -1,26 +1,34 @@
+import { useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useCart } from '@/contexts/CartContext';
+import { useAuth } from '@/hooks/useAuth';
+import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { Link } from 'react-router-dom';
-import { ArrowLeft, MessageCircle, ShoppingBag, CheckCircle2 } from 'lucide-react';
+import { ArrowLeft, MessageCircle, ShoppingBag, CheckCircle2, Loader2 } from 'lucide-react';
 import Layout from '@/components/Layout';
+import { toast } from 'sonner';
 
 const Checkout = () => {
   const { items, totalPrice, clearCart } = useCart();
+  const { user } = useAuth();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [orderPlaced, setOrderPlaced] = useState(false);
+  const [orderId, setOrderId] = useState<string | null>(null);
 
   const shippingCost = totalPrice > 5000 ? 0 : 150;
   const finalTotal = totalPrice + shippingCost;
 
   // Generate WhatsApp message with cart details
-  const generateWhatsAppMessage = (): string => {
+  const generateWhatsAppMessage = (orderRef?: string): string => {
     const orderItems = items.map(item => 
       `• ${item.name} (Qty: ${item.quantity}) - $${(item.price * item.quantity).toLocaleString()}`
     ).join('\n');
 
     const message = `Hello! I would like to place an order:
-
+${orderRef ? `\n🔖 *ORDER REF: ${orderRef}*\n` : ''}
 📦 *ORDER DETAILS*
 ${orderItems}
 
@@ -34,15 +42,84 @@ Please confirm availability and provide payment details. Thank you!`;
     return message;
   };
 
-  const handleWhatsAppCheckout = () => {
+  const saveOrderToDatabase = async () => {
+    if (!user) {
+      return null;
+    }
+
+    try {
+      // Create order
+      const { data: order, error: orderError } = await supabase
+        .from('orders')
+        .insert({
+          user_id: user.id,
+          total_amount: finalTotal,
+          status: 'pending' as const,
+        })
+        .select()
+        .single();
+
+      if (orderError) throw orderError;
+
+      // Create order items
+      const orderItems = items.map(item => ({
+        order_id: order.id,
+        product_id: item.id,
+        product_name: item.name,
+        quantity: item.quantity,
+        unit_price: item.price,
+      }));
+
+      const { error: itemsError } = await supabase
+        .from('order_items')
+        .insert(orderItems);
+
+      if (itemsError) throw itemsError;
+
+      return order.id;
+    } catch (error) {
+      console.error('Error saving order:', error);
+      return null;
+    }
+  };
+
+  const handleWhatsAppCheckout = async () => {
+    setIsSubmitting(true);
+    
+    let orderRef: string | undefined;
+    
+    // Save order to database if user is logged in
+    if (user) {
+      const savedOrderId = await saveOrderToDatabase();
+      if (savedOrderId) {
+        orderRef = savedOrderId.slice(0, 8).toUpperCase();
+        setOrderId(savedOrderId);
+      }
+    }
+
     const phoneNumber = '14076764098';
-    const message = generateWhatsAppMessage();
-    // Properly encode the message for URL
+    const message = generateWhatsAppMessage(orderRef);
     const encodedMessage = encodeURIComponent(message);
     const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
     
     // Open WhatsApp in new tab
     window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
+    
+    // Show success state
+    setOrderPlaced(true);
+    setIsSubmitting(false);
+    
+    if (user && orderRef) {
+      toast.success('Order saved! Complete your order via WhatsApp.');
+    } else {
+      toast.success('Complete your order via WhatsApp!');
+    }
+  };
+
+  const handleClearAndReset = () => {
+    clearCart();
+    setOrderPlaced(false);
+    setOrderId(null);
   };
 
   if (items.length === 0) {
@@ -174,14 +251,60 @@ Please confirm availability and provide payment details. Thank you!`;
                     </div>
                   </div>
 
-                  <Button 
-                    size="lg" 
-                    className="w-full bg-[#25D366] hover:bg-[#128C7E] text-white"
-                    onClick={handleWhatsAppCheckout}
-                  >
-                    <MessageCircle className="h-5 w-5 mr-2" />
-                    Order via WhatsApp
-                  </Button>
+                  {!user && (
+                    <div className="p-3 rounded-lg bg-muted/50 border border-border mb-4">
+                      <p className="text-xs text-muted-foreground">
+                        <Link to="/auth" className="text-primary hover:underline">Sign in</Link> to track your order and view order history.
+                      </p>
+                    </div>
+                  )}
+
+                  {orderPlaced ? (
+                    <div className="space-y-4">
+                      <div className="p-4 rounded-lg bg-green-500/10 border border-green-500/20 text-center">
+                        <CheckCircle2 className="h-8 w-8 text-green-500 mx-auto mb-2" />
+                        <p className="font-semibold text-green-500">Order Sent!</p>
+                        <p className="text-sm text-muted-foreground mt-1">
+                          Complete your order in WhatsApp
+                        </p>
+                        {orderId && (
+                          <p className="text-xs text-muted-foreground mt-2">
+                            Order Ref: {orderId.slice(0, 8).toUpperCase()}
+                          </p>
+                        )}
+                      </div>
+                      <Button
+                        variant="outline"
+                        className="w-full"
+                        onClick={handleClearAndReset}
+                      >
+                        Clear Cart & Start New Order
+                      </Button>
+                      {user && (
+                        <Button
+                          variant="ghost"
+                          className="w-full"
+                          asChild
+                        >
+                          <Link to="/profile">View My Orders</Link>
+                        </Button>
+                      )}
+                    </div>
+                  ) : (
+                    <Button 
+                      size="lg" 
+                      className="w-full bg-[#25D366] hover:bg-[#128C7E] text-white"
+                      onClick={handleWhatsAppCheckout}
+                      disabled={isSubmitting}
+                    >
+                      {isSubmitting ? (
+                        <Loader2 className="h-5 w-5 mr-2 animate-spin" />
+                      ) : (
+                        <MessageCircle className="h-5 w-5 mr-2" />
+                      )}
+                      {isSubmitting ? 'Processing...' : 'Order via WhatsApp'}
+                    </Button>
+                  )}
 
                   <p className="text-xs text-muted-foreground text-center">
                     Your order details will be sent to our sales team at +1 407 676 4098

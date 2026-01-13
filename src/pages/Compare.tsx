@@ -1,4 +1,5 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { products as staticProducts } from '@/lib/data';
 import { useDBProducts, useHasDBProducts } from '@/hooks/useProducts';
@@ -30,12 +31,27 @@ import {
 } from 'lucide-react';
 
 export default function Compare() {
+  const [searchParams, setSearchParams] = useSearchParams();
   const { data: hasDBProducts } = useHasDBProducts();
   const { data: dbProducts } = useDBProducts();
   const products = hasDBProducts && dbProducts?.length ? dbProducts : staticProducts;
   const { addItem } = useCart();
 
   const [selectedProducts, setSelectedProducts] = useState<string[]>([]);
+
+  // Handle URL parameter for adding product from product card
+  useEffect(() => {
+    const productId = searchParams.get('product');
+    if (productId && !selectedProducts.includes(productId)) {
+      const productExists = products.find(p => p.id === productId);
+      if (productExists && selectedProducts.length < 3) {
+        setSelectedProducts(prev => [...prev, productId]);
+      }
+      // Clear the URL parameter
+      searchParams.delete('product');
+      setSearchParams(searchParams, { replace: true });
+    }
+  }, [searchParams, products, selectedProducts, setSearchParams]);
 
   const selectedProductData = useMemo(() => {
     return selectedProducts
