@@ -1,8 +1,8 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { ArrowRight, Shield, Truck, Headphones } from 'lucide-react';
+import { ArrowRight, Shield, Truck, Headphones, Search } from 'lucide-react';
 import { motion, useScroll, useTransform } from 'framer-motion';
-import { useRef, useMemo } from 'react';
+import { useRef, useMemo, useState } from 'react';
 import heroMobileBg from '@/assets/hero-mobile-bg.webp';
 
 // Generate random particles
@@ -77,6 +77,9 @@ const FloatingParticles = () => {
 
 const HeroSection = () => {
   const sectionRef = useRef<HTMLElement>(null);
+  const [searchQuery, setSearchQuery] = useState('');
+  const navigate = useNavigate();
+  
   const { scrollYProgress } = useScroll({
     target: sectionRef,
     offset: ["start start", "end start"]
@@ -85,6 +88,13 @@ const HeroSection = () => {
   // Parallax transforms
   const backgroundY = useTransform(scrollYProgress, [0, 1], ['0%', '30%']);
   const backgroundScale = useTransform(scrollYProgress, [0, 1], [1.1, 1.3]);
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      navigate(`/shop?search=${encodeURIComponent(searchQuery.trim())}`);
+    }
+  };
 
   return (
     <section ref={sectionRef} className="relative min-h-[85vh] flex items-center overflow-hidden bg-gradient-hero">
@@ -258,6 +268,49 @@ const HeroSection = () => {
               Order your ASIC miner for home or professional mining operations. 
               Hong Kong warehouse with worldwide shipping and unbeatable prices.
             </motion.p>
+
+            {/* Search Bar */}
+            <motion.form
+              onSubmit={handleSearch}
+              className="relative max-w-lg"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.7 }}
+            >
+              <div className="relative flex items-center">
+                <Search className="absolute left-4 h-5 w-5 text-white/50" />
+                <input
+                  type="text"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder="Search miners by name, algorithm, brand..."
+                  className="w-full h-14 pl-12 pr-32 rounded-xl bg-white/10 backdrop-blur-sm border border-white/20 text-white placeholder:text-white/50 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/50 transition-all"
+                />
+                <Button 
+                  type="submit"
+                  size="sm"
+                  className="absolute right-2 bg-primary hover:bg-primary/90 text-primary-foreground h-10 px-6"
+                >
+                  Search
+                </Button>
+              </div>
+              <div className="flex gap-2 mt-3 flex-wrap">
+                <span className="text-white/40 text-sm">Popular:</span>
+                {['S21 Pro', 'KS5', 'L9', 'Kaspa'].map((term) => (
+                  <button
+                    key={term}
+                    type="button"
+                    onClick={() => {
+                      setSearchQuery(term);
+                      navigate(`/shop?search=${encodeURIComponent(term)}`);
+                    }}
+                    className="text-sm text-white/70 hover:text-white bg-white/5 hover:bg-white/10 px-3 py-1 rounded-full transition-colors"
+                  >
+                    {term}
+                  </button>
+                ))}
+              </div>
+            </motion.form>
 
             <motion.div 
               className="flex flex-col sm:flex-row gap-4"
