@@ -12,6 +12,8 @@ import { Label } from '@/components/ui/label';
 import MinerVisualizer from '@/components/MinerVisualizer';
 import Layout from '@/components/Layout';
 import ProductCard from '@/components/ProductCard';
+import ImageZoom from '@/components/ImageZoom';
+import ImageLightbox from '@/components/ImageLightbox';
 import {
   ShoppingCart,
   ChevronRight,
@@ -163,6 +165,8 @@ export default function ProductDetailApple() {
   const { addItem } = useCart();
   const [quantity, setQuantity] = useState(1);
   const [quoteOpen, setQuoteOpen] = useState(false);
+  const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+  const [lightboxOpen, setLightboxOpen] = useState(false);
 
   const heroRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
@@ -441,14 +445,55 @@ export default function ProductDetailApple() {
           <ScrollReveal>
             <div className="max-w-4xl mx-auto">
               <div className="grid md:grid-cols-2 gap-12 items-start">
-                {/* Product Image */}
-                <div className="aspect-square rounded-3xl overflow-hidden bg-muted/50">
-                  <img
-                    src={product.images[0]}
-                    alt={product.name}
-                    className="w-full h-full object-cover"
-                  />
+                {/* Product Image Gallery with Zoom */}
+                <div className="space-y-4">
+                  {/* Main Image with Magnifying Glass Zoom */}
+                  <div 
+                    className="aspect-square rounded-3xl overflow-hidden bg-muted/50 cursor-zoom-in"
+                    onClick={() => setLightboxOpen(true)}
+                  >
+                    <ImageZoom
+                      src={product.images[selectedImageIndex]}
+                      alt={product.name}
+                      className="w-full h-full"
+                      zoomLevel={2.5}
+                      lensSize={180}
+                      showBrandWatermark={true}
+                    />
+                  </div>
+
+                  {/* Thumbnail Gallery */}
+                  {product.images.length > 1 && (
+                    <div className="flex gap-3 overflow-x-auto pb-2">
+                      {product.images.map((img, idx) => (
+                        <button
+                          key={idx}
+                          onClick={() => setSelectedImageIndex(idx)}
+                          className={`relative flex-shrink-0 w-20 h-20 rounded-xl overflow-hidden border-2 transition-all duration-200 ${
+                            selectedImageIndex === idx
+                              ? 'border-primary ring-2 ring-primary/30 scale-105'
+                              : 'border-border hover:border-primary/50 opacity-70 hover:opacity-100'
+                          }`}
+                        >
+                          <img
+                            src={img}
+                            alt={`${product.name} view ${idx + 1}`}
+                            className="w-full h-full object-cover"
+                          />
+                        </button>
+                      ))}
+                    </div>
+                  )}
                 </div>
+
+                {/* Lightbox for Full-screen View */}
+                <ImageLightbox
+                  images={product.images}
+                  initialIndex={selectedImageIndex}
+                  isOpen={lightboxOpen}
+                  onClose={() => setLightboxOpen(false)}
+                  alt={product.name}
+                />
 
                 {/* Purchase Options */}
                 <div className="space-y-8">

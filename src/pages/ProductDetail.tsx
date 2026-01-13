@@ -8,6 +8,7 @@ import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import Layout from '@/components/Layout';
 import ImageLightbox from '@/components/ImageLightbox';
+import ImageZoom from '@/components/ImageZoom';
 import { 
   ShoppingCart, 
   ChevronRight, 
@@ -94,27 +95,22 @@ const ProductDetail = () => {
           <div className="grid lg:grid-cols-2 gap-12 mb-16">
             {/* Image Gallery */}
             <div className="space-y-4">
-              {/* Main Image */}
+              {/* Main Image with Magnifying Glass Zoom */}
               <div 
                 className="relative aspect-square rounded-2xl overflow-hidden bg-muted cursor-zoom-in group"
                 onClick={() => setLightboxOpen(true)}
               >
-                <img
+                <ImageZoom
                   src={product.images[selectedImage]}
                   alt={product.name}
-                  className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                  className="w-full h-full"
+                  zoomLevel={2.5}
+                  lensSize={160}
+                  showBrandWatermark={true}
                 />
                 
-                {/* Zoom indicator */}
-                <div className="absolute inset-0 flex items-center justify-center bg-black/0 group-hover:bg-black/20 transition-colors">
-                  <div className="opacity-0 group-hover:opacity-100 transition-opacity bg-black/50 backdrop-blur-sm text-white px-4 py-2 rounded-full flex items-center gap-2">
-                    <ZoomIn className="h-4 w-4" />
-                    <span className="text-sm">Click to zoom</span>
-                  </div>
-                </div>
-                
                 {/* Badges */}
-                <div className="absolute top-4 left-4 flex flex-col gap-2">
+                <div className="absolute top-4 left-4 flex flex-col gap-2 z-10">
                   {product.isNew && (
                     <Badge className="bg-primary text-primary-foreground">New</Badge>
                   )}
@@ -127,7 +123,7 @@ const ProductDetail = () => {
                 </div>
 
                 {/* Location Badge */}
-                <div className="absolute top-4 right-4">
+                <div className="absolute top-4 right-4 z-10">
                   <Badge variant="outline" className="bg-background/90 backdrop-blur-sm">
                     {product.location === 'hongkong' ? '🇭🇰 Hong Kong Stock' : '🌏 International'}
                   </Badge>
@@ -140,7 +136,7 @@ const ProductDetail = () => {
                   <button
                     key={idx}
                     onClick={() => setSelectedImage(idx)}
-                    className={`aspect-square rounded-lg overflow-hidden border-2 transition-all ${
+                    className={`relative aspect-square rounded-lg overflow-hidden border-2 transition-all ${
                       selectedImage === idx 
                         ? 'border-primary ring-2 ring-primary/20' 
                         : 'border-border hover:border-primary/50'
@@ -151,6 +147,10 @@ const ProductDetail = () => {
                       alt={`${product.name} view ${idx + 1}`}
                       className="w-full h-full object-cover"
                     />
+                    {/* Thumbnail watermark */}
+                    <div className="absolute bottom-1 right-1 font-bold text-[8px] px-1 py-0.5 tracking-wide bg-background/80 backdrop-blur-sm rounded text-primary border border-primary/20 select-none pointer-events-none">
+                      MH
+                    </div>
                   </button>
                 ))}
               </div>
