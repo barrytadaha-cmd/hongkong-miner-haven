@@ -79,10 +79,14 @@ export default function Admin() {
   });
 
   useEffect(() => {
-    if (!authLoading && !user) {
-      navigate('/auth');
+    if (!authLoading) {
+      if (!user) {
+        navigate('/auth');
+      } else if (!isAdmin) {
+        navigate('/');
+      }
     }
-  }, [user, authLoading, navigate]);
+  }, [user, authLoading, isAdmin, navigate]);
 
   const handleMigrateProducts = async () => {
     setMigrating(true);
@@ -302,7 +306,7 @@ export default function Admin() {
     );
   }
 
-  if (!user) {
+  if (!user || !isAdmin) {
     return null;
   }
 
@@ -315,11 +319,6 @@ export default function Admin() {
             <p className="text-muted-foreground">Manage your products and images</p>
           </div>
           <div className="flex gap-2">
-            {!isAdmin && (
-              <Badge variant="outline" className="text-yellow-600 border-yellow-600">
-                Not Admin - Contact support for admin access
-              </Badge>
-            )}
             <Button variant="outline" onClick={signOut}>
               <LogOut className="mr-2 h-4 w-4" />
               Sign Out
