@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { ShoppingCart, Menu, X, ChevronDown, Search, User, MapPin, Award, Phone, Settings, GitCompare, UserCircle, Shield, Truck } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -10,6 +10,8 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSepara
 const Header = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
+  const [topBarVisible, setTopBarVisible] = useState(true);
+  const [lastScrollY, setLastScrollY] = useState(0);
   const {
     totalItems,
     setIsOpen
@@ -20,6 +22,29 @@ const Header = () => {
     signOut
   } = useAuth();
   const location = useLocation();
+
+  // Handle scroll to hide/show top bar on mobile
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+      
+      // Only apply on mobile (md breakpoint is 768px)
+      if (window.innerWidth < 768) {
+        if (currentScrollY > lastScrollY && currentScrollY > 50) {
+          setTopBarVisible(false);
+        } else if (currentScrollY < lastScrollY) {
+          setTopBarVisible(true);
+        }
+      } else {
+        setTopBarVisible(true);
+      }
+      
+      setLastScrollY(currentScrollY);
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [lastScrollY]);
   const bitcoinMiners = [{
     name: 'All Bitcoin Miners',
     path: '/shop?category=bitcoin'
@@ -59,31 +84,43 @@ const Header = () => {
     name: 'Repair & Warranty',
     path: '/repair-warranty'
   }];
+  const topBarItems = [
+    { icon: MapPin, text: 'Hong Kong HQ', accent: false },
+    { icon: Award, text: 'Best Price', accent: true },
+    { icon: Shield, text: '2 Year Warranty', accent: true },
+    { icon: Truck, text: 'Free Shipping', accent: true },
+    { icon: Phone, text: 'Service & Support', accent: false },
+  ];
+
   return <header className="fixed top-0 left-0 right-0 z-50">
       {/* Top Bar */}
-      <div className="bg-navy text-navy-foreground text-xs md:text-sm py-1.5 md:py-2">
+      <div 
+        className={`bg-navy text-navy-foreground text-xs md:text-sm py-1.5 md:py-2 transition-all duration-300 overflow-hidden ${
+          topBarVisible ? 'max-h-12 opacity-100' : 'max-h-0 opacity-0 py-0'
+        }`}
+      >
         <div className="container mx-auto px-4">
-          <div className="flex items-center justify-center gap-3 md:gap-6 flex-wrap">
-            <span className="flex items-center gap-1 md:gap-1.5">
-              <MapPin className="h-3 w-3 md:h-3.5 md:w-3.5" />
-              Hong Kong HQ
-            </span>
-            <span className="flex items-center gap-1 md:gap-1.5">
-              <Award className="h-3 w-3 md:h-3.5 md:w-3.5 text-accent" />
-              Best Price
-            </span>
-            <span className="flex items-center gap-1 md:gap-1.5">
-              <Shield className="h-3 w-3 md:h-3.5 md:w-3.5 text-accent" />
-              2 Year Warranty
-            </span>
-            <span className="flex items-center gap-1 md:gap-1.5">
-              <Truck className="h-3 w-3 md:h-3.5 md:w-3.5 text-accent" />
-              Free Shipping
-            </span>
-            <span className="hidden md:flex items-center gap-1.5">
-              <Phone className="h-3.5 w-3.5" />
-              Service & Support
-            </span>
+          {/* Desktop: Static display */}
+          <div className="hidden md:flex items-center justify-center gap-6">
+            {topBarItems.map((item, index) => (
+              <span key={index} className="flex items-center gap-1.5">
+                <item.icon className={`h-3.5 w-3.5 ${item.accent ? 'text-accent' : ''}`} />
+                {item.text}
+              </span>
+            ))}
+          </div>
+          
+          {/* Mobile: Marquee animation */}
+          <div className="md:hidden overflow-hidden">
+            <div className="animate-marquee whitespace-nowrap flex">
+              {/* Duplicate items for seamless loop */}
+              {[...topBarItems, ...topBarItems].map((item, index) => (
+                <span key={index} className="flex items-center gap-1 mx-4">
+                  <item.icon className={`h-3 w-3 ${item.accent ? 'text-accent' : ''}`} />
+                  {item.text}
+                </span>
+              ))}
+            </div>
           </div>
         </div>
       </div>
