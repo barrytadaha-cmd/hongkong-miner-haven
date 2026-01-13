@@ -29,33 +29,34 @@ const Footer = () => {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
+        {/* Mobile: 3 rows (2+2+1 columns), Tablet: 2 columns, Desktop: 4 columns */}
+        <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-12">
           {/* Shop */}
           <div>
-            <h4 className="font-display font-semibold text-lg mb-4">Shop</h4>
-            <ul className="space-y-2">
+            <h4 className="font-display font-semibold text-base md:text-lg mb-3 md:mb-4">Shop</h4>
+            <ul className="space-y-1.5 md:space-y-2">
               <li>
-                <Link to="/shop" className="text-navy-foreground/70 hover:text-accent transition-colors text-sm">
+                <Link to="/shop" className="text-navy-foreground/70 hover:text-accent transition-colors text-xs md:text-sm">
                   All Miners
                 </Link>
               </li>
               <li>
-                <Link to="/shop?category=bitcoin" className="text-navy-foreground/70 hover:text-accent transition-colors text-sm">
+                <Link to="/shop?category=bitcoin" className="text-navy-foreground/70 hover:text-accent transition-colors text-xs md:text-sm">
                   Bitcoin Miners
                 </Link>
               </li>
               <li>
-                <Link to="/shop?category=litecoin" className="text-navy-foreground/70 hover:text-accent transition-colors text-sm">
+                <Link to="/shop?category=litecoin" className="text-navy-foreground/70 hover:text-accent transition-colors text-xs md:text-sm">
                   Litecoin Miners
                 </Link>
               </li>
               <li>
-                <Link to="/shop?category=kaspa" className="text-navy-foreground/70 hover:text-accent transition-colors text-sm">
+                <Link to="/shop?category=kaspa" className="text-navy-foreground/70 hover:text-accent transition-colors text-xs md:text-sm">
                   Kaspa Miners
                 </Link>
               </li>
               <li>
-                <Link to="/shop?category=home" className="text-navy-foreground/70 hover:text-accent transition-colors text-sm">
+                <Link to="/shop?category=home" className="text-navy-foreground/70 hover:text-accent transition-colors text-xs md:text-sm">
                   Home Miners
                 </Link>
               </li>
@@ -64,25 +65,25 @@ const Footer = () => {
 
           {/* Categories */}
           <div>
-            <h4 className="font-display font-semibold text-lg mb-4">Categories</h4>
-            <ul className="space-y-2">
+            <h4 className="font-display font-semibold text-base md:text-lg mb-3 md:mb-4">Categories</h4>
+            <ul className="space-y-1.5 md:space-y-2">
               <li>
-                <Link to="/shop?type=air" className="text-navy-foreground/70 hover:text-accent transition-colors text-sm">
+                <Link to="/shop?type=air" className="text-navy-foreground/70 hover:text-accent transition-colors text-xs md:text-sm">
                   Air-Cooled Miners
                 </Link>
               </li>
               <li>
-                <Link to="/shop?type=hydro" className="text-navy-foreground/70 hover:text-accent transition-colors text-sm">
+                <Link to="/shop?type=hydro" className="text-navy-foreground/70 hover:text-accent transition-colors text-xs md:text-sm">
                   Hydro Miners
                 </Link>
               </li>
               <li>
-                <Link to="/shop?category=heater" className="text-navy-foreground/70 hover:text-accent transition-colors text-sm">
+                <Link to="/shop?category=heater" className="text-navy-foreground/70 hover:text-accent transition-colors text-xs md:text-sm">
                   Bitcoin Heaters
                 </Link>
               </li>
               <li>
-                <Link to="/shop?category=lottery" className="text-navy-foreground/70 hover:text-accent transition-colors text-sm">
+                <Link to="/shop?category=lottery" className="text-navy-foreground/70 hover:text-accent transition-colors text-xs md:text-sm">
                   Lottery Miners
                 </Link>
               </li>
@@ -91,30 +92,30 @@ const Footer = () => {
 
           {/* Knowledge */}
           <div>
-            <h4 className="font-display font-semibold text-lg mb-4">Knowledge</h4>
-            <ul className="space-y-2">
+            <h4 className="font-display font-semibold text-base md:text-lg mb-3 md:mb-4">Knowledge</h4>
+            <ul className="space-y-1.5 md:space-y-2">
               <li>
-                <Link to="/blog" className="text-navy-foreground/70 hover:text-accent transition-colors text-sm">
+                <Link to="/blog" className="text-navy-foreground/70 hover:text-accent transition-colors text-xs md:text-sm">
                   Blog
                 </Link>
               </li>
               <li>
-                <Link to="/faq" className="text-navy-foreground/70 hover:text-accent transition-colors text-sm">
+                <Link to="/faq" className="text-navy-foreground/70 hover:text-accent transition-colors text-xs md:text-sm">
                   FAQ
                 </Link>
               </li>
               <li>
-                <Link to="/repair-warranty" className="text-navy-foreground/70 hover:text-accent transition-colors text-sm">
+                <Link to="/repair-warranty" className="text-navy-foreground/70 hover:text-accent transition-colors text-xs md:text-sm">
                   Repair & Warranty
                 </Link>
               </li>
               <li>
-                <Link to="/about" className="text-navy-foreground/70 hover:text-accent transition-colors text-sm">
+                <Link to="/about" className="text-navy-foreground/70 hover:text-accent transition-colors text-xs md:text-sm">
                   About Us
                 </Link>
               </li>
               <li>
-                <Link to="/contact" className="text-navy-foreground/70 hover:text-accent transition-colors text-sm">
+                <Link to="/contact" className="text-navy-foreground/70 hover:text-accent transition-colors text-xs md:text-sm">
                   Contact
                 </Link>
               </li>
@@ -123,43 +124,43 @@ const Footer = () => {
 
           {/* Company Info */}
           <div>
-            <h4 className="font-display font-semibold text-lg mb-4">Contact Us</h4>
-            <ul className="space-y-3">
-              <li className="flex items-start gap-3">
-                <MapPin className="h-4 w-4 text-accent mt-0.5 shrink-0" />
-                <span className="text-navy-foreground/70 text-sm">
+            <h4 className="font-display font-semibold text-base md:text-lg mb-3 md:mb-4">Contact Us</h4>
+            <ul className="space-y-2 md:space-y-3">
+              <li className="flex items-start gap-2 md:gap-3">
+                <MapPin className="h-3.5 w-3.5 md:h-4 md:w-4 text-accent mt-0.5 shrink-0" />
+                <span className="text-navy-foreground/70 text-xs md:text-sm">
                   Unit 1205, 12/F, Tower 1<br />
                   Lippo Centre, 89 Queensway<br />
                   Admiralty, Hong Kong
                 </span>
               </li>
-              <li className="flex items-center gap-3">
-                <Phone className="h-4 w-4 text-accent shrink-0" />
-                <a href="tel:+14076764098" className="text-navy-foreground/70 hover:text-accent transition-colors text-sm">
+              <li className="flex items-center gap-2 md:gap-3">
+                <Phone className="h-3.5 w-3.5 md:h-4 md:w-4 text-accent shrink-0" />
+                <a href="tel:+14076764098" className="text-navy-foreground/70 hover:text-accent transition-colors text-xs md:text-sm">
                   +1 407 676 4098
                 </a>
               </li>
-              <li className="flex items-center gap-3">
-                <Mail className="h-4 w-4 text-accent shrink-0" />
-                <a href="mailto:support@minerhaolan.com" className="text-navy-foreground/70 hover:text-accent transition-colors text-sm">
+              <li className="flex items-center gap-2 md:gap-3">
+                <Mail className="h-3.5 w-3.5 md:h-4 md:w-4 text-accent shrink-0" />
+                <a href="mailto:support@minerhaolan.com" className="text-navy-foreground/70 hover:text-accent transition-colors text-xs md:text-sm">
                   support@minerhaolan.com
                 </a>
               </li>
             </ul>
             
             {/* Social Links */}
-            <div className="flex gap-4 mt-6">
+            <div className="flex gap-3 md:gap-4 mt-4 md:mt-6">
               <a href="#" className="text-navy-foreground/50 hover:text-accent transition-colors">
-                <Facebook className="h-5 w-5" />
+                <Facebook className="h-4 w-4 md:h-5 md:w-5" />
               </a>
               <a href="#" className="text-navy-foreground/50 hover:text-accent transition-colors">
-                <Twitter className="h-5 w-5" />
+                <Twitter className="h-4 w-4 md:h-5 md:w-5" />
               </a>
               <a href="#" className="text-navy-foreground/50 hover:text-accent transition-colors">
-                <Instagram className="h-5 w-5" />
+                <Instagram className="h-4 w-4 md:h-5 md:w-5" />
               </a>
               <a href="#" className="text-navy-foreground/50 hover:text-accent transition-colors">
-                <Youtube className="h-5 w-5" />
+                <Youtube className="h-4 w-4 md:h-5 md:w-5" />
               </a>
             </div>
           </div>
