@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Calendar, Clock, ArrowRight, X, Filter } from 'lucide-react';
 import { blogPosts, blogCategories, blogTags, getPostsByTag } from '@/lib/blogData';
 import Layout from '@/components/Layout';
+import PartnersSection from '@/components/PartnersSection';
 
 const Blog = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -203,6 +204,7 @@ const Blog = () => {
             </>
           )}
         </div>
+        <PartnersSection />
       </main>
     </Layout>
   );

@@ -9,6 +9,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
 import Layout from '@/components/Layout';
+import PartnersSection from '@/components/PartnersSection';
 
 const FAQ = () => {
   return (
@@ -63,6 +64,7 @@ const FAQ = () => {
             </Button>
           </div>
         </div>
+        <PartnersSection />
       </main>
     </Layout>
   );

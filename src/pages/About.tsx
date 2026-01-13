@@ -1,6 +1,7 @@
 import { Helmet } from 'react-helmet-async';
 import { Building2, Users, Globe, Award } from 'lucide-react';
 import Layout from '@/components/Layout';
+import PartnersSection from '@/components/PartnersSection';
 const stats = [
   { label: 'Years in Business', value: '5+' },
   { label: 'Miners Sold', value: '10,000+' },
@@ -140,6 +141,7 @@ const About = () => {
             </div>
           </div>
         </div>
+        <PartnersSection />
       </main>
     </Layout>
   );
