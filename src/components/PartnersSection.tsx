@@ -41,9 +41,9 @@ const PartnersSection = () => {
           {partners.map((partner, index) => (
             <motion.div 
               key={partner.name} 
-              className="grayscale hover:grayscale-0 opacity-60 hover:opacity-100 transition-all duration-300"
+              className="hover:scale-110 transition-all duration-300"
               initial={{ opacity: 0, y: 30, scale: 0.8 }}
-              whileInView={{ opacity: 0.6, y: 0, scale: 1 }}
+              whileInView={{ opacity: 1, y: 0, scale: 1 }}
               viewport={{ once: true, margin: "-50px" }}
               transition={{ 
                 duration: 0.5, 
@@ -78,7 +78,7 @@ const PartnersSection = () => {
                 <img 
                   src={partner.logo} 
                   alt={partner.name}
-                  className="h-8 md:h-10 w-auto object-contain"
+                  className="h-16 md:h-24 lg:h-28 w-auto object-contain max-w-[200px] md:max-w-[280px]"
                 />
               </motion.div>
             </motion.div>
