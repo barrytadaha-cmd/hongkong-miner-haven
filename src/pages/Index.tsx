@@ -1,4 +1,6 @@
 import { Helmet } from 'react-helmet-async';
+import Header from '@/components/Header';
+import Footer from '@/components/Footer';
 import HeroSection from '@/components/HeroSection';
 import CategoryCards from '@/components/CategoryCards';
 import FeaturedProducts from '@/components/FeaturedProducts';
@@ -23,6 +25,8 @@ const Index = () => {
         <link rel="canonical" href="https://minerhaolan.com" />
       </Helmet>
       
+      <Header />
+      
       <main>
         <HeroSection />
         <CategoryCards />
@@ -35,6 +39,8 @@ const Index = () => {
         <HelpSection />
         <FAQSection />
       </main>
+      
+      <Footer />
     </>
   );
 };
