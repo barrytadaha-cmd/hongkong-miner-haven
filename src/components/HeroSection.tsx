@@ -2,9 +2,10 @@ import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { ArrowRight, Shield, Truck, Headphones } from 'lucide-react';
 import { motion, useScroll, useTransform } from 'framer-motion';
-import { useRef, useMemo } from 'react';
+import { useRef, useMemo, useState, useEffect } from 'react';
 import heroMobileBg from '@/assets/hero-mobile-bg.webp';
 import { products } from '@/lib/data';
+import { AnimatePresence } from 'framer-motion';
 
 // Generate random particles
 const generateParticles = (count: number) => {
@@ -78,12 +79,23 @@ const FloatingParticles = () => {
 
 const HeroSection = () => {
   const sectionRef = useRef<HTMLElement>(null);
+  const [currentIndex, setCurrentIndex] = useState(0);
   
-  // Get first featured product (with sale or new badge preferred)
-  const featuredProduct = useMemo(() => {
-    const featured = products.find(p => p.isSale || p.isNew) || products[0];
-    return featured;
+  // Get featured products (with sale or new badge preferred)
+  const featuredProducts = useMemo(() => {
+    const featured = products.filter(p => p.isSale || p.isNew);
+    return featured.length > 0 ? featured.slice(0, 5) : products.slice(0, 5);
   }, []);
+  
+  // Rotate products every 5 seconds
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentIndex((prev) => (prev + 1) % featuredProducts.length);
+    }, 5000);
+    return () => clearInterval(interval);
+  }, [featuredProducts.length]);
+  
+  const featuredProduct = featuredProducts[currentIndex];
   
   const discount = featuredProduct.originalPrice 
     ? Math.round((1 - featuredProduct.price / featuredProduct.originalPrice) * 100) 
@@ -343,83 +355,103 @@ const HeroSection = () => {
               />
               
               {/* Main Card - Matching ProductCard style */}
-              <motion.div 
-                className="relative bg-card rounded-2xl border border-border overflow-hidden shadow-2xl shadow-primary/10"
-                initial={{ opacity: 0, scale: 0.9, rotateY: -10 }}
-                animate={{ opacity: 1, scale: 1, rotateY: 0 }}
-                transition={{ duration: 1, delay: 0.5 }}
-                whileHover={{ 
-                  scale: 1.02,
-                  transition: { duration: 0.3 }
-                }}
-              >
-                {/* Image Container */}
-                <Link to={`/product/${featuredProduct.id}`} className="block">
-                  <div className="relative aspect-square overflow-hidden bg-gradient-to-br from-secondary to-secondary/50 p-6">
-                    <div className="absolute inset-0 bg-gradient-to-br from-primary/0 to-accent/0 hover:from-primary/5 hover:to-accent/5 transition-all duration-500" />
+              <AnimatePresence mode="wait">
+                <motion.div 
+                  key={featuredProduct.id}
+                  className="relative bg-card rounded-2xl border border-border overflow-hidden shadow-2xl shadow-primary/10"
+                  initial={{ opacity: 0, x: 50 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -50 }}
+                  transition={{ duration: 0.5 }}
+                  whileHover={{ 
+                    scale: 1.02,
+                    transition: { duration: 0.3 }
+                  }}
+                >
+                  {/* Image Container */}
+                  <Link to={`/product/${featuredProduct.id}`} className="block">
+                    <div className="relative aspect-square overflow-hidden bg-gradient-to-br from-secondary to-secondary/50 p-6">
+                      <div className="absolute inset-0 bg-gradient-to-br from-primary/0 to-accent/0 hover:from-primary/5 hover:to-accent/5 transition-all duration-500" />
+                      
+                      <img 
+                        src={featuredProduct.image} 
+                        alt={`${featuredProduct.name} - ASIC Miner available at Miner Haolan`} 
+                        className="object-contain w-full h-full transition-all duration-700 hover:scale-110"
+                      />
                     
-                    <img 
-                      src={featuredProduct.image} 
-                      alt={`${featuredProduct.name} - ASIC Miner available at Miner Haolan`} 
-                      className="object-contain w-full h-full transition-all duration-700 hover:scale-110"
-                    />
-                  
-                    {/* Badges */}
-                    <div className="absolute top-3 left-3 flex flex-col gap-2">
-                      {featuredProduct.isNew && (
-                        <span className="bg-primary text-primary-foreground text-xs font-medium px-2.5 py-1 rounded-md shadow-lg">New</span>
-                      )}
-                      {featuredProduct.isSale && discount > 0 && (
-                        <span className="bg-gradient-to-r from-accent to-yellow-500 text-white text-xs font-medium px-2.5 py-1 rounded-md shadow-lg">-{discount}%</span>
-                      )}
+                      {/* Badges */}
+                      <div className="absolute top-3 left-3 flex flex-col gap-2">
+                        {featuredProduct.isNew && (
+                          <span className="bg-primary text-primary-foreground text-xs font-medium px-2.5 py-1 rounded-md shadow-lg">New</span>
+                        )}
+                        {featuredProduct.isSale && discount > 0 && (
+                          <span className="bg-gradient-to-r from-accent to-yellow-500 text-white text-xs font-medium px-2.5 py-1 rounded-md shadow-lg">-{discount}%</span>
+                        )}
+                      </div>
                     </div>
-                  </div>
-                </Link>
-
-                {/* Content */}
-                <div className="p-5">
-                  {/* Brand */}
-                  <p className="text-xs font-medium text-primary mb-1">{featuredProduct.brand}</p>
-                  
-                  {/* Name */}
-                  <Link to={`/product/${featuredProduct.id}`}>
-                    <h3 className="font-semibold text-base mb-3 text-foreground hover:text-primary transition-colors">
-                      {featuredProduct.name}
-                    </h3>
                   </Link>
 
-                  {/* Price */}
-                  <div className="flex items-baseline gap-2 mb-4">
-                    <span className="text-xl font-bold text-foreground">${featuredProduct.price.toLocaleString()}</span>
-                    {featuredProduct.originalPrice && (
-                      <span className="text-sm text-muted-foreground line-through">${featuredProduct.originalPrice.toLocaleString()}</span>
-                    )}
-                  </div>
-
-                  {/* Specs */}
-                  <div className="space-y-2 text-sm border-t border-border pt-4">
-                    <div className="flex items-center justify-between">
-                      <span className="text-muted-foreground">Algorithm</span>
-                      <span className="font-medium text-xs bg-secondary px-2 py-0.5 rounded">{featuredProduct.algorithm}</span>
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <span className="text-muted-foreground">Hashrate</span>
-                      <span className="font-semibold text-primary">{featuredProduct.hashrate}</span>
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <span className="text-muted-foreground">Power</span>
-                      <span className="font-medium">{featuredProduct.power}</span>
-                    </div>
-                  </div>
-
-                  {/* View Details Button */}
-                  <Button className="w-full mt-4 h-11 btn-shine" asChild>
+                  {/* Content */}
+                  <div className="p-5">
+                    {/* Brand */}
+                    <p className="text-xs font-medium text-primary mb-1">{featuredProduct.brand}</p>
+                    
+                    {/* Name */}
                     <Link to={`/product/${featuredProduct.id}`}>
-                      View Details
+                      <h3 className="font-semibold text-base mb-3 text-foreground hover:text-primary transition-colors">
+                        {featuredProduct.name}
+                      </h3>
                     </Link>
-                  </Button>
-                </div>
-              </motion.div>
+
+                    {/* Price */}
+                    <div className="flex items-baseline gap-2 mb-4">
+                      <span className="text-xl font-bold text-foreground">${featuredProduct.price.toLocaleString()}</span>
+                      {featuredProduct.originalPrice && (
+                        <span className="text-sm text-muted-foreground line-through">${featuredProduct.originalPrice.toLocaleString()}</span>
+                      )}
+                    </div>
+
+                    {/* Specs */}
+                    <div className="space-y-2 text-sm border-t border-border pt-4">
+                      <div className="flex items-center justify-between">
+                        <span className="text-muted-foreground">Algorithm</span>
+                        <span className="font-medium text-xs bg-secondary px-2 py-0.5 rounded">{featuredProduct.algorithm}</span>
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <span className="text-muted-foreground">Hashrate</span>
+                        <span className="font-semibold text-primary">{featuredProduct.hashrate}</span>
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <span className="text-muted-foreground">Power</span>
+                        <span className="font-medium">{featuredProduct.power}</span>
+                      </div>
+                    </div>
+
+                    {/* View Details Button */}
+                    <Button className="w-full mt-4 h-11 btn-shine" asChild>
+                      <Link to={`/product/${featuredProduct.id}`}>
+                        View Details
+                      </Link>
+                    </Button>
+                  </div>
+                </motion.div>
+              </AnimatePresence>
+              
+              {/* Progress Indicators */}
+              <div className="flex justify-center gap-2 mt-4">
+                {featuredProducts.map((_, index) => (
+                  <button
+                    key={index}
+                    onClick={() => setCurrentIndex(index)}
+                    className={`h-2 rounded-full transition-all duration-300 ${
+                      index === currentIndex 
+                        ? 'w-8 bg-primary' 
+                        : 'w-2 bg-white/30 hover:bg-white/50'
+                    }`}
+                    aria-label={`View product ${index + 1}`}
+                  />
+                ))}
+              </div>
             </motion.div>
           </div>
         </div>
