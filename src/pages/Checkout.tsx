@@ -96,6 +96,25 @@ _Thank you for choosing *Miner Haolan*!_ 🙏
 
       if (itemsError) throw itemsError;
 
+      // Send notification emails (customer + admin)
+      try {
+        const { data: sessionData } = await supabase.auth.getSession();
+        await supabase.functions.invoke('send-order-notification', {
+          body: {
+            orderId: order.id,
+            status: 'pending',
+            trackingNumber: null,
+            notifyAdmin: true, // Notify admin for new orders
+          },
+          headers: {
+            Authorization: `Bearer ${sessionData.session?.access_token}`,
+          },
+        });
+      } catch (notifyError) {
+        console.error('Failed to send notification:', notifyError);
+        // Don't throw - order was still created successfully
+      }
+
       return order.id;
     } catch (error) {
       console.error('Error saving order:', error);
