@@ -68,7 +68,7 @@ const Header = () => {
               <MapPin className="h-3.5 w-3.5" />
               Hong Kong HQ
             </span>
-            <span className="hidden sm:flex items-center gap-1.5">Best Price/2 Years Guarantee<Award className="h-3.5 w-3.5 text-accent" />
+            <span className="hidden sm:flex items-center gap-1.5">Best Price Guarantee<Award className="h-3.5 w-3.5 text-accent" />
               Best Price Guarantee
             </span>
             <span className="hidden md:flex items-center gap-1.5">
