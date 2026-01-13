@@ -6,7 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/hooks/use-toast';
-import { Loader2, Package, Truck, RefreshCw, ChevronDown, ChevronUp, Search, Filter, Calendar, X, Download } from 'lucide-react';
+import { Loader2, Package, Truck, RefreshCw, ChevronDown, ChevronUp, Search, Filter, Calendar, X, Download, User, Mail, Phone } from 'lucide-react';
 import {
   Select,
   SelectContent,
@@ -30,6 +30,12 @@ interface OrderItem {
   unit_price: number;
 }
 
+interface CustomerInfo {
+  email: string | null;
+  full_name: string | null;
+  phone: string | null;
+}
+
 interface Order {
   id: string;
   user_id: string;
@@ -44,7 +50,7 @@ interface Order {
   created_at: string;
   updated_at: string;
   order_items: OrderItem[];
-  user_email?: string;
+  customer?: CustomerInfo;
 }
 
 const statusColors: Record<string, string> = {
@@ -75,12 +81,15 @@ export default function OrderManagement() {
   // Filtered orders
   const filteredOrders = useMemo(() => {
     return orders.filter((order) => {
-      // Search filter (order ID)
+      // Search filter (order ID, tracking, customer email/name/phone)
       if (searchQuery) {
         const searchLower = searchQuery.toLowerCase();
         const matchesId = order.id.toLowerCase().includes(searchLower);
         const matchesTracking = order.tracking_number?.toLowerCase().includes(searchLower);
-        if (!matchesId && !matchesTracking) return false;
+        const matchesEmail = order.customer?.email?.toLowerCase().includes(searchLower);
+        const matchesName = order.customer?.full_name?.toLowerCase().includes(searchLower);
+        const matchesPhone = order.customer?.phone?.toLowerCase().includes(searchLower);
+        if (!matchesId && !matchesTracking && !matchesEmail && !matchesName && !matchesPhone) return false;
       }
 
       // Status filter
@@ -128,6 +137,9 @@ export default function OrderManagement() {
     const headers = [
       'Order ID',
       'Date',
+      'Customer Email',
+      'Customer Name',
+      'Customer Phone',
       'Status',
       'Total Amount',
       'Tracking Number',
@@ -147,6 +159,9 @@ export default function OrderManagement() {
       return [
         order.id,
         new Date(order.created_at).toISOString(),
+        order.customer?.email || '',
+        order.customer?.full_name || '',
+        order.customer?.phone || '',
         order.status,
         order.total_amount.toString(),
         order.tracking_number || '',
@@ -214,6 +229,7 @@ export default function OrderManagement() {
   }, []);
 
   const fetchOrders = async () => {
+    // Fetch orders with items
     const { data, error } = await supabase
       .from('orders')
       .select(`
@@ -228,15 +244,42 @@ export default function OrderManagement() {
         description: error.message,
         variant: 'destructive',
       });
-    } else {
-      setOrders((data as Order[]) || []);
-      // Initialize tracking inputs
-      const trackingMap: Record<string, string> = {};
-      data?.forEach((order: Order) => {
-        trackingMap[order.id] = order.tracking_number || '';
-      });
-      setTrackingInputs(trackingMap);
+      setLoading(false);
+      return;
     }
+
+    // Fetch customer info for each order
+    const ordersWithCustomers = await Promise.all(
+      (data || []).map(async (order) => {
+        // Get user email using the secure function
+        const { data: emailData } = await supabase.rpc('get_user_email', { user_uuid: order.user_id });
+        
+        // Get profile info
+        const { data: profileData } = await supabase
+          .from('profiles')
+          .select('full_name, phone')
+          .eq('user_id', order.user_id)
+          .single();
+
+        return {
+          ...order,
+          customer: {
+            email: emailData || null,
+            full_name: profileData?.full_name || null,
+            phone: profileData?.phone || null,
+          },
+        };
+      })
+    );
+
+    setOrders(ordersWithCustomers as Order[]);
+    
+    // Initialize tracking inputs
+    const trackingMap: Record<string, string> = {};
+    ordersWithCustomers.forEach((order) => {
+      trackingMap[order.id] = order.tracking_number || '';
+    });
+    setTrackingInputs(trackingMap);
     setLoading(false);
   };
 
@@ -459,6 +502,37 @@ export default function OrderManagement() {
 
                   <CollapsibleContent>
                     <div className="px-4 pb-4 pt-2 border-t border-border bg-muted/30 space-y-6">
+                      {/* Customer Info */}
+                      <div className="bg-primary/5 rounded-lg p-4 border border-primary/10">
+                        <h4 className="font-semibold text-sm mb-3 flex items-center gap-2">
+                          <User className="h-4 w-4" />
+                          Customer Information
+                        </h4>
+                        <div className="grid sm:grid-cols-3 gap-4">
+                          <div className="flex items-center gap-2">
+                            <Mail className="h-4 w-4 text-muted-foreground" />
+                            <div>
+                              <p className="text-xs text-muted-foreground">Email</p>
+                              <p className="text-sm font-medium">{order.customer?.email || 'N/A'}</p>
+                            </div>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <User className="h-4 w-4 text-muted-foreground" />
+                            <div>
+                              <p className="text-xs text-muted-foreground">Name</p>
+                              <p className="text-sm font-medium">{order.customer?.full_name || 'Not provided'}</p>
+                            </div>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <Phone className="h-4 w-4 text-muted-foreground" />
+                            <div>
+                              <p className="text-xs text-muted-foreground">Phone</p>
+                              <p className="text-sm font-medium">{order.customer?.phone || 'Not provided'}</p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
                       {/* Order Items */}
                       <div>
                         <h4 className="font-semibold text-sm mb-3">Items</h4>
