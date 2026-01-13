@@ -14,16 +14,181 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      product_images: {
+        Row: {
+          created_at: string | null
+          id: string
+          image_url: string
+          is_primary: boolean | null
+          product_id: string
+          sort_order: number | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          image_url: string
+          is_primary?: boolean | null
+          product_id: string
+          sort_order?: number | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          image_url?: string
+          is_primary?: boolean | null
+          product_id?: string
+          sort_order?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "product_images_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      product_specs: {
+        Row: {
+          cooling: string | null
+          dimensions: string | null
+          id: string
+          interface: string | null
+          noise: string | null
+          product_id: string
+          temperature: string | null
+          voltage: string | null
+          weight: string | null
+        }
+        Insert: {
+          cooling?: string | null
+          dimensions?: string | null
+          id?: string
+          interface?: string | null
+          noise?: string | null
+          product_id: string
+          temperature?: string | null
+          voltage?: string | null
+          weight?: string | null
+        }
+        Update: {
+          cooling?: string | null
+          dimensions?: string | null
+          id?: string
+          interface?: string | null
+          noise?: string | null
+          product_id?: string
+          temperature?: string | null
+          voltage?: string | null
+          weight?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "product_specs_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: true
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      products: {
+        Row: {
+          algorithm: string | null
+          brand: string | null
+          category: string
+          coins: string[] | null
+          created_at: string | null
+          description: string | null
+          efficiency: string | null
+          hashrate: string | null
+          id: string
+          is_new: boolean | null
+          location: string | null
+          name: string
+          original_price: number | null
+          power: string | null
+          price: number
+          stock: string | null
+          type: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          algorithm?: string | null
+          brand?: string | null
+          category: string
+          coins?: string[] | null
+          created_at?: string | null
+          description?: string | null
+          efficiency?: string | null
+          hashrate?: string | null
+          id?: string
+          is_new?: boolean | null
+          location?: string | null
+          name: string
+          original_price?: number | null
+          power?: string | null
+          price: number
+          stock?: string | null
+          type?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          algorithm?: string | null
+          brand?: string | null
+          category?: string
+          coins?: string[] | null
+          created_at?: string | null
+          description?: string | null
+          efficiency?: string | null
+          hashrate?: string | null
+          id?: string
+          is_new?: boolean | null
+          location?: string | null
+          name?: string
+          original_price?: number | null
+          power?: string | null
+          price?: number
+          stock?: string | null
+          type?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      user_roles: {
+        Row: {
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin" | "moderator" | "user"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +315,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin", "moderator", "user"],
+    },
   },
 } as const
