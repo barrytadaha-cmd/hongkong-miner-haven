@@ -53,22 +53,31 @@ export const products: Product[] = [
     brand: 'Bitmain',
     algorithm: 'SHA256',
     hashrate: '234 TH/s',
-    power: '3531W',
-    efficiency: '15.1 J/TH',
+    power: '3510W',
+    efficiency: '15 J/TH',
     price: 2980,
     originalPrice: 3499,
-    image: 'https://images.unsplash.com/photo-1639762681485-074b7f938ba0?w=600&h=600&fit=crop',
+    image: '/products/antminer-s21-pro-1.jpg',
     images: [
-      'https://images.unsplash.com/photo-1639762681485-074b7f938ba0?w=600&h=600&fit=crop',
-      'https://images.unsplash.com/photo-1518770660439-4636190af475?w=600&h=600&fit=crop'
+      '/products/antminer-s21-pro-1.jpg',
+      '/products/antminer-s21-pro-2.png',
+      '/products/antminer-s21-pro-3.png'
     ],
     category: 'bitcoin',
     type: 'air',
     inStock: true,
     isSale: true,
     location: 'hongkong',
-    description: 'The Antminer S21 Pro represents the latest advancement in Bitcoin mining technology from Bitmain with 234 TH/s hashrate.',
-    specs: { ...defaultSpecs, weight: '14.6 kg', cooling: '4 x 12038 Fans' },
+    description: 'The Antminer S21 Pro represents the latest advancement in Bitcoin mining technology from Bitmain. Featuring SHA256 algorithm with multiple hashrate modes: 245 TH/s @ 3875W, 234 TH/s @ 3510W, and 220 TH/s @ 3300W. Built with RJ45 Ethernet 10/100M connectivity, operating in -20°C to 45°C environments with 10%-90% humidity tolerance.',
+    specs: {
+      dimensions: '450 x 219 x 293 mm',
+      weight: '18.5 kg',
+      noise: '76 dB',
+      temperature: '-20°C to 45°C',
+      voltage: '220-277V AC',
+      interface: 'RJ45 Ethernet 10/100M',
+      cooling: 'Air Cooling (550 CFM)'
+    },
     coins: ['Bitcoin', 'Bitcoin Cash', 'Bitcoin SV']
   },
   {
