@@ -74,6 +74,11 @@ const ProductCard = ({ product }: ProductCardProps) => {
               setImageLoaded(true);
             }}
           />
+
+          {/* Brand Watermark */}
+          <div className="absolute bottom-2 right-2 font-bold text-[10px] px-1.5 py-0.5 tracking-wide bg-background/80 backdrop-blur-sm rounded text-primary border border-primary/20 shadow-sm select-none pointer-events-none opacity-80 group-hover:opacity-100 transition-opacity">
+            MinerHaolan
+          </div>
         
           {/* Badges */}
           <div className="absolute top-3 left-3 flex flex-col gap-2">
