@@ -2,6 +2,7 @@ import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.49.1";
 
 const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
+const ADMIN_EMAIL = "support@minerhaolan.com"; // Admin notification email
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -13,6 +14,7 @@ interface NotificationRequest {
   orderId: string;
   status: string;
   trackingNumber: string | null;
+  notifyAdmin?: boolean; // New flag to notify admin on new orders
 }
 
 const statusMessages: Record<string, { subject: string; heading: string; message: string }> = {
@@ -67,7 +69,7 @@ const handler = async (req: Request): Promise<Response> => {
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
     );
 
-    const { orderId, status, trackingNumber }: NotificationRequest = await req.json();
+    const { orderId, status, trackingNumber, notifyAdmin }: NotificationRequest = await req.json();
 
     // Fetch order with user info
     const { data: order, error: orderError } = await supabase
@@ -120,7 +122,8 @@ const handler = async (req: Request): Promise<Response> => {
       `
       : "";
 
-    const emailHtml = `
+    // Customer email HTML
+    const customerEmailHtml = `
       <!DOCTYPE html>
       <html>
         <head>
@@ -184,7 +187,8 @@ const handler = async (req: Request): Promise<Response> => {
       </html>
     `;
 
-    const emailResponse = await fetch("https://api.resend.com/emails", {
+    // Send customer email
+    const customerEmailResponse = await fetch("https://api.resend.com/emails", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -194,15 +198,98 @@ const handler = async (req: Request): Promise<Response> => {
         from: "Miner Haolan <onboarding@resend.dev>",
         to: [userEmail],
         subject: `${statusInfo.subject} - Order #${orderId.slice(0, 8).toUpperCase()}`,
-        html: emailHtml,
+        html: customerEmailHtml,
       }),
     });
 
-    const emailResult = await emailResponse.json();
+    const customerEmailResult = await customerEmailResponse.json();
+    console.log("Customer email sent:", customerEmailResult);
 
-    console.log("Email sent successfully:", emailResult);
+    // Send admin notification for new orders
+    let adminEmailResult = null;
+    if (notifyAdmin && status === 'pending') {
+      const adminEmailHtml = `
+        <!DOCTYPE html>
+        <html>
+          <head>
+            <meta charset="utf-8">
+            <title>New Order Received</title>
+          </head>
+          <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background: #f9fafb;">
+            <div style="background: white; border-radius: 12px; padding: 32px; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
+              <div style="text-align: center; margin-bottom: 24px; background: #22c55e; padding: 16px; border-radius: 8px;">
+                <h1 style="color: white; margin: 0; font-size: 24px;">🎉 New Order Received!</h1>
+              </div>
+              
+              <div style="background: #f0fdf4; padding: 16px; border-radius: 8px; margin-bottom: 20px;">
+                <p style="margin: 0; font-size: 14px; color: #166534;">
+                  <strong>Order ID:</strong> #${orderId.slice(0, 8).toUpperCase()}<br>
+                  <strong>Customer:</strong> ${userEmail}<br>
+                  <strong>Total:</strong> $${order.total_amount.toLocaleString()}<br>
+                  <strong>Date:</strong> ${new Date().toLocaleString()}
+                </p>
+              </div>
+              
+              <h3 style="color: #111; margin-bottom: 12px;">Order Items</h3>
+              
+              <table style="width: 100%; border-collapse: collapse; margin-top: 16px;">
+                <thead>
+                  <tr style="background: #f3f4f6;">
+                    <th style="padding: 12px; text-align: left; font-weight: 600;">Product</th>
+                    <th style="padding: 12px; text-align: center; font-weight: 600;">Qty</th>
+                    <th style="padding: 12px; text-align: right; font-weight: 600;">Price</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  ${orderItemsHtml}
+                </tbody>
+                <tfoot>
+                  <tr style="background: #111;">
+                    <td colspan="2" style="padding: 16px 12px; text-align: right; font-weight: bold; color: white;">Total:</td>
+                    <td style="padding: 16px 12px; text-align: right; font-weight: bold; font-size: 18px; color: #22c55e;">$${order.total_amount.toLocaleString()}</td>
+                  </tr>
+                </tfoot>
+              </table>
+              
+              <div style="margin-top: 24px; padding: 16px; background: #fef3c7; border-radius: 8px;">
+                <p style="margin: 0; font-size: 14px; color: #92400e;">
+                  ⚡ <strong>Action Required:</strong> Please contact the customer to confirm the order and provide payment details.
+                </p>
+              </div>
+              
+              <div style="margin-top: 24px; text-align: center;">
+                <p style="color: #999; font-size: 12px; margin: 0;">
+                  This is an automated notification from Miner Haolan
+                </p>
+              </div>
+            </div>
+          </body>
+        </html>
+      `;
 
-    return new Response(JSON.stringify({ success: true, emailResult }), {
+      const adminEmailResponse = await fetch("https://api.resend.com/emails", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${RESEND_API_KEY}`,
+        },
+        body: JSON.stringify({
+          from: "Miner Haolan Orders <onboarding@resend.dev>",
+          to: [ADMIN_EMAIL],
+          subject: `🎉 New Order #${orderId.slice(0, 8).toUpperCase()} - $${order.total_amount.toLocaleString()}`,
+          html: adminEmailHtml,
+        }),
+      });
+
+      adminEmailResult = await adminEmailResponse.json();
+      console.log("Admin notification sent:", adminEmailResult);
+    }
+
+    return new Response(JSON.stringify({ 
+      success: true, 
+      customerEmailResult,
+      adminEmailResult 
+    }), {
       status: 200,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
