@@ -6,82 +6,106 @@ import { Badge } from '@/components/ui/badge';
 import { Check, X, Wrench, Shield, Clock, Phone, ChevronRight } from 'lucide-react';
 import Layout from '@/components/Layout';
 import PartnersSection from '@/components/PartnersSection';
-
-const warrantyPlans = [
-  {
-    name: 'Standard Manufacturer Warranty',
-    price: 0,
-    period: '6-12 months',
-    repairTime: '8-12 weeks',
-    features: [
-      { name: 'Basic coverage', included: true },
-      { name: '6-12 month warranty', included: true },
-      { name: 'Long repair times', included: true },
-      { name: 'Free technical diagnosis', included: false },
-      { name: 'Repair guarantee', included: false },
-      { name: 'No additional costs', included: false },
-      { name: 'Priority processing', included: false },
-    ],
-    popular: false,
-    cta: 'Learn more',
-    variant: 'outline' as const,
-  },
-  {
-    name: 'Miner Haolan Premium Guarantee',
-    price: 249,
-    period: '18 months',
-    repairTime: '3-5 weeks',
-    features: [
-      { name: 'Extended coverage', included: true },
-      { name: '18 month warranty', included: true },
-      { name: 'Fast repair times', included: true },
-      { name: 'Free technical diagnosis', included: true },
-      { name: 'Repair guarantee', included: true },
-      { name: 'No additional costs', included: true },
-      { name: '30 Hashcoins', included: true },
-    ],
-    popular: true,
-    cta: 'Book now',
-    variant: 'default' as const,
-  },
-  {
-    name: 'Miner Haolan Ultra Premium',
-    price: 399,
-    period: '18 months',
-    repairTime: '1-2 weeks',
-    features: [
-      { name: 'Full comprehensive coverage', included: true },
-      { name: '18 month warranty', included: true },
-      { name: 'Express repair times', included: true },
-      { name: 'Free technical diagnosis', included: true },
-      { name: 'Repair guarantee', included: true },
-      { name: 'No additional costs', included: true },
-      { name: 'Priority repair queue', included: true },
-      { name: 'Dedicated support', included: true },
-      { name: '2x Hashcoins', included: true },
-    ],
-    popular: false,
-    cta: 'Choose Premium',
-    variant: 'outline' as const,
-  },
-];
-
-const services = [
-  'Hashboard repair',
-  'Replacement of defective components',
-  'Fan repair or replacement',
-  'Use of genuine original spare parts',
-  'Transparent and attractive warranties',
-  'Performance and overclocking testing',
-  'Stress testing runs',
-  'Fan and cooling for check',
-  'Firmware & software update',
-  'Power cord & AC/DC check & repair',
-];
-
+const warrantyPlans = [{
+  name: 'Standard Manufacturer Warranty',
+  price: 0,
+  period: '6-12 months',
+  repairTime: '8-12 weeks',
+  features: [{
+    name: 'Basic coverage',
+    included: true
+  }, {
+    name: '6-12 month warranty',
+    included: true
+  }, {
+    name: 'Long repair times',
+    included: true
+  }, {
+    name: 'Free technical diagnosis',
+    included: false
+  }, {
+    name: 'Repair guarantee',
+    included: false
+  }, {
+    name: 'No additional costs',
+    included: false
+  }, {
+    name: 'Priority processing',
+    included: false
+  }],
+  popular: false,
+  cta: 'Learn more',
+  variant: 'outline' as const
+}, {
+  name: 'Miner Haolan Premium Guarantee',
+  price: 249,
+  period: '18 months',
+  repairTime: '3-5 weeks',
+  features: [{
+    name: 'Extended coverage',
+    included: true
+  }, {
+    name: '18 month warranty',
+    included: true
+  }, {
+    name: 'Fast repair times',
+    included: true
+  }, {
+    name: 'Free technical diagnosis',
+    included: true
+  }, {
+    name: 'Repair guarantee',
+    included: true
+  }, {
+    name: 'No additional costs',
+    included: true
+  }, {
+    name: '30 Hashcoins',
+    included: true
+  }],
+  popular: true,
+  cta: 'Book now',
+  variant: 'default' as const
+}, {
+  name: 'Miner Haolan Ultra Premium',
+  price: 399,
+  period: '18 months',
+  repairTime: '1-2 weeks',
+  features: [{
+    name: 'Full comprehensive coverage',
+    included: true
+  }, {
+    name: '18 month warranty',
+    included: true
+  }, {
+    name: 'Express repair times',
+    included: true
+  }, {
+    name: 'Free technical diagnosis',
+    included: true
+  }, {
+    name: 'Repair guarantee',
+    included: true
+  }, {
+    name: 'No additional costs',
+    included: true
+  }, {
+    name: 'Priority repair queue',
+    included: true
+  }, {
+    name: 'Dedicated support',
+    included: true
+  }, {
+    name: '2x Hashcoins',
+    included: true
+  }],
+  popular: false,
+  cta: 'Choose Premium',
+  variant: 'outline' as const
+}];
+const services = ['Hashboard repair', 'Replacement of defective components', 'Fan repair or replacement', 'Use of genuine original spare parts', 'Transparent and attractive warranties', 'Performance and overclocking testing', 'Stress testing runs', 'Fan and cooling for check', 'Firmware & software update', 'Power cord & AC/DC check & repair'];
 const RepairWarranty = () => {
-  return (
-    <Layout>
+  return <Layout>
       <Helmet>
         <title>Repair & Warranty Service | Miner Haolan</title>
         <meta name="description" content="Premium warranty and repair service for your ASIC miners. Fast turnaround, genuine parts, and comprehensive coverage." />
@@ -89,7 +113,7 @@ const RepairWarranty = () => {
 
       <main className="pb-16">
         {/* Hero */}
-        <div className="bg-navy text-navy-foreground py-16">
+        <div className="text-navy-foreground py-16 bg-secondary">
           <div className="container mx-auto px-4 text-center">
             <h1 className="font-display text-4xl md:text-5xl font-bold mb-4">
               Repair & Warranty Service
@@ -101,7 +125,7 @@ const RepairWarranty = () => {
         </div>
 
         {/* Intro */}
-        <section className="py-16 bg-secondary">
+        <section className="py-16 bg-secondary-foreground">
           <div className="container mx-auto px-4 text-center max-w-4xl">
             <p className="text-lg text-muted-foreground">
               We know how important uptime is. ASIC mining is very competitive, and every day you are not mining means income lost for now and forever. 
@@ -180,16 +204,10 @@ const RepairWarranty = () => {
 
             {/* Pricing Cards */}
             <div className="grid md:grid-cols-3 gap-6">
-              {warrantyPlans.map((plan) => (
-                <Card 
-                  key={plan.name} 
-                  className={`relative ${plan.popular ? 'border-primary shadow-lg scale-105' : 'border-border'}`}
-                >
-                  {plan.popular && (
-                    <Badge className="absolute -top-3 left-1/2 -translate-x-1/2 bg-primary">
+              {warrantyPlans.map(plan => <Card key={plan.name} className={`relative ${plan.popular ? 'border-primary shadow-lg scale-105' : 'border-border'}`}>
+                  {plan.popular && <Badge className="absolute -top-3 left-1/2 -translate-x-1/2 bg-primary">
                       Most Popular
-                    </Badge>
-                  )}
+                    </Badge>}
                   <CardHeader className="text-center pb-4">
                     <CardTitle className="text-lg">{plan.name}</CardTitle>
                     <div className="mt-4">
@@ -198,31 +216,24 @@ const RepairWarranty = () => {
                   </CardHeader>
                   <CardContent className="space-y-4">
                     <ul className="space-y-3">
-                      {plan.features.slice(0, 7).map((feature, idx) => (
-                        <li key={idx} className="flex items-center gap-2 text-sm">
-                          {feature.included ? (
-                            <Check className="h-4 w-4 text-primary shrink-0" />
-                          ) : (
-                            <X className="h-4 w-4 text-muted-foreground shrink-0" />
-                          )}
+                      {plan.features.slice(0, 7).map((feature, idx) => <li key={idx} className="flex items-center gap-2 text-sm">
+                          {feature.included ? <Check className="h-4 w-4 text-primary shrink-0" /> : <X className="h-4 w-4 text-muted-foreground shrink-0" />}
                           <span className={!feature.included ? 'text-muted-foreground' : ''}>
                             {feature.name}
                           </span>
-                        </li>
-                      ))}
+                        </li>)}
                     </ul>
                     <Button className="w-full" variant={plan.variant}>
                       {plan.cta}
                     </Button>
                   </CardContent>
-                </Card>
-              ))}
+                </Card>)}
             </div>
           </div>
         </section>
 
         {/* Repair Section */}
-        <section className="py-16 bg-secondary">
+        <section className="py-16 bg-secondary-foreground">
           <div className="container mx-auto px-4 text-center">
             <h2 className="font-display text-3xl font-bold mb-4">
               Repair of all brands of miners
@@ -253,12 +264,10 @@ const RepairWarranty = () => {
                     Repair service
                   </h3>
                   <ul className="space-y-2 ml-7">
-                    {services.slice(0, 5).map((service, idx) => (
-                      <li key={idx} className="flex items-center gap-2 text-sm text-muted-foreground">
+                    {services.slice(0, 5).map((service, idx) => <li key={idx} className="flex items-center gap-2 text-sm text-muted-foreground">
                         <ChevronRight className="h-3 w-3" />
                         {service}
-                      </li>
-                    ))}
+                      </li>)}
                   </ul>
                 </div>
 
@@ -268,12 +277,10 @@ const RepairWarranty = () => {
                     Maintenance service
                   </h3>
                   <ul className="space-y-2 ml-7">
-                    {services.slice(5).map((service, idx) => (
-                      <li key={idx} className="flex items-center gap-2 text-sm text-muted-foreground">
+                    {services.slice(5).map((service, idx) => <li key={idx} className="flex items-center gap-2 text-sm text-muted-foreground">
                         <ChevronRight className="h-3 w-3" />
                         {service}
-                      </li>
-                    ))}
+                      </li>)}
                   </ul>
                 </div>
               </div>
@@ -319,8 +326,6 @@ const RepairWarranty = () => {
 
         <PartnersSection />
       </main>
-    </Layout>
-  );
+    </Layout>;
 };
-
 export default RepairWarranty;

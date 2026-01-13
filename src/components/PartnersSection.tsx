@@ -17,7 +17,7 @@ const partners = [{
   logo: iceriverLogo
 }];
 const PartnersSection = () => {
-  return <section className="py-16 border-y border-border bg-muted/30 overflow-hidden">
+  return <section className="py-16 border-y border-border overflow-hidden bg-secondary-foreground">
       <div className="container mx-auto px-4">
         <motion.h2 className="text-center mb-10 text-muted-foreground font-extrabold text-6xl font-serif" initial={{
         opacity: 0,
