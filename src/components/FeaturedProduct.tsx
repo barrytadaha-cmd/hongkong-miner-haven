@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { ArrowRight } from 'lucide-react';
+import avalonMini3Image from '@/assets/avalon-mini-3-featured.jpg';
 
 const FeaturedProduct = () => {
   return (
@@ -11,7 +12,7 @@ const FeaturedProduct = () => {
           <div className="relative">
             <div className="bg-gradient-to-br from-primary/10 to-accent/10 rounded-3xl p-8 md:p-12">
               <img 
-                src="https://asicminermarket.com/wp-content/uploads/2024/05/Avalon-Nano-3.png" 
+                src={avalonMini3Image} 
                 alt="Avalon MINI 3 - Bitcoin Heater" 
                 className="w-full max-w-sm mx-auto"
               />
@@ -55,7 +56,7 @@ const FeaturedProduct = () => {
 
             <div className="flex flex-col sm:flex-row gap-4 pt-4">
               <Button size="lg" className="group" asChild>
-                <Link to="/product/avalon-mini-3">
+                <Link to="/shop?search=avalon+mini+3">
                   Buy Now
                   <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
                 </Link>
