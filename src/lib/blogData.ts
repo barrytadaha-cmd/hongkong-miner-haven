@@ -503,6 +503,309 @@ Scrypt mining offers a solid alternative to Bitcoin mining, especially for those
     date: 'Nov 5, 2025',
     readTime: '8 min read',
   },
+  // ============= NEW ARTICLES FROM UPGRADE SPEC =============
+  {
+    id: '9',
+    slug: 'antminer-s21-pro-vs-s21-xp-hydro-2026-roi',
+    title: 'Bitmain Antminer S21 Pro vs. S21 XP Hydro – The 2026 ROI Showdown',
+    excerpt: 'A comprehensive comparison of air-cooled vs hydro-cooled Bitcoin mining. Which delivers better ROI for your operation?',
+    content: `
+## Introduction: The Efficiency Wars
+
+The Bitcoin network's hash rate continues to climb in 2026, necessitating hardware that pushes the boundaries of thermodynamics and silicon efficiency. The previous generation of hardware is rapidly becoming obsolete for high-cost energy environments. This analysis breaks down the critical differences between Bitmain's flagship air-cooled S21 Pro and the industrial-grade S21 XP Hydro.
+
+## The Cooling Divide: Air vs. Water
+
+The critical differentiator between these two miners is infrastructure requirement.
+
+### Antminer S21 Pro (Air-Cooled)
+
+The **S21 Pro** works in any ventilated garage or mining shed, leveraging high-RPM fans to dissipate heat. It delivers:
+
+- **Hashrate**: 234 TH/s
+- **Power Consumption**: 3,510W
+- **Efficiency**: 15.0 J/TH
+- **Noise Level**: 76 dB (Loud)
+- **Cooling**: 4x High-RPM Fans
+
+The S21 Pro represents the pinnacle of air-cooled efficiency, a form factor that remains vital for home miners and small-to-medium enterprise (SME) farms that lack liquid cooling infrastructure.
+
+### Antminer S21 XP Hydro (Water-Cooled)
+
+The **S21 XP Hydro** requires a water loop, cooling towers, and CDUs. Its specifications are transformative:
+
+- **Hashrate**: 473 TH/s
+- **Power Consumption**: 5,676W
+- **Efficiency**: 12.0 J/TH
+- **Noise Level**: Silent (External Pump Noise Only)
+- **Cooling**: Liquid Loop (DN10 Connector)
+
+The S21 XP Hydro's 12 J/TH efficiency is not just about chips; it is about thermal dynamics. Water, with a specific heat capacity of ~4.18 kJ/kg·K, is a far superior conductor to air (~1.005 kJ/kg·K). Hydro miners remove fans entirely, allowing chips to run at lower junction temperatures (Tj), which reduces current leakage at the transistor level.
+
+## Feature Comparison
+
+| Feature           | Antminer S21 Pro | Antminer S21 XP Hydro        |
+| ----------------- | ---------------- | ---------------------------- |
+| Hashrate          | 234 TH/s         | 473 TH/s                     |
+| Power Consumption | 3,510 W          | 5,676 W                      |
+| Efficiency        | 15.0 J/TH        | 12.0 J/TH                    |
+| Cooling Method    | 4x High-RPM Fans | Liquid Loop (DN10 Connector) |
+| Noise Level       | 76 dB (Loud)     | Silent (External Pump Noise) |
+
+## The Financial Verdict
+
+The efficiency gap (15 J/TH vs 12 J/TH) translates to significant operational expenditure savings over a 3-year lifecycle. However, the XP Hydro's setup cost often demands a minimum deployment of 20+ units to amortize the infrastructure cap-ex.
+
+### ROI Sensitivity Analysis
+
+At an electricity cost of **$0.05/kWh**:
+
+**S21 Pro:**
+- Daily Revenue: ~$28.50
+- Daily Power Cost: ~$4.21
+- Daily Profit: ~$24.29
+- Annual Profit: ~$8,866
+
+**S21 XP Hydro:**
+- Daily Revenue: ~$57.60
+- Daily Power Cost: ~$6.81
+- Daily Profit: ~$50.79
+- Annual Profit: ~$18,538
+
+---
+
+## 🎯 VERDICT BOX
+
+| Use Case | Recommended Miner | Reasoning |
+|----------|-------------------|-----------|
+| **Home / Garage** | **S21 Pro** | Simplicity and lower CapEx wins. No plumbing required. |
+| **Industrial Farms** | **S21 XP Hydro** | Density and long-term OpEx wins. Infrastructure investment pays off at scale. |
+
+---
+
+## Conclusion
+
+Both miners represent the vanguard of Bitcoin mining technology in 2026. Your choice depends entirely on your infrastructure and scale. For home miners and SME operations, the S21 Pro offers near-hydro efficiency without the capital expenditure of cooling towers and pumps. For industrial clients with existing liquid cooling infrastructure, the S21 XP Hydro's transformative efficiency makes it the clear choice.
+
+**Ready to upgrade your operation?** Check our shop for current availability and pricing on both models.
+    `,
+    image: 'https://images.unsplash.com/photo-1639762681485-074b7f938ba0?w=1200&h=630&fit=crop',
+    category: 'Reviews',
+    tags: ['Bitcoin', 'Bitmain', 'ROI', 'Hydro Cooling', 'Efficiency'],
+    author: 'James Liu',
+    authorAvatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop',
+    date: 'Jan 10, 2026',
+    readTime: '12 min read',
+    featured: true,
+  },
+  {
+    id: '10',
+    slug: 'kaspa-mining-2026-iceriver-ks5m-vs-ks0-ultra',
+    title: 'Kaspa Mining in 2026 – IceRiver KS5M vs. KS0 Ultra',
+    excerpt: 'From desktop silent miners to industrial powerhouses. Which Kaspa miner is right for your setup?',
+    content: `
+## Introduction: The Kaspa Revolution
+
+Kaspa (KAS) has matured from a speculative novelty to an industrial-grade mining sector in 2026. The kHeavyHash algorithm powers one of the fastest-growing proof-of-work ecosystems, and IceRiver has emerged as the dominant manufacturer for Kaspa ASICs.
+
+This article compares two ends of the spectrum: the industrial **KS5M** and the home-friendly **KS0 Ultra**.
+
+## The "Silent" Revolution vs. Industrial Might
+
+### IceRiver KS0 Ultra (Home/Office Kaspa)
+
+The **KS0 Ultra** represents a "gateway" product that allows anyone to mine crypto in a bedroom, democratizing access to a demographic previously locked out by the noise of Bitcoin ASICs.
+
+- **Hashrate**: 400 GH/s
+- **Power Consumption**: 100W
+- **Noise Level**: ~10 dB (Silent)
+- **Voltage**: 110-240V (Standard Plug)
+- **Use Case**: Desktop / Office
+
+Its most marketable feature is its silence; operating at roughly 10dB, it can sit on a desk or shelf without disrupting a home environment. While its raw revenue is a fraction of the KS5M, its low price point and ease of use (standard power plug, Wi-Fi capabilities) make it a high-volume SKU.
+
+### IceRiver KS5M (Industrial Kaspa)
+
+The **KS5M** is the industrial standard for the kHeavyHash algorithm. It represents the "heavy artillery" of the Kaspa network.
+
+- **Hashrate**: 15 TH/s
+- **Power Consumption**: 3,400W
+- **Noise Level**: ~75 dB
+- **Voltage**: 220-300V (Heavy Duty)
+- **Use Case**: Industrial / Farm
+
+The KS5M is 37.5x more powerful than the KS0 Ultra but requires dedicated 220V circuits and proper ventilation.
+
+## Metric Comparison
+
+| Metric   | IceRiver KS0 Ultra  | IceRiver KS5M         |
+| -------- | ------------------- | --------------------- |
+| Hashrate | 400 GH/s            | 15 TH/s               |
+| Power    | 100 W               | 3,400 W               |
+| Use Case | Desktop / Office    | Industrial / Farm     |
+| Voltage  | 110-240V (Standard) | 220-300V (Heavy Duty) |
+| Noise    | ~10 dB (Silent)     | ~75 dB (Industrial)   |
+
+## Network Risk and Volatility
+
+Crucially, Kaspa mining carries unique risks:
+
+### Difficulty Bombs
+Kaspa's hashrate is volatile. The introduction of machines like the KS5M creates step-function increases in difficulty, rapidly shortening the profitable lifespan of older units.
+
+### Payback Period Velocity
+Unlike Bitcoin's relative stability, Kaspa mining requires faster payback periods. Plan for 6-12 month ROI targets rather than 18-24 months.
+
+## Profitability Analysis
+
+At current KAS prices and network difficulty:
+
+**KS0 Ultra:**
+- Daily Revenue: ~$1.20
+- Daily Power Cost: ~$0.24
+- Daily Profit: ~$0.96
+- Monthly Profit: ~$28.80
+
+**KS5M:**
+- Daily Revenue: ~$45.00
+- Daily Power Cost: ~$8.16
+- Daily Profit: ~$36.84
+- Monthly Profit: ~$1,105
+
+---
+
+## 🎯 VERDICT BOX
+
+| User Profile | Recommended Miner | Reasoning |
+|--------------|-------------------|-----------|
+| **Hobbyist / Beginner** | **KS0 Ultra** | Silent operation, standard power, zero infrastructure. Perfect entry point. |
+| **Serious Miner / Farm Operator** | **KS5M** | 37.5x the hashpower. Dominates ROI if you have the infrastructure. |
+
+---
+
+## Conclusion
+
+The Kaspa ecosystem offers something for everyone. The KS0 Ultra democratizes mining, allowing bedroom miners to participate without disrupting their living space. The KS5M is for serious operators ready to compete at industrial scale.
+
+**Both miners are available in our shop with worldwide shipping.**
+    `,
+    image: 'https://images.unsplash.com/photo-1605792657660-596af9009e82?w=1200&h=630&fit=crop',
+    category: 'Altcoins',
+    tags: ['Kaspa', 'IceRiver', 'Home Mining', 'ROI'],
+    author: 'David Kim',
+    authorAvatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&h=100&fit=crop',
+    date: 'Jan 8, 2026',
+    readTime: '10 min read',
+    featured: true,
+  },
+  {
+    id: '11',
+    slug: 'antminer-x9-monero-randomx-revolution-2026',
+    title: 'Monero Mining Returns – The Antminer X9 Revolution',
+    excerpt: 'Bitmain breaks through ASIC resistance. How the X9 delivers 1 MH/s on RandomX and what it means for XMR mining.',
+    content: `
+## Introduction: Breaking the Unbreakable
+
+Monero's RandomX algorithm was explicitly designed to be ASIC-resistant, favoring CPUs. The existence of the **Antminer X9** signals a technological breakthrough by Bitmain, likely utilizing massive banks of specialized SRAM or RISC-V architecture to overcome memory-hardness constraints.
+
+This article explores this revolutionary development and what it means for Monero miners.
+
+## The Technological Breakthrough
+
+### What is RandomX?
+
+RandomX is a proof-of-work algorithm optimized for general-purpose CPUs. It was designed with these anti-ASIC features:
+
+- **Memory-hard**: Requires 2GB+ of memory for efficient operation
+- **Random code execution**: Generates and executes random programs
+- **Branch-heavy**: Optimized for CPU branch prediction
+
+### How Did Bitmain Crack It?
+
+The X9's performance suggests a sophisticated architecture, potentially involving:
+
+- **Massive SRAM Banks**: Instead of external memory, Bitmain likely integrated large on-chip SRAM
+- **RISC-V Clusters**: Custom RISC-V cores optimized for RandomX's instruction set
+- **Novel Memory Management**: Advanced caching strategies to minimize memory latency
+
+## Antminer X9 Specifications
+
+- **Hashrate**: 1,000 KH/s (1 MH/s)
+- **Power Consumption**: 2,472W
+- **Efficiency**: 2.47 J/KH
+- **Algorithm**: RandomX (Monero)
+
+## Contextualizing the Performance
+
+To make these numbers real, consider this comparison:
+
+| Hardware | Hashrate | Power | Units to Equal X9 |
+|----------|----------|-------|-------------------|
+| **Antminer X9** | 1,000 KH/s | 2,472W | 1 |
+| **AMD Ryzen 9 7950X** | ~24 KH/s | ~170W | **~41 CPUs** |
+| **Intel i9-14900K** | ~20 KH/s | ~200W | **~50 CPUs** |
+
+**One Antminer X9 equals approximately 41 AMD Ryzen 9 7950X CPUs working in parallel.**
+
+This comparison highlights the X9 as the only viable path for commercial-scale Monero mining.
+
+## The Centralization Controversy
+
+The Monero community has historically valued decentralization through CPU mining. The X9's arrival raises legitimate concerns:
+
+### Community Concerns:
+- Network hashrate concentration
+- Reduced barrier to 51% attacks
+- Loss of "everyman" mining ethos
+
+### Counter-Arguments:
+- Market forces will distribute hardware
+- Increased total hashrate improves security
+- Professional mining improves network reliability
+
+## Profitability Analysis
+
+At current XMR prices (~$180) and network difficulty:
+
+**Antminer X9:**
+- Daily Revenue: ~$12.50
+- Daily Power Cost: ~$5.93 (at $0.10/kWh)
+- Daily Profit: ~$6.57
+- Monthly Profit: ~$197
+
+**vs. Ryzen 9 7950X (for comparison):**
+- Daily Revenue: ~$0.30
+- Daily Power Cost: ~$0.41
+- Daily Profit: **-$0.11** (unprofitable)
+
+---
+
+## 🎯 VERDICT BOX
+
+| Consideration | Assessment |
+|---------------|------------|
+| **Performance** | Revolutionary. 41x the hashrate of top CPUs. |
+| **Profitability** | Positive at most electricity rates. Only viable commercial Monero mining option. |
+| **Controversy** | Real concerns about centralization, but market forces should distribute over time. |
+| **Recommendation** | For profit-focused miners, the X9 is the only path to meaningful Monero mining in 2026. |
+
+---
+
+## Conclusion
+
+The Antminer X9 represents a paradigm shift for Monero mining. While the community debates the implications for decentralization, the raw economics are undeniable. For commercial Monero mining operations, the X9 is not just an option—it's the only viable path forward.
+
+**Note:** Due to high demand and controversy, X9 availability is limited. Contact us for pre-order information.
+    `,
+    image: 'https://images.unsplash.com/photo-1518546305927-5a555bb7020d?w=1200&h=630&fit=crop',
+    category: 'Reviews',
+    tags: ['Monero', 'Bitmain', 'ASIC', 'Advanced'],
+    author: 'Michael Chen',
+    authorAvatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop',
+    date: 'Jan 5, 2026',
+    readTime: '11 min read',
+    featured: true,
+  },
 ];
 
 export const getRelatedPosts = (currentPost: BlogPost, limit = 3): BlogPost[] => {
