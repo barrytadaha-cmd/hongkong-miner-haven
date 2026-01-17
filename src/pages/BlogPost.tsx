@@ -3,14 +3,72 @@ import { Helmet } from 'react-helmet-async';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Calendar, Clock, ArrowLeft, ArrowRight, User, Tag } from 'lucide-react';
-import { getPostBySlug, getRelatedPosts } from '@/lib/blogData';
+import { Skeleton } from '@/components/ui/skeleton';
+import { Calendar, Clock, ArrowLeft, Tag, Loader2 } from 'lucide-react';
+import { useBlogPost, useRelatedPosts } from '@/hooks/useBlogPosts';
 import Layout from '@/components/Layout';
+
+// Simple markdown renderer for content
+const renderMarkdown = (content: string) => {
+  return content
+    // Headers
+    .replace(/^### (.*$)/gim, '<h3 class="text-xl font-bold mt-8 mb-4">$1</h3>')
+    .replace(/^## (.*$)/gim, '<h2 class="text-2xl font-bold mt-10 mb-4">$1</h2>')
+    .replace(/^# (.*$)/gim, '<h1 class="text-3xl font-bold mt-10 mb-4">$1</h1>')
+    // Bold & Italic
+    .replace(/\*\*\*(.*?)\*\*\*/g, '<strong><em>$1</em></strong>')
+    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+    .replace(/\*(.*?)\*/g, '<em>$1</em>')
+    // Underline
+    .replace(/<u>(.*?)<\/u>/g, '<u>$1</u>')
+    // Code blocks
+    .replace(/```([\s\S]*?)```/g, '<pre class="bg-muted p-4 rounded-lg overflow-x-auto my-4"><code>$1</code></pre>')
+    .replace(/`(.*?)`/g, '<code class="bg-muted px-1.5 py-0.5 rounded text-sm">$1</code>')
+    // Blockquotes
+    .replace(/^> (.*$)/gim, '<blockquote class="border-l-4 border-primary pl-4 italic my-4">$1</blockquote>')
+    // Lists
+    .replace(/^\d+\. (.*$)/gim, '<li class="ml-6 list-decimal">$1</li>')
+    .replace(/^- (.*$)/gim, '<li class="ml-6 list-disc">$1</li>')
+    // Images
+    .replace(/!\[(.*?)\]\((.*?)\)/g, '<img src="$2" alt="$1" class="rounded-lg my-6 w-full" />')
+    // Links
+    .replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2" class="text-primary hover:underline" target="_blank" rel="noopener">$1</a>')
+    // Line breaks (preserve paragraphs)
+    .replace(/\n\n/g, '</p><p class="mb-4">')
+    .replace(/\n/g, '<br/>');
+};
 
 const BlogPost = () => {
   const { slug } = useParams<{ slug: string }>();
   const navigate = useNavigate();
-  const post = getPostBySlug(slug || '');
+  
+  const { data: post, isLoading } = useBlogPost(slug || '');
+  const { data: relatedPosts = [] } = useRelatedPosts(post || null, 3);
+
+  if (isLoading) {
+    return (
+      <Layout>
+        <main className="pt-24 pb-16">
+          <div className="container mx-auto px-4">
+            <Skeleton className="h-8 w-32 mb-6" />
+            <Skeleton className="aspect-[21/9] rounded-xl mb-8" />
+            <div className="max-w-3xl mx-auto space-y-4">
+              <Skeleton className="h-6 w-24" />
+              <Skeleton className="h-12 w-full" />
+              <Skeleton className="h-6 w-3/4" />
+              <div className="flex gap-4 py-6">
+                <Skeleton className="h-12 w-12 rounded-full" />
+                <div className="space-y-2">
+                  <Skeleton className="h-4 w-32" />
+                  <Skeleton className="h-3 w-24" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </main>
+      </Layout>
+    );
+  }
 
   if (!post) {
     return (
@@ -28,8 +86,6 @@ const BlogPost = () => {
       </Layout>
     );
   }
-
-  const relatedPosts = getRelatedPosts(post, 3);
 
   return (
     <Layout>
@@ -134,9 +190,10 @@ const BlogPost = () => {
           </header>
 
           {/* Article Content */}
-          <div className="max-w-3xl mx-auto prose prose-lg dark:prose-invert prose-headings:font-display prose-a:text-primary">
-            <div dangerouslySetInnerHTML={{ __html: post.content.replace(/\n/g, '<br/>').replace(/## /g, '<h2>').replace(/### /g, '<h3>').replace(/<h2>/g, '</p><h2>').replace(/<h3>/g, '</p><h3>').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') }} />
-          </div>
+          <div 
+            className="max-w-3xl mx-auto prose prose-lg dark:prose-invert prose-headings:font-display prose-a:text-primary"
+            dangerouslySetInnerHTML={{ __html: `<p class="mb-4">${renderMarkdown(post.content)}</p>` }}
+          />
 
           {/* Tags */}
           <div className="max-w-3xl mx-auto mt-12 pt-8 border-t border-border">

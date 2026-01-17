@@ -4,8 +4,9 @@ import { Link, useSearchParams } from 'react-router-dom';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Calendar, Clock, ArrowRight, X, Filter } from 'lucide-react';
-import { blogPosts, blogCategories, blogTags, getPostsByTag } from '@/lib/blogData';
+import { Calendar, Clock, ArrowRight, X, Filter, Loader2 } from 'lucide-react';
+import { blogCategories, blogTags } from '@/lib/blogData';
+import { useBlogPosts } from '@/hooks/useBlogPosts';
 import Layout from '@/components/Layout';
 import PartnersSection from '@/components/PartnersSection';
 
@@ -14,16 +15,18 @@ const Blog = () => {
   const activeCategory = searchParams.get('category');
   const activeTag = searchParams.get('tag');
   const [showFilters, setShowFilters] = useState(false);
+  
+  const { data: blogPosts = [], isLoading } = useBlogPosts();
 
   const filteredPosts = useMemo(() => {
     if (activeCategory) {
       return blogPosts.filter(post => post.category.toLowerCase() === activeCategory.toLowerCase());
     }
     if (activeTag) {
-      return getPostsByTag(activeTag);
+      return blogPosts.filter(post => post.tags.includes(activeTag));
     }
     return blogPosts;
-  }, [activeCategory, activeTag]);
+  }, [blogPosts, activeCategory, activeTag]);
 
   const featuredPost = filteredPosts.find(post => post.featured) || filteredPosts[0];
   const otherPosts = filteredPosts.filter(post => post.id !== featuredPost?.id);
@@ -121,7 +124,11 @@ const Blog = () => {
             </div>
           )}
 
-          {filteredPosts.length === 0 ? (
+          {isLoading ? (
+            <div className="flex justify-center py-16">
+              <Loader2 className="h-8 w-8 animate-spin" />
+            </div>
+          ) : filteredPosts.length === 0 ? (
             <div className="text-center py-16">
               <p className="text-xl text-muted-foreground mb-4">No posts found</p>
               <Button onClick={clearFilters}>Clear filters</Button>
