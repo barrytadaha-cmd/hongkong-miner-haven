@@ -8,14 +8,15 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { Table, TableBody, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/hooks/use-toast';
-import { Loader2, Plus, Trash2, Upload, Database, LogOut, Edit, Image, Package, Sparkles } from 'lucide-react';
+import { Loader2, Plus, Database, LogOut } from 'lucide-react';
 import OrderManagement from '@/components/admin/OrderManagement';
 import OrderStatistics from '@/components/admin/OrderStatistics';
 import AIProductDescription from '@/components/AIProductDescription';
 import ProductEditModal from '@/components/admin/ProductEditModal';
+import ProductTableRow from '@/components/admin/ProductTableRow';
 import Layout from '@/components/Layout';
 import {
   Dialog,
@@ -555,7 +556,7 @@ export default function Admin() {
 
         {/* Products Table */}
         <Card>
-          <CardContent className="p-0">
+          <CardContent className="p-0 overflow-x-auto">
             {productsLoading ? (
               <div className="flex items-center justify-center py-12">
                 <Loader2 className="h-8 w-8 animate-spin" />
@@ -564,84 +565,29 @@ export default function Admin() {
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead>Image</TableHead>
+                    <TableHead className="w-16">Image</TableHead>
                     <TableHead>Name</TableHead>
                     <TableHead>Category</TableHead>
                     <TableHead>Price</TableHead>
                     <TableHead>Hashrate</TableHead>
                     <TableHead>Stock</TableHead>
-                    <TableHead>Actions</TableHead>
+                    <TableHead className="text-right">Actions</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {dbProducts?.map((product) => (
-                    <TableRow key={product.id}>
-                      <TableCell>
-                        <div className="relative w-16 h-16">
-                          <img
-                            src={product.image}
-                            alt={product.name}
-                            className="w-full h-full object-cover rounded"
-                          />
-                          <label className="absolute inset-0 flex items-center justify-center bg-black/50 opacity-0 hover:opacity-100 transition-opacity cursor-pointer rounded">
-                            <input
-                              type="file"
-                              accept="image/*"
-                              className="hidden"
-                              onChange={(e) => {
-                                const file = e.target.files?.[0];
-                                if (file) handleImageUpload(product.id, file);
-                              }}
-                              disabled={uploadingImage === product.id || !isAdmin}
-                            />
-                            {uploadingImage === product.id ? (
-                              <Loader2 className="h-4 w-4 text-white animate-spin" />
-                            ) : (
-                              <Image className="h-4 w-4 text-white" />
-                            )}
-                          </label>
-                        </div>
-                      </TableCell>
-                      <TableCell className="font-medium">{product.name}</TableCell>
-                      <TableCell>
-                        <Badge variant="secondary">{product.category}</Badge>
-                      </TableCell>
-                      <TableCell>
-                        ${product.price.toLocaleString()}
-                        {product.originalPrice && (
-                          <span className="text-sm text-muted-foreground line-through ml-2">
-                            ${product.originalPrice.toLocaleString()}
-                          </span>
-                        )}
-                      </TableCell>
-                      <TableCell>{product.hashrate}</TableCell>
-                      <TableCell>
-                        <Badge variant={product.inStock ? 'default' : 'destructive'}>
-                          {product.inStock ? 'In Stock' : 'Out of Stock'}
-                        </Badge>
-                      </TableCell>
-                      <TableCell className="flex gap-2">
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          onClick={() => {
-                            setSelectedProduct(product);
-                            setEditDialogOpen(true);
-                          }}
-                          disabled={!isAdmin}
-                        >
-                          <Edit className="h-4 w-4 text-primary" />
-                        </Button>
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          onClick={() => handleDeleteProduct(product.id)}
-                          disabled={!isAdmin}
-                        >
-                          <Trash2 className="h-4 w-4 text-destructive" />
-                        </Button>
-                      </TableCell>
-                    </TableRow>
+                    <ProductTableRow 
+                      key={product.id} 
+                      product={product} 
+                      isAdmin={isAdmin}
+                      onRefetch={refetch}
+                      onEdit={(p) => {
+                        setSelectedProduct(p);
+                        setEditDialogOpen(true);
+                      }}
+                      uploadingImage={uploadingImage}
+                      handleImageUpload={handleImageUpload}
+                    />
                   ))}
                 </TableBody>
               </Table>
