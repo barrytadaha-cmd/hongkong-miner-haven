@@ -92,7 +92,8 @@ const Header = () => {
     { icon: Phone, text: 'Service & Support', accent: false },
   ];
 
-  return <header className="fixed top-0 left-0 right-0 z-50">
+  return (
+    <header className="fixed top-0 left-0 right-0 z-50">
       {/* Top Bar */}
       <div 
         className={`bg-navy text-navy-foreground text-xs md:text-sm py-1.5 md:py-2 transition-all duration-300 overflow-hidden ${
@@ -460,4 +461,5 @@ const Header = () => {
     </header>
   );
 };
+
 export default Header;

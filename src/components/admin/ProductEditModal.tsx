@@ -4,10 +4,10 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/hooks/use-toast';
-import { Loader2, Trash2, Upload, Sparkles, X, GripVertical, Star } from 'lucide-react';
+import { Loader2, Sparkles } from 'lucide-react';
 import AIProductDescription from '@/components/AIProductDescription';
+import ImageUploader from '@/components/admin/ImageUploader';
 import {
   Dialog,
   DialogContent,
@@ -78,7 +78,6 @@ export default function ProductEditModal({
 }: ProductEditModalProps) {
   const { toast } = useToast();
   const [saving, setSaving] = useState(false);
-  const [uploadingImage, setUploadingImage] = useState(false);
   const [productImages, setProductImages] = useState<ProductImage[]>([]);
   const [loadingImages, setLoadingImages] = useState(false);
   
@@ -100,7 +99,6 @@ export default function ProductEditModal({
     is_new: false
   });
 
-  // Load product data when modal opens
   useEffect(() => {
     if (product && open) {
       setFormData({
@@ -191,106 +189,6 @@ export default function ProductEditModal({
     setSaving(false);
   };
 
-  const handleImageUpload = async (file: File) => {
-    if (!product) return;
-    
-    setUploadingImage(true);
-
-    try {
-      const fileExt = file.name.split('.').pop();
-      const fileName = `${product.id}/${Date.now()}.${fileExt}`;
-
-      const { error: uploadError } = await supabase.storage
-        .from('product-images')
-        .upload(fileName, file);
-
-      if (uploadError) throw uploadError;
-
-      const { data: { publicUrl } } = supabase.storage
-        .from('product-images')
-        .getPublicUrl(fileName);
-
-      const isPrimary = productImages.length === 0;
-
-      await supabase.from('product_images').insert({
-        product_id: product.id,
-        image_url: publicUrl,
-        is_primary: isPrimary,
-        sort_order: productImages.length
-      });
-
-      toast({
-        title: 'Image uploaded!',
-        description: 'The image has been added to the product.'
-      });
-
-      loadProductImages();
-    } catch (error: any) {
-      toast({
-        title: 'Error uploading image',
-        description: error.message,
-        variant: 'destructive'
-      });
-    }
-
-    setUploadingImage(false);
-  };
-
-  const handleDeleteImage = async (imageId: string) => {
-    try {
-      const { error } = await supabase
-        .from('product_images')
-        .delete()
-        .eq('id', imageId);
-
-      if (error) throw error;
-
-      toast({
-        title: 'Image deleted',
-        description: 'The image has been removed.'
-      });
-
-      loadProductImages();
-    } catch (error: any) {
-      toast({
-        title: 'Error deleting image',
-        description: error.message,
-        variant: 'destructive'
-      });
-    }
-  };
-
-  const handleSetPrimary = async (imageId: string) => {
-    if (!product) return;
-    
-    try {
-      // First, set all images as non-primary
-      await supabase
-        .from('product_images')
-        .update({ is_primary: false })
-        .eq('product_id', product.id);
-
-      // Then set the selected image as primary
-      await supabase
-        .from('product_images')
-        .update({ is_primary: true })
-        .eq('id', imageId);
-
-      toast({
-        title: 'Primary image set',
-        description: 'The primary image has been updated.'
-      });
-
-      loadProductImages();
-    } catch (error: any) {
-      toast({
-        title: 'Error setting primary image',
-        description: error.message,
-        variant: 'destructive'
-      });
-    }
-  };
-
   if (!product) return null;
 
   return (
@@ -310,83 +208,18 @@ export default function ProductEditModal({
           <form onSubmit={handleSave} className="space-y-6 px-6 pb-6">
             {/* Image Management Section */}
             <div className="space-y-4 p-4 bg-muted/30 rounded-lg border">
-              <div className="flex items-center justify-between">
-                <Label className="text-base font-semibold">Product Images</Label>
-                <label className="cursor-pointer">
-                  <input
-                    type="file"
-                    accept="image/*"
-                    className="hidden"
-                    onChange={(e) => {
-                      const file = e.target.files?.[0];
-                      if (file) handleImageUpload(file);
-                    }}
-                    disabled={uploadingImage || !isAdmin}
-                  />
-                  <Button type="button" variant="outline" size="sm" disabled={uploadingImage} asChild>
-                    <span>
-                      {uploadingImage ? (
-                        <Loader2 className="h-4 w-4 animate-spin mr-2" />
-                      ) : (
-                        <Upload className="h-4 w-4 mr-2" />
-                      )}
-                      Upload Image
-                    </span>
-                  </Button>
-                </label>
-              </div>
-              
+              <Label className="text-base font-semibold">Product Images</Label>
               {loadingImages ? (
                 <div className="flex items-center justify-center py-8">
                   <Loader2 className="h-6 w-6 animate-spin" />
                 </div>
-              ) : productImages.length === 0 ? (
-                <div className="text-center py-8 text-muted-foreground">
-                  No images uploaded yet
-                </div>
               ) : (
-                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-                  {productImages.map((img) => (
-                    <div 
-                      key={img.id} 
-                      className="relative group rounded-lg overflow-hidden border bg-background"
-                    >
-                      <img
-                        src={img.image_url}
-                        alt="Product"
-                        className="w-full aspect-square object-cover"
-                      />
-                      {img.is_primary && (
-                        <Badge className="absolute top-2 left-2 bg-primary text-primary-foreground">
-                          <Star className="h-3 w-3 mr-1" />
-                          Primary
-                        </Badge>
-                      )}
-                      <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
-                        {!img.is_primary && (
-                          <Button
-                            type="button"
-                            variant="secondary"
-                            size="sm"
-                            onClick={() => handleSetPrimary(img.id)}
-                            disabled={!isAdmin}
-                          >
-                            <Star className="h-4 w-4" />
-                          </Button>
-                        )}
-                        <Button
-                          type="button"
-                          variant="destructive"
-                          size="sm"
-                          onClick={() => handleDeleteImage(img.id)}
-                          disabled={!isAdmin}
-                        >
-                          <Trash2 className="h-4 w-4" />
-                        </Button>
-                      </div>
-                    </div>
-                  ))}
-                </div>
+                <ImageUploader
+                  productId={product.id}
+                  images={productImages}
+                  onImagesChange={loadProductImages}
+                  isAdmin={isAdmin}
+                />
               )}
             </div>
 
