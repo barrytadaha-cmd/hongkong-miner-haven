@@ -13,6 +13,9 @@
 @import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Roboto&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Libre+Caslon+Text&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap");
 
 @tailwind base;
 @tailwind components;
@@ -31,13 +34,13 @@
     --primary: 20 90% 48%;
     --primary-foreground: 33 100% 96%;
     /* Secondary: Cool Gray */
-    --secondary: 0 0% 32%;
-    --secondary-foreground: 0 0% 98%;
+    --secondary: 214 31.8182% 91.3725%;
+    --secondary-foreground: 89 80.3922% 10%;
     --muted: 0 0% 63%;
     --muted-foreground: 0 0% 9%;
     /* Accent: Vibrant Orange/Gold */
     --accent: 47 100% 96%;
-    --accent-foreground: 37 92% 50%;
+    --accent-foreground: 32 94.6188% 43.7255%;
     --destructive: 0 72% 50%;
     --destructive-foreground: 0 85% 97%;
     --border: 0 0% 83%;
