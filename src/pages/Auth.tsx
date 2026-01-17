@@ -36,7 +36,7 @@ export default function Auth() {
         title: 'Welcome back!',
         description: 'You have been signed in successfully.'
       });
-      navigate('/admin');
+      navigate('/profile');
     }
     
     setLoading(false);
@@ -84,9 +84,9 @@ export default function Auth() {
       <div className="min-h-[80vh] flex items-center justify-center py-12 px-4">
         <Card className="w-full max-w-md">
           <CardHeader className="text-center">
-            <CardTitle className="text-2xl">Admin Access</CardTitle>
+            <CardTitle className="text-2xl">Welcome</CardTitle>
             <CardDescription>
-              Sign in or create an account to manage products
+              Sign in to track your orders or create an account
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">

@@ -227,18 +227,89 @@ const Header = () => {
             {/* Right Actions */}
             <div className="flex items-center gap-2">
               {/* Search */}
-              {searchOpen ? <div className="hidden md:flex items-center gap-2">
-                  <Input type="search" placeholder="Search miners..." className="w-48" autoFocus onBlur={() => setSearchOpen(false)} />
-                </div> : <Button variant="ghost" size="icon" className="hidden md:flex" onClick={() => setSearchOpen(true)}>
+              {searchOpen ? (
+                <div className="hidden md:flex items-center gap-2">
+                  <Input 
+                    type="search" 
+                    placeholder="Search miners..." 
+                    className="w-48" 
+                    autoFocus 
+                    onBlur={() => setSearchOpen(false)} 
+                  />
+                </div>
+              ) : (
+                <Button variant="ghost" size="icon" className="hidden md:flex" onClick={() => setSearchOpen(true)}>
                   <Search className="h-5 w-5" />
-                </Button>}
+                </Button>
+              )}
 
+              {/* Auth-based Navigation */}
+              {user ? (
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="ghost" size="icon" className="relative">
+                      <UserCircle className="h-5 w-5" />
+                      {isAdmin && (
+                        <span className="absolute -top-0.5 -right-0.5 h-2.5 w-2.5 rounded-full bg-primary ring-2 ring-background" />
+                      )}
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="w-56 bg-popover">
+                    <div className="px-2 py-1.5">
+                      <p className="text-sm font-medium truncate">{user.email}</p>
+                      <p className="text-xs text-muted-foreground">
+                        {isAdmin ? 'Administrator' : 'Customer'}
+                      </p>
+                    </div>
+                    <DropdownMenuSeparator />
+                    
+                    {isAdmin && (
+                      <>
+                        <DropdownMenuItem asChild>
+                          <Link to="/admin" className="cursor-pointer gap-2 text-primary font-medium">
+                            <Settings className="h-4 w-4" />
+                            Admin Panel
+                          </Link>
+                        </DropdownMenuItem>
+                        <DropdownMenuSeparator />
+                      </>
+                    )}
+                    
+                    <DropdownMenuItem asChild>
+                      <Link to="/profile" className="cursor-pointer gap-2">
+                        <User className="h-4 w-4" />
+                        My Dashboard
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                      <Link to="/profile?tab=orders" className="cursor-pointer gap-2">
+                        <Settings className="h-4 w-4" />
+                        Order History
+                      </Link>
+                    </DropdownMenuItem>
+                    
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem onClick={signOut} className="cursor-pointer gap-2 text-destructive">
+                      Sign Out
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              ) : (
+                <Button variant="ghost" size="sm" asChild className="hidden sm:flex gap-1">
+                  <Link to="/auth">
+                    <User className="h-4 w-4" />
+                    Login
+                  </Link>
+                </Button>
+              )}
 
               <Button variant="ghost" size="icon" className="relative" onClick={() => setIsOpen(true)}>
                 <ShoppingCart className="h-5 w-5" />
-                {totalItems > 0 && <Badge className="absolute -top-1 -right-1 h-5 w-5 p-0 flex items-center justify-center text-xs bg-accent text-accent-foreground">
+                {totalItems > 0 && (
+                  <Badge className="absolute -top-1 -right-1 h-5 w-5 p-0 flex items-center justify-center text-xs bg-accent text-accent-foreground">
                     {totalItems}
-                  </Badge>}
+                  </Badge>
+                )}
               </Button>
 
               <Button className="hidden sm:flex bg-primary hover:bg-primary/90" asChild>
@@ -337,14 +408,55 @@ const Header = () => {
                   </Button>
                 </Link>
 
+                {/* Mobile Auth Links */}
+                <div className="border-t border-border mt-2 pt-2">
+                  {user ? (
+                    <>
+                      {isAdmin && (
+                        <Link to="/admin" onClick={() => setMobileMenuOpen(false)}>
+                          <Button variant="ghost" className="w-full justify-start text-sm font-medium px-4 gap-2 text-primary">
+                            <Settings className="h-4 w-4" />
+                            Admin Panel
+                          </Button>
+                        </Link>
+                      )}
+                      <Link to="/profile" onClick={() => setMobileMenuOpen(false)}>
+                        <Button variant="ghost" className="w-full justify-start text-sm font-medium px-4 gap-2">
+                          <UserCircle className="h-4 w-4" />
+                          My Dashboard
+                        </Button>
+                      </Link>
+                      <Button 
+                        variant="ghost" 
+                        className="w-full justify-start text-sm font-medium px-4 gap-2 text-destructive"
+                        onClick={() => {
+                          signOut();
+                          setMobileMenuOpen(false);
+                        }}
+                      >
+                        Sign Out
+                      </Button>
+                    </>
+                  ) : (
+                    <Link to="/auth" onClick={() => setMobileMenuOpen(false)}>
+                      <Button variant="ghost" className="w-full justify-start text-sm font-medium px-4 gap-2">
+                        <User className="h-4 w-4" />
+                        Login / Register
+                      </Button>
+                    </Link>
+                  )}
+                </div>
+
                 {/* Mobile Search */}
                 <div className="px-4 pt-2">
                   <Input type="search" placeholder="Search miners..." className="w-full" />
                 </div>
               </nav>
-            </div>}
+            </div>
+          )}
         </div>
       </div>
-    </header>;
+    </header>
+  );
 };
 export default Header;

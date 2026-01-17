@@ -8,23 +8,32 @@ export function useAuth() {
   const [loading, setLoading] = useState(true);
   const [isAdmin, setIsAdmin] = useState(false);
 
+  // Function to check admin role - called outside of onAuthStateChange
+  const checkAdminRole = async (userId: string) => {
+    const { data } = await supabase
+      .from('user_roles')
+      .select('role')
+      .eq('user_id', userId)
+      .eq('role', 'admin')
+      .maybeSingle();
+    
+    setIsAdmin(!!data);
+  };
+
   useEffect(() => {
-    // Set up auth state listener BEFORE getting initial session
+    // Set up auth state listener FIRST
+    // IMPORTANT: Keep this callback synchronous to prevent deadlocks
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      async (event, session) => {
+      (event, session) => {
+        // Only synchronous state updates here
         setSession(session);
         setUser(session?.user ?? null);
         
+        // Defer Supabase calls with setTimeout to prevent deadlock
         if (session?.user) {
-          // Check admin role
-          const { data } = await supabase
-            .from('user_roles')
-            .select('role')
-            .eq('user_id', session.user.id)
-            .eq('role', 'admin')
-            .maybeSingle();
-          
-          setIsAdmin(!!data);
+          setTimeout(() => {
+            checkAdminRole(session.user.id);
+          }, 0);
         } else {
           setIsAdmin(false);
         }
@@ -33,22 +42,15 @@ export function useAuth() {
       }
     );
 
-    // Get initial session
+    // THEN check for existing session
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
       setUser(session?.user ?? null);
       
       if (session?.user) {
-        supabase
-          .from('user_roles')
-          .select('role')
-          .eq('user_id', session.user.id)
-          .eq('role', 'admin')
-          .maybeSingle()
-          .then(({ data }) => {
-            setIsAdmin(!!data);
-            setLoading(false);
-          });
+        checkAdminRole(session.user.id).then(() => {
+          setLoading(false);
+        });
       } else {
         setLoading(false);
       }
@@ -70,7 +72,7 @@ export function useAuth() {
       email,
       password,
       options: {
-        emailRedirectTo: window.location.origin
+        emailRedirectTo: `${window.location.origin}/profile`
       }
     });
     return { error };
@@ -80,7 +82,7 @@ export function useAuth() {
     const { error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
-        redirectTo: `${window.location.origin}/admin`
+        redirectTo: `${window.location.origin}/profile`
       }
     });
     return { error };
@@ -88,6 +90,7 @@ export function useAuth() {
 
   const signOut = async () => {
     await supabase.auth.signOut();
+    setIsAdmin(false);
   };
 
   return {
