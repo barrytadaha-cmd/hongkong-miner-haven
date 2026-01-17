@@ -233,53 +233,6 @@ const Header = () => {
                   <Search className="h-5 w-5" />
                 </Button>}
 
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" size="icon">
-                    <User className="h-5 w-5" />
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-56">
-                  {user ? <>
-                      <div className="px-2 py-1.5">
-                        <p className="text-sm font-medium">My Account</p>
-                        <p className="text-xs text-muted-foreground truncate">{user.email}</p>
-                      </div>
-                      <DropdownMenuSeparator />
-                      <DropdownMenuItem asChild>
-                        <Link to="/profile" className="cursor-pointer flex items-center gap-2">
-                          <UserCircle className="h-4 w-4" />
-                          My Profile
-                        </Link>
-                      </DropdownMenuItem>
-                      {isAdmin && <>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuItem asChild>
-                          <Link to="/admin" className="cursor-pointer flex items-center gap-2 text-primary">
-                            <Settings className="h-4 w-4" />
-                            Admin Dashboard
-                          </Link>
-                        </DropdownMenuItem>
-                      </>}
-                      <DropdownMenuSeparator />
-                      <DropdownMenuItem onClick={() => signOut()} className="cursor-pointer text-destructive">
-                        Sign Out
-                      </DropdownMenuItem>
-                    </> : <>
-                      <div className="px-2 py-1.5">
-                        <p className="text-sm font-medium">Welcome!</p>
-                        <p className="text-xs text-muted-foreground">Create your personal account</p>
-                      </div>
-                      <DropdownMenuSeparator />
-                      <DropdownMenuItem asChild>
-                        <Link to="/auth" className="cursor-pointer flex items-center gap-2">
-                          <UserCircle className="h-4 w-4" />
-                          Sign In / Create Account
-                        </Link>
-                      </DropdownMenuItem>
-                    </>}
-                </DropdownMenuContent>
-              </DropdownMenu>
 
               <Button variant="ghost" size="icon" className="relative" onClick={() => setIsOpen(true)}>
                 <ShoppingCart className="h-5 w-5" />
