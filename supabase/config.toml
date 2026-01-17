@@ -5,6 +5,3 @@ verify_jwt = false
 
 [functions.ai-assistant]
 verify_jwt = false
-
-[functions.google-shopping-feed]
-verify_jwt = false
