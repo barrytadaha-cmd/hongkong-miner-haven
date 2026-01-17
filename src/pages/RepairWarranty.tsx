@@ -158,9 +158,9 @@ const RepairWarranty = () => {
                 <tbody>
                   <tr className="border-b border-border">
                     <td className="p-4">Price</td>
-                    <td className="text-center p-4">€0</td>
-                    <td className="text-center p-4 font-semibold">€249.00</td>
-                    <td className="text-center p-4 font-semibold">€399.00</td>
+                    <td className="text-center p-4">$0</td>
+                    <td className="text-center p-4 font-semibold">$249.00</td>
+                    <td className="text-center p-4 font-semibold">$399.00</td>
                   </tr>
                   <tr className="border-b border-border">
                     <td className="p-4">Warranty period</td>
@@ -211,7 +211,7 @@ const RepairWarranty = () => {
                   <CardHeader className="text-center pb-4">
                     <CardTitle className="text-lg">{plan.name}</CardTitle>
                     <div className="mt-4">
-                      <span className="text-4xl font-bold">€{plan.price}</span>
+                      <span className="text-4xl font-bold">${plan.price}</span>
                     </div>
                   </CardHeader>
                   <CardContent className="space-y-4">
