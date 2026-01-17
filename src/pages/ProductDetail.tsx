@@ -437,73 +437,115 @@ const ProductDetail = () => {
             </TabsContent>
 
             <TabsContent value="specifications" className="mt-5 sm:mt-8">
-              <div className="grid gap-6 sm:gap-8 md:grid-cols-2">
-                <div className="space-y-1">
-                  <h3 className="text-base sm:text-lg font-semibold mb-3 sm:mb-4">Mining Specifications</h3>
-                  <div className="divide-y divide-border text-sm sm:text-base">
-                    <div className="flex justify-between py-2.5 sm:py-3">
-                      <span className="text-muted-foreground">Manufacturer</span>
-                      <span className="font-medium">{product.brand}</span>
+              {/* Full Technical Specifications Table */}
+              <div className="bg-card border border-border rounded-xl overflow-hidden">
+                <div className="bg-muted/50 px-4 sm:px-6 py-3 sm:py-4 border-b border-border">
+                  <h3 className="text-base sm:text-lg font-semibold flex items-center gap-2">
+                    <Cpu className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
+                    Complete Technical Specifications
+                  </h3>
+                </div>
+                
+                <div className="divide-y divide-border">
+                  {/* Mining Performance */}
+                  <div className="px-4 sm:px-6 py-3 bg-primary/5">
+                    <span className="text-xs sm:text-sm font-semibold text-primary uppercase tracking-wide">Mining Performance</span>
+                  </div>
+                  <div className="grid grid-cols-2 divide-x divide-border">
+                    <div className="px-4 sm:px-6 py-3 sm:py-4">
+                      <span className="text-xs sm:text-sm text-muted-foreground block mb-1">Algorithm</span>
+                      <span className="font-semibold text-sm sm:text-base">{product.algorithm}</span>
                     </div>
-                    <div className="flex justify-between py-2.5 sm:py-3">
-                      <span className="text-muted-foreground">Model</span>
-                      <span className="font-medium truncate ml-4 max-w-[150px] sm:max-w-none">{product.name}</span>
-                    </div>
-                    <div className="flex justify-between py-2.5 sm:py-3">
-                      <span className="text-muted-foreground">Algorithm</span>
-                      <span className="font-medium">{product.algorithm}</span>
-                    </div>
-                    <div className="flex justify-between py-2.5 sm:py-3">
-                      <span className="text-muted-foreground">Hashrate</span>
-                      <span className="font-medium">{product.hashrate}</span>
-                    </div>
-                    <div className="flex justify-between py-2.5 sm:py-3">
-                      <span className="text-muted-foreground">Power</span>
-                      <span className="font-medium">{product.power}</span>
-                    </div>
-                    <div className="flex justify-between py-2.5 sm:py-3">
-                      <span className="text-muted-foreground">Efficiency</span>
-                      <span className="font-medium">{product.efficiency}</span>
+                    <div className="px-4 sm:px-6 py-3 sm:py-4">
+                      <span className="text-xs sm:text-sm text-muted-foreground block mb-1">Hashrate</span>
+                      <span className="font-semibold text-sm sm:text-base text-primary">{product.hashrate}</span>
                     </div>
                   </div>
-                </div>
-
-                <div className="space-y-1">
-                  <h3 className="text-base sm:text-lg font-semibold mb-3 sm:mb-4">Physical Specifications</h3>
-                  <div className="divide-y divide-border text-sm sm:text-base">
-                    <div className="flex justify-between py-2.5 sm:py-3">
-                      <span className="text-muted-foreground flex items-center gap-1.5 sm:gap-2">
-                        <Package className="h-3.5 w-3.5 sm:h-4 sm:w-4" /> Dimensions
-                      </span>
-                      <span className="font-medium text-right max-w-[120px] sm:max-w-none">{product.specs.dimensions}</span>
+                  <div className="grid grid-cols-2 divide-x divide-border">
+                    <div className="px-4 sm:px-6 py-3 sm:py-4">
+                      <span className="text-xs sm:text-sm text-muted-foreground block mb-1">Power Consumption</span>
+                      <span className="font-semibold text-sm sm:text-base">{product.power}</span>
                     </div>
-                    <div className="flex justify-between py-2.5 sm:py-3">
-                      <span className="text-muted-foreground">Weight</span>
-                      <span className="font-medium">{product.specs.weight}</span>
+                    <div className="px-4 sm:px-6 py-3 sm:py-4">
+                      <span className="text-xs sm:text-sm text-muted-foreground block mb-1">Efficiency</span>
+                      <span className="font-semibold text-sm sm:text-base">{product.efficiency}</span>
                     </div>
-                    <div className="flex justify-between py-2.5 sm:py-3">
-                      <span className="text-muted-foreground flex items-center gap-1.5 sm:gap-2">
-                        <Volume2 className="h-3.5 w-3.5 sm:h-4 sm:w-4" /> Noise
+                  </div>
+                  
+                  {/* Physical Specifications */}
+                  <div className="px-4 sm:px-6 py-3 bg-primary/5">
+                    <span className="text-xs sm:text-sm font-semibold text-primary uppercase tracking-wide">Physical Specifications</span>
+                  </div>
+                  <div className="grid grid-cols-2 divide-x divide-border">
+                    <div className="px-4 sm:px-6 py-3 sm:py-4">
+                      <span className="text-xs sm:text-sm text-muted-foreground flex items-center gap-1 mb-1">
+                        <Package className="h-3 w-3" /> Dimensions
                       </span>
-                      <span className="font-medium">{product.specs.noise}</span>
+                      <span className="font-semibold text-sm sm:text-base">{product.specs.dimensions}</span>
                     </div>
-                    <div className="flex justify-between py-2.5 sm:py-3">
-                      <span className="text-muted-foreground flex items-center gap-1.5 sm:gap-2">
-                        <Thermometer className="h-3.5 w-3.5 sm:h-4 sm:w-4" /> Temp
-                      </span>
-                      <span className="font-medium">{product.specs.temperature}</span>
+                    <div className="px-4 sm:px-6 py-3 sm:py-4">
+                      <span className="text-xs sm:text-sm text-muted-foreground block mb-1">Weight</span>
+                      <span className="font-semibold text-sm sm:text-base">{product.specs.weight}</span>
                     </div>
-                    <div className="flex justify-between py-2.5 sm:py-3">
-                      <span className="text-muted-foreground flex items-center gap-1.5 sm:gap-2">
-                        <Zap className="h-3.5 w-3.5 sm:h-4 sm:w-4" /> Voltage
+                  </div>
+                  <div className="grid grid-cols-2 divide-x divide-border">
+                    <div className="px-4 sm:px-6 py-3 sm:py-4">
+                      <span className="text-xs sm:text-sm text-muted-foreground flex items-center gap-1 mb-1">
+                        <Volume2 className="h-3 w-3" /> Noise Level
                       </span>
-                      <span className="font-medium">{product.specs.voltage}</span>
+                      <span className="font-semibold text-sm sm:text-base">{product.specs.noise}</span>
                     </div>
-                    <div className="flex justify-between py-2.5 sm:py-3">
-                      <span className="text-muted-foreground flex items-center gap-1.5 sm:gap-2">
-                        <Wifi className="h-3.5 w-3.5 sm:h-4 sm:w-4" /> Interface
+                    <div className="px-4 sm:px-6 py-3 sm:py-4">
+                      <span className="text-xs sm:text-sm text-muted-foreground flex items-center gap-1 mb-1">
+                        <Thermometer className="h-3 w-3" /> Operating Temp
                       </span>
-                      <span className="font-medium">{product.specs.interface}</span>
+                      <span className="font-semibold text-sm sm:text-base">{product.specs.temperature}</span>
+                    </div>
+                  </div>
+                  
+                  {/* Electrical & Connectivity */}
+                  <div className="px-4 sm:px-6 py-3 bg-primary/5">
+                    <span className="text-xs sm:text-sm font-semibold text-primary uppercase tracking-wide">Electrical & Connectivity</span>
+                  </div>
+                  <div className="grid grid-cols-2 divide-x divide-border">
+                    <div className="px-4 sm:px-6 py-3 sm:py-4">
+                      <span className="text-xs sm:text-sm text-muted-foreground flex items-center gap-1 mb-1">
+                        <Zap className="h-3 w-3" /> Voltage
+                      </span>
+                      <span className="font-semibold text-sm sm:text-base">{product.specs.voltage}</span>
+                    </div>
+                    <div className="px-4 sm:px-6 py-3 sm:py-4">
+                      <span className="text-xs sm:text-sm text-muted-foreground flex items-center gap-1 mb-1">
+                        <Wifi className="h-3 w-3" /> Network Interface
+                      </span>
+                      <span className="font-semibold text-sm sm:text-base">{product.specs.interface}</span>
+                    </div>
+                  </div>
+                  <div className="px-4 sm:px-6 py-3 sm:py-4">
+                    <span className="text-xs sm:text-sm text-muted-foreground block mb-1">Cooling System</span>
+                    <span className="font-semibold text-sm sm:text-base">{product.specs.cooling}</span>
+                  </div>
+                  
+                  {/* Product Info */}
+                  <div className="px-4 sm:px-6 py-3 bg-primary/5">
+                    <span className="text-xs sm:text-sm font-semibold text-primary uppercase tracking-wide">Product Information</span>
+                  </div>
+                  <div className="grid grid-cols-2 divide-x divide-border">
+                    <div className="px-4 sm:px-6 py-3 sm:py-4">
+                      <span className="text-xs sm:text-sm text-muted-foreground block mb-1">Manufacturer</span>
+                      <span className="font-semibold text-sm sm:text-base">{product.brand}</span>
+                    </div>
+                    <div className="px-4 sm:px-6 py-3 sm:py-4">
+                      <span className="text-xs sm:text-sm text-muted-foreground block mb-1">Model</span>
+                      <span className="font-semibold text-sm sm:text-base">{product.name}</span>
+                    </div>
+                  </div>
+                  <div className="px-4 sm:px-6 py-3 sm:py-4">
+                    <span className="text-xs sm:text-sm text-muted-foreground block mb-1">Supported Coins</span>
+                    <div className="flex flex-wrap gap-1.5 mt-1">
+                      {product.coins.map((coin) => (
+                        <Badge key={coin} variant="secondary" className="text-xs">{coin}</Badge>
+                      ))}
                     </div>
                   </div>
                 </div>
