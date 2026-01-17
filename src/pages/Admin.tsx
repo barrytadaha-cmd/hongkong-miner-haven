@@ -17,6 +17,7 @@ import OrderStatistics from '@/components/admin/OrderStatistics';
 import AIProductDescription from '@/components/AIProductDescription';
 import ProductEditModal from '@/components/admin/ProductEditModal';
 import ProductTableRow from '@/components/admin/ProductTableRow';
+import BlogEditor from '@/components/admin/BlogEditor';
 import Layout from '@/components/Layout';
 import {
   Dialog,
@@ -356,6 +357,11 @@ export default function Admin() {
         {/* Order Management */}
         <div className="mb-8">
           <OrderManagement />
+        </div>
+
+        {/* Blog Editor */}
+        <div className="mb-8">
+          <BlogEditor isAdmin={isAdmin} />
         </div>
 
         {/* Add Product */}
