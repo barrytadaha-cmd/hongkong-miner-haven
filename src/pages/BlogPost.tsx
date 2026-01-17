@@ -10,6 +10,7 @@ import Layout from '@/components/Layout';
 import LivePriceTicker from '@/components/blog/LivePriceTicker';
 import StickySidebar from '@/components/blog/StickySidebar';
 import AIOSummaryBox from '@/components/blog/AIOSummaryBox';
+import ProfitabilityCalculator from '@/components/blog/ProfitabilityCalculator';
 
 // Map of article slugs to their mentioned products for schema injection
 const articleProductsMap: Record<string, ProductSchemaData[]> = {
@@ -113,6 +114,30 @@ const articlePriceTickers: Record<string, string[]> = {
   'monero-mining-antminer-x9-revolution-2026': ['X9']
 };
 
+// Map of articles to calculator miner specs
+interface MinerSpec {
+  name: string;
+  hashrate: number;
+  power: number;
+  price: number;
+  coin: 'BTC' | 'KAS' | 'XMR';
+  dailyRevenue: number;
+}
+
+const articleCalculatorMiners: Record<string, MinerSpec[]> = {
+  'antminer-s21-pro-vs-s21-xp-hydro-2026-roi-showdown': [
+    { name: 'Antminer S21 Pro', hashrate: 234, power: 3510, price: 2980, coin: 'BTC', dailyRevenue: 28.50 },
+    { name: 'Antminer S21 XP Hydro', hashrate: 473, power: 5676, price: 8500, coin: 'BTC', dailyRevenue: 57.60 },
+  ],
+  'kaspa-mining-2026-iceriver-ks5m-vs-ks0-ultra': [
+    { name: 'IceRiver KS5M', hashrate: 15, power: 3400, price: 1599, coin: 'KAS', dailyRevenue: 12.75 },
+    { name: 'IceRiver KS0 Ultra', hashrate: 0.4, power: 100, price: 129, coin: 'KAS', dailyRevenue: 0.34 },
+  ],
+  'monero-mining-antminer-x9-revolution-2026': [
+    { name: 'Antminer X9', hashrate: 1, power: 2472, price: 4999, coin: 'XMR', dailyRevenue: 3.50 },
+  ],
+};
+
 const BlogPost = () => {
   const { slug } = useParams<{ slug: string }>();
   const navigate = useNavigate();
@@ -142,6 +167,7 @@ const BlogPost = () => {
   const aioSummary = articleAIOSummaries[slug || ''];
   const stickyProduct = articleStickyProducts[slug || ''];
   const priceTickers = articlePriceTickers[slug || ''] || [];
+  const calculatorMiners = articleCalculatorMiners[slug || ''] || [];
 
   // Generate enhanced schema with nested products
   const enhancedSchema = mentionedProducts.length > 0
@@ -307,6 +333,13 @@ const BlogPost = () => {
           <div className="max-w-3xl mx-auto prose prose-lg dark:prose-invert prose-headings:font-display prose-a:text-primary prose-a:no-underline hover:prose-a:underline prose-table:border-collapse prose-td:border prose-td:border-border prose-td:p-2 prose-th:border prose-th:border-border prose-th:p-2 prose-th:bg-muted">
             <div dangerouslySetInnerHTML={{ __html: processedContent }} />
           </div>
+
+          {/* Profitability Calculator */}
+          {calculatorMiners.length > 0 && (
+            <div className="max-w-3xl mx-auto mt-12">
+              <ProfitabilityCalculator miners={calculatorMiners} />
+            </div>
+          )}
 
           {/* Tags */}
           <div className="max-w-3xl mx-auto mt-12 pt-8 border-t border-border">
