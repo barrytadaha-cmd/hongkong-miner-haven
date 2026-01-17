@@ -4,7 +4,8 @@ import { Slider } from '@/components/ui/slider';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
-import { Calculator, Zap, TrendingUp, DollarSign, Coins } from 'lucide-react';
+import { Calculator, Zap, TrendingUp, Coins, RefreshCw, TrendingDown } from 'lucide-react';
+import { useCoinPrice, ALGORITHM_TO_COIN } from '@/hooks/useCryptoPrices';
 
 interface ProfitabilityCalculatorProps {
   hashrate: string;
@@ -13,20 +14,29 @@ interface ProfitabilityCalculatorProps {
   productName: string;
 }
 
-// Coin reward rates per TH/s per day (simplified estimates)
+// Coin reward rates per unit per day (simplified estimates based on current network difficulty)
 const COIN_REWARDS: Record<string, { 
   rewardPerUnit: number; 
-  priceUsd: number; 
   unit: string;
-  coinName: string;
 }> = {
-  'SHA256': { rewardPerUnit: 0.00000435, priceUsd: 98000, unit: 'TH/s', coinName: 'BTC' },
-  'SCRYPT': { rewardPerUnit: 0.000156, priceUsd: 108, unit: 'GH/s', coinName: 'LTC' },
-  'KHeavyHash': { rewardPerUnit: 8.5, priceUsd: 0.12, unit: 'TH/s', coinName: 'KAS' },
-  'Ethash': { rewardPerUnit: 0.0032, priceUsd: 3400, unit: 'GH/s', coinName: 'ETC' },
-  'Blake3': { rewardPerUnit: 15.2, priceUsd: 0.85, unit: 'TH/s', coinName: 'ALPH' },
-  'Equihash': { rewardPerUnit: 0.045, priceUsd: 28, unit: 'KSol/s', coinName: 'ZEC' },
-  'RandomX': { rewardPerUnit: 0.0052, priceUsd: 185, unit: 'MH/s', coinName: 'XMR' },
+  'SHA256': { rewardPerUnit: 0.00000435, unit: 'TH/s' },
+  'SCRYPT': { rewardPerUnit: 0.000156, unit: 'GH/s' },
+  'KHeavyHash': { rewardPerUnit: 8.5, unit: 'TH/s' },
+  'Ethash': { rewardPerUnit: 0.0032, unit: 'GH/s' },
+  'Blake3': { rewardPerUnit: 15.2, unit: 'TH/s' },
+  'Equihash': { rewardPerUnit: 0.045, unit: 'KSol/s' },
+  'RandomX': { rewardPerUnit: 0.0052, unit: 'MH/s' },
+};
+
+// Fallback prices if API fails
+const FALLBACK_PRICES: Record<string, number> = {
+  'SHA256': 98000,
+  'SCRYPT': 108,
+  'KHeavyHash': 0.12,
+  'Ethash': 3400,
+  'Blake3': 0.85,
+  'Equihash': 28,
+  'RandomX': 185,
 };
 
 const parseHashrate = (hashrate: string): { value: number; unit: string } => {
@@ -49,8 +59,13 @@ const ProfitabilityCalculator = ({
   const [electricityCost, setElectricityCost] = useState(0.08);
   const [coinPriceOverride, setCoinPriceOverride] = useState<number | null>(null);
 
-  const coinData = COIN_REWARDS[algorithm] || COIN_REWARDS['SHA256'];
-  const effectiveCoinPrice = coinPriceOverride ?? coinData.priceUsd;
+  // Fetch real-time crypto price
+  const { price: livePrice, change24h, isLoading: priceLoading, coinInfo } = useCoinPrice(algorithm);
+  
+  const coinRewardData = COIN_REWARDS[algorithm] || COIN_REWARDS['SHA256'];
+  const fallbackPrice = FALLBACK_PRICES[algorithm] || 98000;
+  const currentPrice = livePrice ?? fallbackPrice;
+  const effectiveCoinPrice = coinPriceOverride ?? currentPrice;
   
   const { value: hashrateValue } = parseHashrate(hashrate);
   const powerWatts = parsePower(power);
@@ -61,7 +76,7 @@ const ProfitabilityCalculator = ({
     const dailyElectricityCost = dailyKwh * electricityCost;
 
     // Daily coin earnings
-    const dailyCoinEarnings = hashrateValue * coinData.rewardPerUnit;
+    const dailyCoinEarnings = hashrateValue * coinRewardData.rewardPerUnit;
     const dailyRevenue = dailyCoinEarnings * effectiveCoinPrice;
 
     // Profit
@@ -79,7 +94,9 @@ const ProfitabilityCalculator = ({
       yearlyProfit,
       isProfitable: dailyProfit > 0
     };
-  }, [hashrateValue, powerWatts, electricityCost, effectiveCoinPrice, coinData.rewardPerUnit]);
+  }, [hashrateValue, powerWatts, electricityCost, effectiveCoinPrice, coinRewardData.rewardPerUnit]);
+
+  const coinSymbol = coinInfo?.symbol || 'BTC';
 
   return (
     <Card className="bg-gradient-to-br from-secondary/50 to-secondary/30 border-primary/20">
@@ -125,15 +142,27 @@ const ProfitabilityCalculator = ({
             <div className="flex items-center justify-between">
               <Label className="flex items-center gap-1.5 text-sm">
                 <Coins className="h-4 w-4 text-orange-500" />
-                {coinData.coinName} Price
+                {coinSymbol} Price
               </Label>
-              <Badge variant="secondary" className="text-xs">
-                Live: ${coinData.priceUsd.toLocaleString()}
-              </Badge>
+              <div className="flex items-center gap-2">
+                {priceLoading && <RefreshCw className="h-3 w-3 animate-spin text-muted-foreground" />}
+                {change24h !== null && (
+                  <Badge 
+                    variant="outline" 
+                    className={`text-xs ${change24h >= 0 ? 'text-green-500 border-green-500/30' : 'text-red-500 border-red-500/30'}`}
+                  >
+                    {change24h >= 0 ? <TrendingUp className="h-3 w-3 mr-1" /> : <TrendingDown className="h-3 w-3 mr-1" />}
+                    {change24h.toFixed(1)}%
+                  </Badge>
+                )}
+                <Badge variant="secondary" className="text-xs">
+                  {livePrice ? '🟢 Live' : '📊 Est'}: ${currentPrice.toLocaleString()}
+                </Badge>
+              </div>
             </div>
             <Input
               type="number"
-              placeholder={`$${coinData.priceUsd}`}
+              placeholder={`$${currentPrice}`}
               value={coinPriceOverride || ''}
               onChange={(e) => setCoinPriceOverride(e.target.value ? parseFloat(e.target.value) : null)}
               className="h-9"
@@ -152,7 +181,7 @@ const ProfitabilityCalculator = ({
             <p className="font-semibold text-sm text-red-400">-${calculations.dailyElectricityCost.toFixed(2)}</p>
           </div>
           <div className="p-3 bg-background/50 rounded-lg text-center">
-            <p className="text-xs text-muted-foreground mb-1">Daily {coinData.coinName}</p>
+            <p className="text-xs text-muted-foreground mb-1">Daily {coinSymbol}</p>
             <p className="font-semibold text-sm">{calculations.dailyCoinEarnings.toFixed(6)}</p>
           </div>
           <div className="p-3 bg-background/50 rounded-lg text-center">
