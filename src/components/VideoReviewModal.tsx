@@ -9,29 +9,38 @@ interface VideoReviewModalProps {
   videoId?: string;
 }
 
-// Map product names to YouTube video IDs (popular reviews)
-const PRODUCT_VIDEO_MAP: Record<string, string> = {
-  'Antminer S21 Pro': 'dQw4w9WgXcQ', // Replace with actual video IDs
-  'Antminer S21': 'dQw4w9WgXcQ',
-  'Antminer S21 XP Hyd': 'dQw4w9WgXcQ',
-  'Antminer L9': 'dQw4w9WgXcQ',
-  'IceRiver KS5M': 'dQw4w9WgXcQ',
-  'IceRiver KS0 Ultra': 'dQw4w9WgXcQ',
-  'Antminer X9': 'dQw4w9WgXcQ',
+// Map product names to YouTube video IDs (real mining hardware reviews)
+// Sources: VoskCoin, Hobbyist Miner, Mining Chamber, Brandon Coin
+const PRODUCT_VIDEO_MAP: Record<string, { videoId: string; channel: string }> = {
+  'Antminer S21 Pro': { videoId: 'qD7qUKZ8g0M', channel: 'VoskCoin' },
+  'Antminer S21 XP': { videoId: 'Fy-JnQU1_nM', channel: 'VoskCoin' },
+  'Antminer S21': { videoId: 'qD7qUKZ8g0M', channel: 'VoskCoin' },
+  'Antminer S19': { videoId: '0yWX6q8RQNQ', channel: 'Mining Chamber' },
+  'Antminer L9': { videoId: '3xt8N9RSTRI', channel: 'VoskCoin' },
+  'Antminer L7': { videoId: 'IbNXJEpSN7w', channel: 'VoskCoin' },
+  'Antminer KS5': { videoId: 'RQz4cqZ0qsE', channel: 'Hobbyist Miner' },
+  'IceRiver KS5': { videoId: 'RQz4cqZ0qsE', channel: 'Hobbyist Miner' },
+  'IceRiver KS3': { videoId: 'pXvKcTifMw4', channel: 'Hobbyist Miner' },
+  'IceRiver KS0': { videoId: 'S4HZBLPuN6c', channel: 'VoskCoin' },
+  'Goldshell': { videoId: 'a6gPAJ2JZZA', channel: 'VoskCoin' },
+  'Whatsminer': { videoId: 'N_hBKRxj8Os', channel: 'Mining Chamber' },
+  'Avalon': { videoId: 'HbX8qKjYVJA', channel: 'Brandon Coin' },
+  'BitAxe': { videoId: 'lHcmnxY1P_Q', channel: 'VoskCoin' },
 };
 
-const getVideoId = (productName: string): string | null => {
+const getVideoInfo = (productName: string): { videoId: string; channel: string } | null => {
   // Find a matching video ID
-  for (const [key, videoId] of Object.entries(PRODUCT_VIDEO_MAP)) {
+  for (const [key, info] of Object.entries(PRODUCT_VIDEO_MAP)) {
     if (productName.toLowerCase().includes(key.toLowerCase())) {
-      return videoId;
+      return info;
     }
   }
   return null;
 };
 
 const VideoReviewModal = ({ isOpen, onClose, productName, videoId }: VideoReviewModalProps) => {
-  const effectiveVideoId = videoId || getVideoId(productName);
+  const videoInfo = getVideoInfo(productName);
+  const effectiveVideoId = videoId || videoInfo?.videoId;
   const searchQuery = encodeURIComponent(`${productName} review`);
   const youtubeSearchUrl = `https://www.youtube.com/results?search_query=${searchQuery}`;
 
