@@ -87,7 +87,7 @@ To mine Bitcoin with solar power, you need to calculate:
 
 Solar mining is not just environmentally responsible—it can be economically advantageous in the right conditions. With careful planning and the right equipment, you can build a sustainable mining operation that will serve you for years to come.
     `,
-    image: 'https://images.unsplash.com/photo-1509391366360-2e959784a276?w=1200&h=630&fit=crop',
+    image: '/products/avalon-mini-3-2.jpg',
     category: 'Guides',
     tags: ['Bitcoin', 'Solar Mining', 'Efficiency', 'Beginners'],
     author: 'Michael Chen',
@@ -151,7 +151,7 @@ Consider these factors:
 
 Each manufacturer has its place in the market. For most miners, we recommend starting with Bitmain or MicroBT for Bitcoin mining, and IceRiver for Kaspa.
     `,
-    image: 'https://images.unsplash.com/photo-1518770660439-4636190af475?w=1200&h=630&fit=crop',
+    image: '/products/antminer-s21-pro-1.jpg',
     category: 'Industry',
     tags: ['Bitmain', 'MicroBT', 'Canaan', 'ASIC'],
     author: 'Sarah Wong',
@@ -204,7 +204,7 @@ The S21 Pro is currently the best air-cooled Bitcoin miner on the market. If you
 
 **Rating: 4.5/5**
     `,
-    image: 'https://images.unsplash.com/photo-1639762681485-074b7f938ba0?w=1200&h=630&fit=crop',
+    image: '/products/antminer-s21-pro-2.png',
     category: 'Reviews',
     tags: ['Bitcoin', 'Bitmain', 'ASIC', 'Profitability'],
     author: 'James Liu',
@@ -262,7 +262,7 @@ Home mining won't make you rich, but it can:
 
 Home mining in 2026 is profitable under the right conditions: low electricity costs, heat utilization, and realistic expectations about returns.
     `,
-    image: 'https://images.unsplash.com/photo-1516245834210-c4c142787335?w=1200&h=630&fit=crop',
+    image: '/products/heatbit-mini-1.jpg',
     category: 'Analysis',
     tags: ['Home Mining', 'Profitability', 'Bitcoin', 'Heat Recovery'],
     author: 'Emma Zhang',
@@ -320,7 +320,7 @@ Kaspa uses KHeavyHash, designed to be ASIC-friendly while maintaining memory har
 
 Kaspa mining can be highly profitable, but ASIC prices are volatile. Do your research and calculate ROI carefully.
     `,
-    image: 'https://images.unsplash.com/photo-1605792657660-596af9009e82?w=1200&h=630&fit=crop',
+    image: '/products/iceriver-ks3-1.png',
     category: 'Altcoins',
     tags: ['Kaspa', 'IceRiver', 'Bitmain', 'Altcoins'],
     author: 'David Kim',
@@ -373,7 +373,7 @@ Hong Kong has emerged as a hub for cryptocurrency activities, including mining o
 
 Hong Kong offers a favorable environment for mining operations, but proper planning and compliance are essential.
     `,
-    image: 'https://images.unsplash.com/photo-1536599018102-9f803c140fc1?w=1200&h=630&fit=crop',
+    image: '/products/whatsminer-m63s-hydro-1.jpg',
     category: 'Business',
     tags: ['Business', 'Beginners', 'Advanced'],
     author: 'Grace Lee',
@@ -436,7 +436,7 @@ Modern ASIC miners generate significant heat. How you handle this heat determine
 
 Choose based on your specific situation, not just efficiency numbers.
     `,
-    image: 'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=1200&h=630&fit=crop',
+    image: '/products/antminer-s21-hyd-1.png',
     category: 'Guides',
     tags: ['Hydro Cooling', 'ASIC', 'Efficiency', 'Advanced'],
     author: 'Michael Chen',
@@ -495,7 +495,7 @@ At current prices and difficulty:
 
 Scrypt mining offers a solid alternative to Bitcoin mining, especially for those seeking diversification.
     `,
-    image: 'https://images.unsplash.com/photo-1621761191319-c6fb62004040?w=1200&h=630&fit=crop',
+    image: '/products/antminer-l9-1.jpg',
     category: 'Altcoins',
     tags: ['Litecoin', 'ASIC', 'Profitability', 'Beginners'],
     author: 'Sarah Wong',
