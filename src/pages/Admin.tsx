@@ -18,6 +18,8 @@ import AIProductDescription from '@/components/AIProductDescription';
 import ProductEditModal from '@/components/admin/ProductEditModal';
 import ProductTableRow from '@/components/admin/ProductTableRow';
 import BlogEditor from '@/components/admin/BlogEditor';
+import { BulkImageUploader } from '@/components/admin/BulkImageUploader';
+import { ProductScraper } from '@/components/admin/ProductScraper';
 import Layout from '@/components/Layout';
 import {
   Dialog,
@@ -362,6 +364,19 @@ export default function Admin() {
         {/* Blog Editor */}
         <div className="mb-8">
           <BlogEditor isAdmin={isAdmin} />
+        </div>
+
+        {/* Bulk Image Uploader & Product Scraper */}
+        <div className="grid md:grid-cols-2 gap-8 mb-8">
+          <BulkImageUploader 
+            products={(dbProducts || []).map(p => ({ 
+              id: p.id, 
+              name: p.name, 
+              slug: p.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')
+            }))}
+            onUploadComplete={() => refetch()}
+          />
+          <ProductScraper />
         </div>
 
         {/* Add Product */}
