@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import { Button } from '@/components/ui/button';
@@ -9,6 +9,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Switch } from '@/components/ui/switch';
 import { Separator } from '@/components/ui/separator';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import {
   Select,
   SelectContent,
@@ -43,6 +44,9 @@ import {
   Save,
   X,
   FileText,
+  Sparkles,
+  Upload,
+  Wand2,
 } from 'lucide-react';
 import { blogCategories, blogTags as staticTags } from '@/lib/blogData';
 
@@ -69,6 +73,42 @@ interface BlogPost {
 interface BlogEditorProps {
   isAdmin: boolean;
 }
+
+// Simple markdown to HTML converter for preview
+const renderMarkdown = (content: string): string => {
+  let html = content
+    // Escape HTML
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    // Headers
+    .replace(/^### (.*$)/gim, '<h3 class="text-xl font-bold mt-6 mb-3">$1</h3>')
+    .replace(/^## (.*$)/gim, '<h2 class="text-2xl font-bold mt-8 mb-4">$1</h2>')
+    .replace(/^# (.*$)/gim, '<h1 class="text-3xl font-bold mt-8 mb-4">$1</h1>')
+    // Bold and Italic
+    .replace(/\*\*\*(.*?)\*\*\*/g, '<strong><em>$1</em></strong>')
+    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+    .replace(/\*(.*?)\*/g, '<em>$1</em>')
+    // Code blocks
+    .replace(/```([\s\S]*?)```/g, '<pre class="bg-muted p-4 rounded-lg my-4 overflow-x-auto"><code>$1</code></pre>')
+    .replace(/`(.*?)`/g, '<code class="bg-muted px-2 py-1 rounded text-sm">$1</code>')
+    // Blockquotes
+    .replace(/^> (.*$)/gim, '<blockquote class="border-l-4 border-primary pl-4 italic my-4">$1</blockquote>')
+    // Images
+    .replace(/!\[(.*?)\]\((.*?)\)/g, '<img src="$2" alt="$1" class="rounded-lg my-4 max-w-full" />')
+    // Links
+    .replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2" class="text-primary hover:underline">$1</a>')
+    // Unordered lists
+    .replace(/^\- (.*$)/gim, '<li class="ml-4">$1</li>')
+    // Ordered lists
+    .replace(/^\d+\. (.*$)/gim, '<li class="ml-4 list-decimal">$1</li>')
+    // Paragraphs
+    .replace(/\n\n/g, '</p><p class="my-4">')
+    // Line breaks
+    .replace(/\n/g, '<br />');
+  
+  return `<div class="prose prose-lg max-w-none"><p class="my-4">${html}</p></div>`;
+};
 
 const RichTextToolbar = ({ onFormat }: { onFormat: (format: string, value?: string) => void }) => {
   const tools = [
@@ -105,6 +145,54 @@ const RichTextToolbar = ({ onFormat }: { onFormat: (format: string, value?: stri
   );
 };
 
+// AI Content Generator Component
+const AIContentGenerator = ({ 
+  onGenerate, 
+  generating 
+}: { 
+  onGenerate: (type: 'title' | 'outline' | 'content') => void;
+  generating: boolean;
+}) => {
+  return (
+    <div className="flex flex-wrap gap-2 p-3 bg-gradient-to-r from-primary/10 to-accent/10 rounded-lg border border-primary/20">
+      <div className="flex items-center gap-2 w-full mb-2">
+        <Sparkles className="h-4 w-4 text-primary" />
+        <span className="text-sm font-medium">AI Content Assistant</span>
+      </div>
+      <Button 
+        type="button" 
+        variant="outline" 
+        size="sm"
+        onClick={() => onGenerate('title')}
+        disabled={generating}
+      >
+        {generating ? <Loader2 className="mr-2 h-3 w-3 animate-spin" /> : <Wand2 className="mr-2 h-3 w-3" />}
+        Generate Title
+      </Button>
+      <Button 
+        type="button" 
+        variant="outline" 
+        size="sm"
+        onClick={() => onGenerate('outline')}
+        disabled={generating}
+      >
+        {generating ? <Loader2 className="mr-2 h-3 w-3 animate-spin" /> : <Wand2 className="mr-2 h-3 w-3" />}
+        Generate Outline
+      </Button>
+      <Button 
+        type="button" 
+        variant="outline" 
+        size="sm"
+        onClick={() => onGenerate('content')}
+        disabled={generating}
+      >
+        {generating ? <Loader2 className="mr-2 h-3 w-3 animate-spin" /> : <Wand2 className="mr-2 h-3 w-3" />}
+        Expand Content
+      </Button>
+    </div>
+  );
+};
+
 export default function BlogEditor({ isAdmin }: BlogEditorProps) {
   const { toast } = useToast();
   const [posts, setPosts] = useState<BlogPost[]>([]);
@@ -114,6 +202,11 @@ export default function BlogEditor({ isAdmin }: BlogEditorProps) {
   const [editingPost, setEditingPost] = useState<BlogPost | null>(null);
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [contentRef, setContentRef] = useState<HTMLTextAreaElement | null>(null);
+  const [activeTab, setActiveTab] = useState('write');
+  const [generating, setGenerating] = useState(false);
+  const [uploadingImage, setUploadingImage] = useState(false);
+  const [keyword, setKeyword] = useState('');
+  const fileInputRef = useRef<HTMLInputElement>(null);
   
   const [formData, setFormData] = useState({
     title: '',
@@ -166,6 +259,102 @@ export default function BlogEditor({ isAdmin }: BlogEditorProps) {
     const words = content.split(/\s+/).length;
     const minutes = Math.ceil(words / 200);
     return `${minutes} min read`;
+  };
+
+  // AI Content Generation
+  const handleAIGenerate = async (type: 'title' | 'outline' | 'content') => {
+    const searchKeyword = keyword || formData.category || 'cryptocurrency mining';
+    
+    setGenerating(true);
+    try {
+      const { data, error } = await supabase.functions.invoke('ai-assistant', {
+        body: {
+          action: 'generate_blog_content',
+          type,
+          keyword: searchKeyword,
+          existingTitle: formData.title,
+          existingContent: formData.content,
+          category: formData.category,
+        }
+      });
+
+      if (error) throw error;
+
+      if (type === 'title' && data.title) {
+        setFormData(prev => ({
+          ...prev,
+          title: data.title,
+          slug: generateSlug(data.title),
+          meta_title: data.title,
+        }));
+        toast({ title: 'Title generated!', description: data.title });
+      } else if (type === 'outline' && data.outline) {
+        setFormData(prev => ({
+          ...prev,
+          content: prev.content + '\n\n' + data.outline,
+          read_time: calculateReadTime(prev.content + data.outline),
+        }));
+        toast({ title: 'Outline generated!' });
+      } else if (type === 'content' && data.content) {
+        setFormData(prev => ({
+          ...prev,
+          content: data.content,
+          read_time: calculateReadTime(data.content),
+        }));
+        toast({ title: 'Content expanded!' });
+      }
+    } catch (error: any) {
+      console.error('AI generation error:', error);
+      toast({
+        title: 'AI Generation Failed',
+        description: error.message || 'Could not generate content. Please try again.',
+        variant: 'destructive',
+      });
+    }
+    setGenerating(false);
+  };
+
+  // Image Upload
+  const handleImageUpload = async (file: File) => {
+    if (!file) return;
+    
+    const maxSize = 5 * 1024 * 1024; // 5MB
+    if (file.size > maxSize) {
+      toast({
+        title: 'File too large',
+        description: 'Please upload an image smaller than 5MB.',
+        variant: 'destructive',
+      });
+      return;
+    }
+
+    setUploadingImage(true);
+    try {
+      const fileExt = file.name.split('.').pop();
+      const fileName = `${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`;
+      const filePath = `blog/${fileName}`;
+
+      const { error: uploadError } = await supabase.storage
+        .from('blog-images')
+        .upload(filePath, file);
+
+      if (uploadError) throw uploadError;
+
+      const { data: { publicUrl } } = supabase.storage
+        .from('blog-images')
+        .getPublicUrl(filePath);
+
+      setFormData(prev => ({ ...prev, image: publicUrl }));
+      toast({ title: 'Image uploaded!', description: 'Featured image has been set.' });
+    } catch (error: any) {
+      console.error('Upload error:', error);
+      toast({
+        title: 'Upload failed',
+        description: error.message || 'Could not upload image.',
+        variant: 'destructive',
+      });
+    }
+    setUploadingImage(false);
   };
 
   const handleFormat = (format: string) => {
@@ -222,13 +411,9 @@ export default function BlogEditor({ isAdmin }: BlogEditorProps) {
         }
         break;
       case 'image':
-        const imgUrl = prompt('Enter image URL:', 'https://');
-        if (imgUrl) {
-          replacement = `\n![${selected || 'Image description'}](${imgUrl})\n`;
-        } else {
-          return;
-        }
-        break;
+        // Trigger file upload instead of URL prompt
+        fileInputRef.current?.click();
+        return;
       default:
         return;
     }
@@ -242,6 +427,42 @@ export default function BlogEditor({ isAdmin }: BlogEditorProps) {
       const newPosition = start + replacement.length - cursorOffset;
       contentRef.setSelectionRange(newPosition, newPosition);
     }, 0);
+  };
+
+  const handleInlineImageUpload = async (file: File) => {
+    if (!file || !contentRef) return;
+    
+    setUploadingImage(true);
+    try {
+      const fileExt = file.name.split('.').pop();
+      const fileName = `${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`;
+      const filePath = `blog/${fileName}`;
+
+      const { error: uploadError } = await supabase.storage
+        .from('blog-images')
+        .upload(filePath, file);
+
+      if (uploadError) throw uploadError;
+
+      const { data: { publicUrl } } = supabase.storage
+        .from('blog-images')
+        .getPublicUrl(filePath);
+
+      const start = contentRef.selectionStart;
+      const end = contentRef.selectionEnd;
+      const imageMarkdown = `\n![${file.name}](${publicUrl})\n`;
+      const newContent = formData.content.substring(0, start) + imageMarkdown + formData.content.substring(end);
+      
+      setFormData(prev => ({ ...prev, content: newContent, read_time: calculateReadTime(newContent) }));
+      toast({ title: 'Image inserted!' });
+    } catch (error: any) {
+      toast({
+        title: 'Upload failed',
+        description: error.message,
+        variant: 'destructive',
+      });
+    }
+    setUploadingImage(false);
   };
 
   const handleTitleChange = (title: string) => {
@@ -285,6 +506,8 @@ export default function BlogEditor({ isAdmin }: BlogEditorProps) {
       meta_description: '',
     });
     setSelectedTags([]);
+    setActiveTab('write');
+    setKeyword('');
     setEditorOpen(true);
   };
 
@@ -306,6 +529,7 @@ export default function BlogEditor({ isAdmin }: BlogEditorProps) {
       meta_description: post.meta_description || '',
     });
     setSelectedTags(post.tags || []);
+    setActiveTab('write');
     setEditorOpen(true);
   };
 
@@ -486,9 +710,22 @@ export default function BlogEditor({ isAdmin }: BlogEditorProps) {
           </div>
         )}
 
+        {/* Hidden file input for inline images */}
+        <input
+          ref={fileInputRef}
+          type="file"
+          accept="image/*"
+          className="hidden"
+          onChange={(e) => {
+            const file = e.target.files?.[0];
+            if (file) handleInlineImageUpload(file);
+            e.target.value = '';
+          }}
+        />
+
         {/* Editor Dialog */}
         <Dialog open={editorOpen} onOpenChange={setEditorOpen}>
-          <DialogContent className="max-w-4xl max-h-[95vh] overflow-y-auto">
+          <DialogContent className="max-w-5xl max-h-[95vh] overflow-y-auto">
             <DialogHeader>
               <DialogTitle>
                 {editingPost ? 'Edit Blog Post' : 'Create New Blog Post'}
@@ -496,6 +733,19 @@ export default function BlogEditor({ isAdmin }: BlogEditorProps) {
             </DialogHeader>
 
             <div className="space-y-6">
+              {/* AI Content Generator */}
+              <div className="space-y-3">
+                <div className="flex items-center gap-2">
+                  <Input
+                    placeholder="Enter keyword for AI generation (e.g., bitcoin mining, ASIC profitability)"
+                    value={keyword}
+                    onChange={(e) => setKeyword(e.target.value)}
+                    className="flex-1"
+                  />
+                </div>
+                <AIContentGenerator onGenerate={handleAIGenerate} generating={generating} />
+              </div>
+
               {/* Title & Slug */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
@@ -530,36 +780,83 @@ export default function BlogEditor({ isAdmin }: BlogEditorProps) {
                 />
               </div>
 
-              {/* Rich Text Content */}
+              {/* Content with Preview Tabs */}
               <div className="space-y-2">
                 <Label>Content (Markdown) *</Label>
-                <RichTextToolbar onFormat={handleFormat} />
-                <Textarea
-                  ref={(ref) => setContentRef(ref)}
-                  value={formData.content}
-                  onChange={(e) => setFormData({ 
-                    ...formData, 
-                    content: e.target.value,
-                    read_time: calculateReadTime(e.target.value)
-                  })}
-                  placeholder="Write your article content here using Markdown..."
-                  rows={15}
-                  className="font-mono text-sm rounded-t-none"
-                />
-                <p className="text-xs text-muted-foreground">
-                  Supports Markdown: **bold**, *italic*, # headings, - lists, &gt; quotes, `code`
-                </p>
+                <Tabs value={activeTab} onValueChange={setActiveTab}>
+                  <TabsList className="mb-2">
+                    <TabsTrigger value="write">
+                      <Edit className="h-4 w-4 mr-2" />
+                      Write
+                    </TabsTrigger>
+                    <TabsTrigger value="preview">
+                      <Eye className="h-4 w-4 mr-2" />
+                      Preview
+                    </TabsTrigger>
+                  </TabsList>
+                  
+                  <TabsContent value="write" className="mt-0">
+                    <RichTextToolbar onFormat={handleFormat} />
+                    <Textarea
+                      ref={(ref) => setContentRef(ref)}
+                      value={formData.content}
+                      onChange={(e) => setFormData({ 
+                        ...formData, 
+                        content: e.target.value,
+                        read_time: calculateReadTime(e.target.value)
+                      })}
+                      placeholder="Write your article content here using Markdown..."
+                      rows={15}
+                      className="font-mono text-sm rounded-t-none"
+                    />
+                    <p className="text-xs text-muted-foreground mt-1">
+                      Supports Markdown: **bold**, *italic*, # headings, - lists, &gt; quotes, `code`
+                    </p>
+                  </TabsContent>
+                  
+                  <TabsContent value="preview" className="mt-0">
+                    <div 
+                      className="min-h-[400px] p-6 border rounded-lg bg-card overflow-auto"
+                      dangerouslySetInnerHTML={{ __html: renderMarkdown(formData.content) }}
+                    />
+                  </TabsContent>
+                </Tabs>
               </div>
 
-              {/* Featured Image */}
+              {/* Featured Image with Upload */}
               <div className="space-y-2">
-                <Label htmlFor="image">Featured Image URL</Label>
-                <Input
-                  id="image"
-                  value={formData.image}
-                  onChange={(e) => setFormData({ ...formData, image: e.target.value })}
-                  placeholder="https://example.com/image.jpg"
-                />
+                <Label>Featured Image</Label>
+                <div className="flex gap-2">
+                  <Input
+                    value={formData.image}
+                    onChange={(e) => setFormData({ ...formData, image: e.target.value })}
+                    placeholder="Image URL or upload below"
+                    className="flex-1"
+                  />
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={() => document.getElementById('featured-image-upload')?.click()}
+                    disabled={uploadingImage}
+                  >
+                    {uploadingImage ? (
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                    ) : (
+                      <Upload className="h-4 w-4" />
+                    )}
+                  </Button>
+                  <input
+                    id="featured-image-upload"
+                    type="file"
+                    accept="image/*"
+                    className="hidden"
+                    onChange={(e) => {
+                      const file = e.target.files?.[0];
+                      if (file) handleImageUpload(file);
+                      e.target.value = '';
+                    }}
+                  />
+                </div>
                 {formData.image && (
                   <img
                     src={formData.image}

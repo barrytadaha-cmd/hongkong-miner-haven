@@ -16,11 +16,102 @@ serve(async (req) => {
   }
 
   try {
-    const { type, messages, productData, orderData } = await req.json();
+    const body = await req.json();
+    const { type, messages, productData, orderData, action, keyword, existingTitle, existingContent, category } = body;
     const LOVABLE_API_KEY = Deno.env.get('LOVABLE_API_KEY');
     
     if (!LOVABLE_API_KEY) {
       throw new Error('LOVABLE_API_KEY is not configured');
+    }
+
+    // Handle blog content generation (non-streaming)
+    if (action === 'generate_blog_content') {
+      const blogType = body.type || 'title';
+      let prompt = '';
+      
+      switch (blogType) {
+        case 'title':
+          prompt = `Generate an engaging, SEO-optimized blog post title about "${keyword}" for a cryptocurrency mining hardware blog. 
+          
+Requirements:
+- Target audience: crypto miners, investors, tech enthusiasts
+- Include power words that drive clicks
+- Keep under 60 characters for SEO
+- Make it specific and valuable
+- Include the main keyword naturally
+
+Return ONLY the title, nothing else.`;
+          break;
+          
+        case 'outline':
+          prompt = `Create a detailed blog post outline about "${keyword}" for a cryptocurrency mining hardware blog.
+
+Requirements:
+- Create 5-7 main sections with H2 headings
+- Include 2-3 bullet points under each section
+- Make it comprehensive and SEO-friendly
+- Target crypto miners and investors
+- Include sections on: introduction, main topic, practical tips, considerations, conclusion
+
+Format as Markdown with ## for headings and - for bullets.`;
+          break;
+          
+        case 'content':
+          prompt = `Expand this blog post outline into full article content about "${keyword}":
+
+${existingContent || 'Write about cryptocurrency mining and the topic: ' + keyword}
+
+Requirements:
+- Write in an engaging, authoritative tone
+- Include practical insights and data
+- Keep paragraphs concise (3-4 sentences each)
+- Add relevant statistics or examples
+- Target 1000-1500 words
+- Use Markdown formatting (## for H2, ### for H3, **bold**, *italic*)
+- Include a compelling introduction and conclusion
+- Make it SEO-optimized with natural keyword usage
+
+Category: ${category || 'guides'}`;
+          break;
+      }
+
+      const response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${LOVABLE_API_KEY}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          model: 'google/gemini-3-flash-preview',
+          messages: [
+            { role: 'system', content: 'You are an expert SEO content writer for a cryptocurrency mining hardware blog. Write engaging, accurate, and valuable content that ranks well in search engines.' },
+            { role: 'user', content: prompt },
+          ],
+          stream: false,
+        }),
+      });
+
+      if (!response.ok) {
+        const text = await response.text();
+        console.error('AI gateway error:', response.status, text);
+        throw new Error('AI generation failed');
+      }
+
+      const data = await response.json();
+      const generatedContent = data.choices?.[0]?.message?.content || '';
+
+      const result: Record<string, string> = {};
+      if (blogType === 'title') {
+        result.title = generatedContent.trim().replace(/^["']|["']$/g, '');
+      } else if (blogType === 'outline') {
+        result.outline = generatedContent;
+      } else {
+        result.content = generatedContent;
+      }
+
+      return new Response(JSON.stringify(result), {
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
     }
 
     let systemPrompt = '';
