@@ -1,11 +1,11 @@
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { ArrowRight, Shield, Truck, Headphones } from 'lucide-react';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
 import { useRef, useMemo, useState, useEffect } from 'react';
 import heroMobileBg from '@/assets/hero-mobile-bg.webp';
-import { products } from '@/lib/data';
-import { AnimatePresence } from 'framer-motion';
+import { products as staticProducts } from '@/lib/data';
+import { useDBProducts, useHasDBProducts } from '@/hooks/useProducts';
 
 // Generate random particles
 const generateParticles = (count: number) => {
@@ -81,11 +81,18 @@ const HeroSection = () => {
   const sectionRef = useRef<HTMLElement>(null);
   const [currentIndex, setCurrentIndex] = useState(0);
   
+  // Check if database has products
+  const { data: hasDBProducts } = useHasDBProducts();
+  const { data: dbProducts } = useDBProducts();
+  
+  // Use database products if available, otherwise fall back to static
+  const products = hasDBProducts && dbProducts?.length ? dbProducts : staticProducts;
+  
   // Get featured products (with sale or new badge preferred)
   const featuredProducts = useMemo(() => {
     const featured = products.filter(p => p.isSale || p.isNew);
     return featured.length > 0 ? featured.slice(0, 5) : products.slice(0, 5);
-  }, []);
+  }, [products]);
   
   // Rotate products every 5 seconds
   useEffect(() => {
