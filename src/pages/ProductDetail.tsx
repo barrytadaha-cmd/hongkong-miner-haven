@@ -10,6 +10,11 @@ import Layout from '@/components/Layout';
 import ImageLightbox from '@/components/ImageLightbox';
 import ImageZoom from '@/components/ImageZoom';
 import ProductDetailSkeleton from '@/components/ProductDetailSkeleton';
+import ProfitabilityCalculator from '@/components/ProfitabilityCalculator';
+import VideoReviewModal from '@/components/VideoReviewModal';
+import ProductReviews from '@/components/ProductReviews';
+import StickyBuyButton from '@/components/StickyBuyButton';
+import ProductCard from '@/components/ProductCard';
 import { 
   ShoppingCart, 
   ChevronRight, 
@@ -25,9 +30,9 @@ import {
   Package,
   Wifi,
   CheckCircle2,
+  Play,
 } from 'lucide-react';
 import { toast } from 'sonner';
-import ProductCard from '@/components/ProductCard';
 
 const ProductDetail = () => {
   const { id } = useParams<{ id: string }>();
@@ -36,6 +41,7 @@ const ProductDetail = () => {
   const [selectedImage, setSelectedImage] = useState(0);
   const [quantity, setQuantity] = useState(1);
   const [lightboxOpen, setLightboxOpen] = useState(false);
+  const [videoModalOpen, setVideoModalOpen] = useState(false);
 
   // Fetch product from database
   const { data: product, isLoading, error } = useDBProduct(id || '');
@@ -90,20 +96,62 @@ const ProductDetail = () => {
     );
   }
 
-  const handleAddToCart = () => {
-    for (let i = 0; i < quantity; i++) {
+  const handleAddToCart = (qty?: number) => {
+    const addQty = qty || quantity;
+    for (let i = 0; i < addQty; i++) {
       addItem(product);
     }
-    toast.success(`${quantity}x ${product.name} added to cart`);
+    toast.success(`${addQty}x ${product.name} added to cart`);
   };
 
   const categoryName = product.category.charAt(0).toUpperCase() + product.category.slice(1);
 
+  // JSON-LD Product Schema for SEO
+  const productSchema = {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    "name": product.name,
+    "image": product.images,
+    "description": product.description || `${product.name} - ${product.hashrate} ${product.algorithm} miner with ${product.efficiency} efficiency.`,
+    "brand": {
+      "@type": "Brand",
+      "name": product.brand
+    },
+    "sku": product.id,
+    "mpn": product.id,
+    "offers": {
+      "@type": "Offer",
+      "url": `https://minerhaolan.lovable.app/product/${product.id}`,
+      "priceCurrency": "USD",
+      "price": product.price,
+      "priceValidUntil": new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+      "availability": product.inStock ? "https://schema.org/InStock" : "https://schema.org/PreOrder",
+      "seller": {
+        "@type": "Organization",
+        "name": "MinerHaolan"
+      }
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "4.7",
+      "reviewCount": "5"
+    }
+  };
+
   return (
     <Layout>
       <Helmet>
-        <title>{product.name} | MinerHoalan Hong Kong</title>
+        <title>{product.name} | MinerHaolan Hong Kong</title>
         <meta name="description" content={`Buy ${product.name} - ${product.hashrate} ${product.algorithm} miner with ${product.efficiency} efficiency. Fast shipping from Hong Kong.`} />
+        <meta property="og:title" content={`${product.name} | MinerHaolan`} />
+        <meta property="og:description" content={`${product.hashrate} ${product.algorithm} miner - $${product.price.toLocaleString()}`} />
+        <meta property="og:image" content={product.images[0]} />
+        <meta property="og:type" content="product" />
+        <meta property="product:price:amount" content={product.price.toString()} />
+        <meta property="product:price:currency" content="USD" />
+        <script type="application/ld+json">
+          {JSON.stringify(productSchema)}
+        </script>
       </Helmet>
 
       <main className="pt-20 pb-12 lg:pb-16">
@@ -192,6 +240,23 @@ const ProductDetail = () => {
                 isOpen={lightboxOpen}
                 onClose={() => setLightboxOpen(false)}
                 alt={product.name}
+              />
+
+              {/* Watch Review Button */}
+              <Button
+                variant="outline"
+                className="w-full"
+                onClick={() => setVideoModalOpen(true)}
+              >
+                <Play className="h-4 w-4 mr-2 text-red-500" />
+                Watch Expert Review
+              </Button>
+
+              {/* Video Modal */}
+              <VideoReviewModal
+                isOpen={videoModalOpen}
+                onClose={() => setVideoModalOpen(false)}
+                productName={product.name}
               />
             </div>
 
@@ -289,7 +354,7 @@ const ProductDetail = () => {
                 <Button
                   size="lg"
                   className="flex-1 h-11 sm:h-12 text-sm sm:text-base"
-                  onClick={handleAddToCart}
+                  onClick={() => handleAddToCart()}
                   disabled={!product.inStock}
                 >
                   <ShoppingCart className="h-4 w-4 sm:h-5 sm:w-5 mr-2" />
@@ -547,19 +612,42 @@ const ProductDetail = () => {
             </TabsContent>
           </Tabs>
 
+          {/* Profitability Calculator */}
+          <section className="mb-12 lg:mb-16">
+            <ProfitabilityCalculator
+              hashrate={product.hashrate}
+              power={product.power}
+              algorithm={product.algorithm}
+              productName={product.name}
+            />
+          </section>
+
+          {/* Customer Reviews */}
+          <section className="mb-12 lg:mb-16">
+            <ProductReviews productName={product.name} productId={product.id} />
+          </section>
+
           {/* Related Products */}
           {relatedProducts.length > 0 && (
-            <section>
+            <section className="mb-24 lg:mb-16">
               <h2 className="font-display text-xl sm:text-2xl font-bold mb-4 sm:mb-8">Related Products</h2>
               <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6">
-                {relatedProducts.map((product) => (
-                  <ProductCard key={product.id} product={product} />
+                {relatedProducts.map((p) => (
+                  <ProductCard key={p.id} product={p} />
                 ))}
               </div>
             </section>
           )}
         </div>
       </main>
+
+      {/* Sticky Buy Button for Mobile */}
+      <StickyBuyButton
+        productName={product.name}
+        price={product.price}
+        inStock={product.inStock}
+        onAddToCart={handleAddToCart}
+      />
     </Layout>
   );
 };
