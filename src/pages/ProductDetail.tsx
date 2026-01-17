@@ -7,8 +7,8 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import Layout from '@/components/Layout';
+import MegaGallery from '@/components/MegaGallery';
 import ImageLightbox from '@/components/ImageLightbox';
-import ImageZoom from '@/components/ImageZoom';
 import ProductDetailSkeleton from '@/components/ProductDetailSkeleton';
 import ProfitabilityCalculator from '@/components/ProfitabilityCalculator';
 import VideoReviewModal from '@/components/VideoReviewModal';
@@ -38,9 +38,7 @@ const ProductDetail = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { addItem } = useCart();
-  const [selectedImage, setSelectedImage] = useState(0);
   const [quantity, setQuantity] = useState(1);
-  const [lightboxOpen, setLightboxOpen] = useState(false);
   const [videoModalOpen, setVideoModalOpen] = useState(false);
 
   // Fetch product from database
@@ -171,94 +169,25 @@ const ProductDetail = () => {
 
           {/* Product Section */}
           <div className="grid lg:grid-cols-2 gap-6 lg:gap-12 mb-12 lg:mb-16">
-            {/* Image Gallery */}
-            <div className="space-y-3 sm:space-y-4">
-              {/* Main Image with Magnifying Glass Zoom */}
-              <div 
-                className="relative aspect-square rounded-xl lg:rounded-2xl overflow-hidden bg-muted cursor-zoom-in group"
-                onClick={() => setLightboxOpen(true)}
-              >
-                <ImageZoom
-                  src={product.images[selectedImage]}
-                  alt={product.name}
-                  className="w-full h-full"
-                  zoomLevel={2.5}
-                  lensSize={120}
-                  showBrandWatermark={true}
-                />
-                
-                {/* Badges */}
-                <div className="absolute top-2 sm:top-4 left-2 sm:left-4 flex flex-col gap-1.5 sm:gap-2 z-10">
-                  {product.isNew && (
-                    <Badge className="bg-primary text-primary-foreground text-xs">New</Badge>
-                  )}
-                  {product.isSale && (
-                    <Badge variant="destructive" className="text-xs">Sale</Badge>
-                  )}
-                  {!product.inStock && (
-                    <Badge variant="secondary" className="bg-muted-foreground/80 text-xs">Sold Out</Badge>
-                  )}
-                </div>
+            {/* Mega Gallery */}
+            <MegaGallery
+              images={product.images}
+              productName={product.name}
+              brand={product.brand}
+              isNew={product.isNew}
+              isSale={product.isSale}
+              inStock={product.inStock}
+              location={product.location}
+              onWatchReview={() => setVideoModalOpen(true)}
+              hasVideo={true}
+            />
 
-                {/* Location Badge */}
-                <div className="absolute top-2 sm:top-4 right-2 sm:right-4 z-10">
-                  <Badge variant="outline" className="bg-background/90 backdrop-blur-sm text-xs">
-                    {product.location === 'hongkong' ? '🇭🇰 HK Stock' : '🌏 International'}
-                  </Badge>
-                </div>
-              </div>
-
-              {/* Thumbnails - horizontal scroll on mobile */}
-              <div className="flex gap-2 sm:gap-3 overflow-x-auto pb-2 -mx-4 px-4 lg:mx-0 lg:px-0 lg:grid lg:grid-cols-4">
-                {product.images.map((img, idx) => (
-                  <button
-                    key={idx}
-                    onClick={() => setSelectedImage(idx)}
-                    className={`relative flex-shrink-0 w-16 h-16 sm:w-20 sm:h-20 lg:w-full lg:aspect-square rounded-lg overflow-hidden border-2 transition-all ${
-                      selectedImage === idx 
-                        ? 'border-primary ring-2 ring-primary/20' 
-                        : 'border-border hover:border-primary/50'
-                    }`}
-                  >
-                    <img
-                      src={img}
-                      alt={`${product.name} view ${idx + 1}`}
-                      className="w-full h-full object-cover"
-                    />
-                    {/* Thumbnail watermark */}
-                    <div className="absolute bottom-0.5 right-0.5 sm:bottom-1 sm:right-1 font-bold text-[6px] sm:text-[8px] px-0.5 sm:px-1 py-0.5 tracking-wide bg-background/80 backdrop-blur-sm rounded text-primary border border-primary/20 select-none pointer-events-none">
-                      MH
-                    </div>
-                  </button>
-                ))}
-              </div>
-
-              {/* Lightbox */}
-              <ImageLightbox
-                images={product.images}
-                initialIndex={selectedImage}
-                isOpen={lightboxOpen}
-                onClose={() => setLightboxOpen(false)}
-                alt={product.name}
-              />
-
-              {/* Watch Review Button */}
-              <Button
-                variant="outline"
-                className="w-full"
-                onClick={() => setVideoModalOpen(true)}
-              >
-                <Play className="h-4 w-4 mr-2 text-red-500" />
-                Watch Expert Review
-              </Button>
-
-              {/* Video Modal */}
-              <VideoReviewModal
-                isOpen={videoModalOpen}
-                onClose={() => setVideoModalOpen(false)}
-                productName={product.name}
-              />
-            </div>
+            {/* Video Modal */}
+            <VideoReviewModal
+              isOpen={videoModalOpen}
+              onClose={() => setVideoModalOpen(false)}
+              productName={product.name}
+            />
 
             {/* Product Info */}
             <div className="space-y-4 sm:space-y-5">
