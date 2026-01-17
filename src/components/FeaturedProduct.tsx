@@ -2,8 +2,19 @@ import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { ArrowRight } from 'lucide-react';
 import avalonMini3Image from '@/assets/avalon-mini-3-featured.jpg';
+import { useDBProducts } from '@/hooks/useProducts';
+import { useMemo } from 'react';
 
 const FeaturedProduct = () => {
+  const { data: dbProducts } = useDBProducts();
+  
+  // Find the Avalon MINI 3 product from database
+  const avalonMini3 = useMemo(() => {
+    return dbProducts?.find(p => p.name === 'Avalon MINI 3');
+  }, [dbProducts]);
+
+  const productLink = avalonMini3 ? `/product/${avalonMini3.id}` : '/shop?search=avalon+mini+3';
+
   return (
     <section className="py-20 bg-background">
       <div className="container mx-auto px-4">
@@ -56,7 +67,7 @@ const FeaturedProduct = () => {
 
             <div className="flex flex-col sm:flex-row gap-4 pt-4">
               <Button size="lg" className="group" asChild>
-                <Link to="/shop?search=avalon+mini+3">
+                <Link to={productLink}>
                   Buy Now
                   <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
                 </Link>
