@@ -1,7 +1,7 @@
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
-import { products } from '@/lib/data';
+import { useDBProduct, useDBProducts } from '@/hooks/useProducts';
 import { useCart } from '@/contexts/CartContext';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -25,7 +25,6 @@ import {
   Package,
   Wifi,
   CheckCircle2,
-  ZoomIn
 } from 'lucide-react';
 import { toast } from 'sonner';
 import ProductCard from '@/components/ProductCard';
@@ -37,28 +36,42 @@ const ProductDetail = () => {
   const [selectedImage, setSelectedImage] = useState(0);
   const [quantity, setQuantity] = useState(1);
   const [lightboxOpen, setLightboxOpen] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
 
-  const product = products.find(p => p.id === id);
+  // Fetch product from database
+  const { data: product, isLoading, error } = useDBProduct(id || '');
+  
+  // Fetch all products for related section
+  const { data: allProducts } = useDBProducts();
 
+  // Get related products based on algorithm or category
   const relatedProducts = useMemo(() => {
-    if (!product) return [];
-    return products
-      .filter(p => p.id !== product.id && p.category === product.category)
+    if (!product || !allProducts) return [];
+    return allProducts
+      .filter(p => 
+        p.id !== product.id && 
+        (p.algorithm === product.algorithm || p.category === product.category)
+      )
       .slice(0, 4);
-  }, [product]);
-
-  // Simulate loading for skeleton display
-  useEffect(() => {
-    setIsLoading(true);
-    const timer = setTimeout(() => setIsLoading(false), 800);
-    return () => clearTimeout(timer);
-  }, [id]);
+  }, [product, allProducts]);
 
   if (isLoading) {
     return (
       <Layout>
         <ProductDetailSkeleton />
+      </Layout>
+    );
+  }
+
+  if (error) {
+    return (
+      <Layout>
+        <main className="pt-20 pb-16">
+          <div className="container mx-auto px-4 text-center py-16">
+            <h1 className="text-2xl font-bold mb-4">Error Loading Product</h1>
+            <p className="text-muted-foreground mb-8">There was an error loading this product.</p>
+            <Button onClick={() => navigate('/shop')}>Back to Shop</Button>
+          </div>
+        </main>
       </Layout>
     );
   }
