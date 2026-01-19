@@ -10,6 +10,13 @@ import { Textarea } from '@/components/ui/textarea';
 import { Badge } from '@/components/ui/badge';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Separator } from '@/components/ui/separator';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import { 
   Globe, 
   Loader2, 
@@ -19,7 +26,9 @@ import {
   FileText, 
   DollarSign,
   CheckCircle,
-  AlertCircle
+  AlertCircle,
+  Tag,
+  Building2
 } from 'lucide-react';
 
 interface ScrapedData {
@@ -29,6 +38,30 @@ interface ScrapedData {
   specs: Record<string, string>;
   images: string[];
 }
+
+const categories = [
+  { id: 'bitcoin', name: 'Bitcoin Miners' },
+  { id: 'litecoin', name: 'Litecoin/Scrypt' },
+  { id: 'kaspa', name: 'Kaspa Miners' },
+  { id: 'zcash', name: 'Zcash/Equihash' },
+  { id: 'ethereum', name: 'Ethereum/EtHash' },
+  { id: 'home', name: 'Home Miners' },
+  { id: 'heater', name: 'Bitcoin Heaters' },
+  { id: 'altcoin', name: 'Altcoin Miners' }
+];
+
+const brands = [
+  { id: 'bitmain', name: 'Bitmain (Antminer)' },
+  { id: 'microbt', name: 'MicroBT (Whatsminer)' },
+  { id: 'canaan', name: 'Canaan (Avalon)' },
+  { id: 'iceriver', name: 'IceRiver' },
+  { id: 'goldshell', name: 'Goldshell' },
+  { id: 'elphapex', name: 'Elphapex' },
+  { id: 'ipollo', name: 'iPollo' },
+  { id: 'bitaxe', name: 'Bitaxe' },
+  { id: 'heatbit', name: 'Heatbit' },
+  { id: 'other', name: 'Other' }
+];
 
 export function ProductScraper() {
   const { toast } = useToast();
@@ -42,6 +75,8 @@ export function ProductScraper() {
   const [editedDescription, setEditedDescription] = useState('');
   const [editedPrice, setEditedPrice] = useState('');
   const [selectedImages, setSelectedImages] = useState<string[]>([]);
+  const [selectedCategory, setSelectedCategory] = useState('bitcoin');
+  const [selectedBrand, setSelectedBrand] = useState('');
 
   const handleScrape = async () => {
     if (!url.trim()) {
@@ -108,7 +143,8 @@ export function ProductScraper() {
           name: editedName,
           description: editedDescription || null,
           price: parseFloat(editedPrice) || 0,
-          category: 'Bitcoin Miners',
+          category: categories.find(c => c.id === selectedCategory)?.name || 'Bitcoin Miners',
+          brand: brands.find(b => b.id === selectedBrand)?.name || null,
           stock: 'in-stock',
           is_new: true,
         })
@@ -149,6 +185,8 @@ export function ProductScraper() {
       setEditedDescription('');
       setEditedPrice('');
       setSelectedImages([]);
+      setSelectedCategory('bitcoin');
+      setSelectedBrand('');
 
     } catch (error) {
       console.error('Save error:', error);
@@ -247,6 +285,47 @@ export function ProductScraper() {
                   placeholder="Product description"
                   rows={3}
                 />
+              </div>
+
+              {/* Category & Brand Selectors */}
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <Label className="flex items-center gap-2 mb-2">
+                    <Tag className="h-4 w-4" />
+                    Category
+                  </Label>
+                  <Select value={selectedCategory} onValueChange={setSelectedCategory}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select category" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {categories.map((cat) => (
+                        <SelectItem key={cat.id} value={cat.id}>
+                          {cat.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div>
+                  <Label className="flex items-center gap-2 mb-2">
+                    <Building2 className="h-4 w-4" />
+                    Brand
+                  </Label>
+                  <Select value={selectedBrand} onValueChange={setSelectedBrand}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select brand" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {brands.map((brand) => (
+                        <SelectItem key={brand.id} value={brand.id}>
+                          {brand.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
               </div>
             </div>
 
